@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="godc">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesGdocumentos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                            <p:commandButton value="Crear" action="#{bgesGdocumentos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                            <p:commandButton value="Actualizar" action="#{bgesGdocumentos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                            <p:commandButton value="Eliminar" action="#{bgesGdocumentos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 360px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesGdocumentos.columnas}"
+                                              rendered="#{not bgesGdocumentos.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Codigo" itemValue="1"/>
+                                <f:selectItem itemLabel="Descripcion" itemValue="2"/>
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesGdocumentos.opcion.equals('1') or bgesGdocumentos.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesGdocumentos.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px" value="#{bgesGdocumentos.gdocumentos}" var="gdoc"
+                                     scrollable="true" rowKey="#{gdoc.gdoGrupoPk}" scrollHeight="220"
+                                     emptyMessage="#{bgenErrores.obtenerError(14)}"
+                                     scrollWidth="600" selection="#{bgesGdocumentos.gdocumento}" selectionMode="single"
+                                 rendered="#{not bgesGdocumentos.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            <p:column headerText="Codigo" filterBy="#{gdoc.gdoGrupoPk}" filterMatchMode="contains"
+                                      rendered="#{bgesGdocumentos.columnas.contains('1')}"
+                                      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{gdoc.gdoGrupoPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Descripcion" filterBy="#{gdoc.gdoDescripcion}" filterMatchMode="contains"
+                                      rendered="#{bgesGdocumentos.columnas.contains('2')}"
+                                      width="120" filterStyle="min-width: 120px; max-width: 120px">
+                                <font size="1">
+                                    <h:outputText value="#{gdoc.gdoDescripcion}"/>
+                                </font>
+                            </p:column>
+                        </p:dataTable>
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesGdocumentos.opcion.equals('2')}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesGdocumentos.CGdocumento.gdoGrupoPk}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(85)}"
+                                             converterMessage="#{bgenErrores.obtenerError(86)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(87)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod" value="#{bgenAyudas.obtenerAyuda(121)}"/>
+                                <p:tooltip for="msg_cod" value="#{bgenMessages.message('gdoc:cod')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Descripcion</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesGdocumentos.CGdocumento.gdoDescripcion}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(28)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(29)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt" value="#{bgenAyudas.obtenerAyuda(122)}"/>
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('gdoc:idt')}"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesGdocumentos.crear}" rendered="#{bgesGdocumentos.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesGdocumentos.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesGdocumentos.gdocumento.gdoDescripcion}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesGdocumentos.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                            <h:outputText value="#{bgesGdocumentos.gdocumento.gdoGrupoPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Descripcion</b>
+                                </font>
+                            <h:outputText value="#{bgesGdocumentos.gdocumento.gdoDescripcion}"/>
+                        </h:panelGrid>
+                    </p:dialog>
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesGdocumentos.opcion.equals('3')}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesGdocumentos.gdocumento.gdoGrupoPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Descripcion</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="idt_1" value="#{bgesGdocumentos.gdocumento.gdoDescripcion}" required="true"
+                                                 requiredMessage="#{bgenErrores.obtenerError(28)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(29)}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="50"/>
+                                    </h:inputText>
+                                    <h:message id="msg_idt_1" for="idt_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="idt_1" value="#{bgenAyudas.obtenerAyuda(122)}"/>
+                                    <p:tooltip for="msg_idt_1" value="#{bgenMessages.message('gdoc:idt_1')}"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesGdocumentos.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

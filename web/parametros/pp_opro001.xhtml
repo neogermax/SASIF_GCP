@@ -1,0 +1,305 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+         <br/>
+        <div id="formulario">
+            
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="opro">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesOpcionRoles.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                                <p:commandButton value="Crear" action="#{bgesOpcionRoles.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                                <p:commandButton value="Actualizar" action="#{bgesOpcionRoles.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                                <p:commandButton value="Eliminar" action="#{bgesOpcionRoles.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesOpcionRoles.columnas}"
+                                              rendered="#{not bgesOpcionRoles.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Codigo" itemValue="1"/>
+                                <f:selectItem itemLabel="Consecutivo" itemValue="2"/>
+                                <f:selectItem itemLabel="Tipo" itemValue="3"/>
+                                <f:selectItem itemLabel="Tipo Trabajo" itemValue="4"/>
+                                <f:selectItem itemLabel="Sub Rol" itemValue="5"/>
+                                <f:selectItem itemLabel="Nombre" itemValue="6"/>
+                                
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesOpcionRoles.opcion.equals('1') or bgesOpcionRoles.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesOpcionRoles.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px; table-layout: fixed;" value="#{bgesOpcionRoles.opcionRoles}" var="opro"
+                                     scrollable="true" rowKey="#{opro.opcionRolesPK}" scrollHeight="190"
+                                     emptyMessage="#{cabecera.opro_tabla_vacia}"
+                                     scrollWidth="600" selection="#{bgesOpcionRoles.opcionRol}" selectionMode="single"
+                                 rendered="#{not bgesOpcionRoles.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            
+                            <p:column headerText="Codigo" filterBy="#{opro.opcionRolesPK.opcRolPk}" filterMatchMode="contains"
+                                      rendered="#{bgesOpcionRoles.columnas.contains('1')}"
+				      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{opro.opcionRolesPK.opcRolPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Consecutivo" filterBy="#{opro.opcionRolesPK.opcConsPk}" filterMatchMode="contains"
+                                      rendered="#{bgesOpcionRoles.columnas.contains('2')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{opro.opcionRolesPK.opcConsPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tipo" filterBy="#{opro.opcTipo}" filterMatchMode="contains"
+                                      rendered="#{bgesOpcionRoles.columnas.contains('3')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{opro.opcTipo}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tipo Trabajo" filterBy="#{opro.opcTipoTrab}" filterMatchMode="contains"
+                                      rendered="#{bgesOpcionRoles.columnas.contains('4')}" 
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{opro.opcTipoTrab}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Sub Rol" filterBy="#{opro.opcSubrol}" filterMatchMode="contains"
+                                      rendered="#{bgesOpcionRoles.columnas.contains('5')}" 
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{opro.opcSubrol.rolDescrip}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Nombre" filterBy="#{opro.opcNombre}" filterMatchMode="contains"
+                                      rendered="#{bgesOpcionRoles.columnas.contains('6')}" 
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{opro.opcNombre.linkCodPk}"/>
+                                </font>
+                            </p:column>
+                        </p:dataTable>
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesOpcionRoles.opcion.equals('2')}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:selectOneMenu value="#{bgesOpcionRoles.COpcionRol.roles}">
+                                    <f:selectItems value="#{bgesRoles.roles}" var="rol"
+                                                   itemLabel="#{rol.rolRolPk}" itemValue="#{rol}"/>
+                                    <f:converter converterId="jsf.beans.BConvRoles"/>
+                                </h:selectOneMenu>
+                                
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Consecutivo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="con" value="#{bgesOpcionRoles.COpcionRol.opcionRolesPK.opcConsPk}" required="true"
+                                             requiredMessage="#{cabecera.opro_req_codigo}"
+                                             converterMessage="#{cabecera.opro_conver_codigo}"
+                                             validatorMessage="#{cabecera.opro_val_codigo}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="999"/>
+                                </h:inputText>
+                                <h:message id="msg_con" for="con" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="con">
+                                    #{bgenAyudas.obtenerAyuda(98)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_con" value="#{bgenMessages.message('opro:con')}"/>
+                            </h:panelGrid>                            
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Tipo</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesOpcionRoles.COpcionRol.opcTipo}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:selectItem itemLabel="Operativo" itemValue="O"/>
+                                <f:selectItem itemLabel="Sub Rol" itemValue="S"/>
+                            </p:selectOneRadio>
+                            
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tipo Trabajo</b>
+                            </font>
+                            
+                            <p:selectOneRadio value="#{bgesOpcionRoles.COpcionRol.opcTipoTrab}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:selectItem itemLabel="Trabajo" itemValue="T"/>
+                                <f:selectItem itemLabel="Consulta" itemValue="C"/>
+                                <f:selectItem itemLabel="Ninguno" itemValue= ""/>
+                            </p:selectOneRadio>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Sub rol</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:selectOneMenu value="#{bgesOpcionRoles.COpcionRol.opcSubrol}">
+                                    <f:selectItems value="#{bgesOpcionRoles.subRoles}" var="rol"
+                                                   itemLabel="#{rol.rolRolPk}" itemValue="#{rol}"/>
+                                    <f:converter converterId="jsf.beans.BConvRoles"/>
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Nombre</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesOpcionRoles.COpcionRol.opcNombre}">
+                                <f:selectItems value="#{bgesOpcionRoles.links}" var="lrol"
+                                               itemLabel="#{lrol.linkCodPk}" itemValue="#{lrol}"/>
+                                    <f:converter converterId="jsf.beans.BConvLinks"/>
+                                </h:selectOneMenu>
+                                
+                            </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update=":contenido" action="#{bgesOpcionRoles.crear}" rendered="#{bgesOpcionRoles.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesOpcionRoles.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesOpcionRoles.opcionRol.opcionRolesPK.opcRolPk}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesOpcionRoles.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                            <h:outputText value="#{bgesOpcionRoles.opcionRol.opcionRolesPK.opcRolPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Consecutivo</b>
+                                </font>
+                            <h:outputText value="#{bgesOpcionRoles.opcionRol.opcionRolesPK.opcConsPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo</b>
+                                </font>
+                            <h:outputText value="#{bgesOpcionRoles.opcionRol.opcTipo}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo Trabajo</b>
+                                </font>
+                            <h:outputText value="#{bgesOpcionRoles.opcionRol.opcTipoTrab}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Sub Rol</b>
+                                </font>
+                            <h:outputText value="#{bgesOpcionRoles.opcionRol.opcSubrol.rolDescrip}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre</b>
+                                </font>
+                            <h:outputText value="#{bgesOpcionRoles.opcionRol.opcNombre.linkCodPk}"/>
+                            
+                            <h:outputText value="#{bgesOpcionroles.opcionRol.opcSubrol.polDescrip}"/>
+                            <h:outputText value="#{bgesOpcionroles.opcionRol.opcNombre.polDescrip}"/>
+                            </h:panelGrid>
+                    </p:dialog>
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesOpcionRoles.opcion.equals('3')}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesOpcionRoles.opcionRol.opcionRolesPK.opcRolPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Consecutivo</b>
+                                </font>
+                                <h:outputText value="#{bgesOpcionRoles.opcionRol.opcionRolesPK.opcConsPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo</b>
+                                </font>
+                                <p:selectOneRadio value="#{bgesOpcionRoles.opcionRol.opcTipo}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Operativo" itemValue="O"/>
+                                    <f:selectItem itemLabel="Sub Rol" itemValue="S"/>
+                                </p:selectOneRadio>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo Trabajo</b>
+                                </font>
+                                <p:selectOneRadio value="#{bgesOpcionRoles.opcionRol.opcTipoTrab}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Trabajo" itemValue="T"/>
+                                    <f:selectItem itemLabel="Consulta" itemValue="C"/>
+                                    <f:selectItem itemLabel="Ninguno" itemValue= ""/>
+                                </p:selectOneRadio>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Sub Rol</b>
+                                </font>
+  
+                                <h:selectOneMenu value="#{bgesOpcionRoles.opcionRol.opcSubrol}">
+                                    <f:selectItems value="#{bgesOpcionRoles.subRoles}" var="rol"
+                                                   itemLabel="#{rol.rolRolPk}" itemValue="#{rol}"/>
+                                    <f:converter converterId="jsf.beans.BConvRoles"/>
+                                </h:selectOneMenu>
+                                
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre</b>
+                                </font>
+                                <h:selectOneMenu value="#{bgesOpcionRoles.opcionRol.opcNombre}">
+                                    <f:selectItems value="#{bgesOpcionRoles.links}" var="lrol"
+                                               itemLabel="#{lrol.linkCodPk}" itemValue="#{lrol}"/>
+                                    <f:converter converterId="jsf.beans.BConvLinks"/>
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesOpcionRoles.actualizar}" update=":contenido"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

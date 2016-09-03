@@ -1,0 +1,176 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}">
+                <h:form id="rel">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>Relacion Clase - Etapa - Actividad</b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 360px; width: 650px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                        <p:commandButton value="Tabla" action="#{bgesRelaciones.opcion}" update="@form" icon="ui-tabla" rendered="#{bgesRelaciones.opcion eq '2'}">
+                            <f:param name="opcion" value="1"/>
+                        </p:commandButton>
+                        <p:commandButton value="Mapa" action="#{bgesRelaciones.opcion}" update="@form" icon="ui-mapa" rendered="#{bgesRelaciones.opcion eq '1'}">
+                            <f:param name="opcion" value="2"/>
+                        </p:commandButton>
+                        <p:tabView id="tabs" style="background-color: #{cabecera.form_inter_border_color}" rendered="#{bgesRelaciones.opcion eq '1'}">
+                            <p:ajax event="tabChange" update=":rel:tabs:tabcls :rel:tabs:cls :rel:tabs:cls1 :rel:tabs:etp :rel:tabs:tabetp :rel:tabs:tabact"/>
+                            <p:tab title="Clases">
+                                <b>Clases</b>
+                                <h:selectOneMenu value="#{bgesRelaciones.clase}" converter="jsf.beans.BConvClases">
+                                    <f:selectItems value="#{bgesRelaciones.clases}" var="cls"
+                                                   itemLabel="#{cls.clsDescrip}" itemValue="#{cls}"/>
+                                </h:selectOneMenu>
+                                <p:commandButton id="add" action="#{bgesRelaciones.addClase}" update="tabcls :rel:msg" icon="ui-button-add"/>
+                                <p:commandButton id="del" onclick="delcls.show()" icon="ui-button-del"/>
+                                <p:tooltip for="add" value="Adicionar clase de proyecto"/>
+                                <p:tooltip for="del" value="Retirar clase de proyecto"/>
+                                <br/><br/>
+                                <p:dataTable id="tabcls" value="#{bgesRelaciones.mapaNavegacion.clases}" var="cls"
+                                             scrollable="true" rowKey="#{cls.clase.clsCodPk}" scrollHeight="180"
+                                             emptyMessage="#{bgenErrores.obtenerError(14)}"
+                                     scrollWidth="600" selection="#{bgesRelaciones.mapaNavegacion.clase}" selectionMode="single">
+                                    <p:column headerText="Codigo" width="50">
+                                        <font size="1">
+                                            <h:outputText value="#{cls.clase.clsCodPk}"/>
+                                        </font>
+                                    </p:column>
+                                    <p:column headerText="Descripcion" width="510">
+                                        <font size="1">
+                                            <h:outputText value="#{cls.clase.clsDescrip}"/>
+                                        </font>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title="Etapas">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b>Clase: </b>
+                                </font>
+                                <h:outputText id="cls" value="#{bgesRelaciones.mapaNavegacion.clase.clase.clsDescrip}"/>
+                                <br/>
+                                <b>Etapas</b>
+                                <h:selectOneMenu value="#{bgesRelaciones.etapa}" converter="jsf.beans.BConvEtapas">
+                                    <f:selectItems value="#{bgesRelaciones.etapas}" var="etp"
+                                                   itemLabel="#{etp.etpDescrip}" itemValue="#{etp}"/>
+                                </h:selectOneMenu>
+                                <p:commandButton id="add1" action="#{bgesRelaciones.addEtapa}" update="tabetp :rel:msg" icon="ui-button-add"/>
+                                <p:commandButton id="del1" onclick="deletp.show()" icon="ui-button-del"/>
+                                <p:tooltip for="add1" value="Adicionar etapa"/>
+                                <p:tooltip for="del1" value="Retirar etapa"/>
+                                <br/><br/>
+                                <p:dataTable id="tabetp" style="width: 600px" value="#{bgesRelaciones.mapaNavegacion.etapas}" var="etp"
+                                             scrollable="true" rowKey="#{etp.etapa.etpCodPk}" scrollHeight="160"
+                                     emptyMessage="#{bgenErrores.obtenerError(14)}"
+                                     scrollWidth="600" selection="#{bgesRelaciones.mapaNavegacion.etapa}" selectionMode="single">
+                                    <p:column headerText="Codigo" width="50">
+                                        <font size="1">
+                                            <h:outputText value="#{etp.etapa.etpCodPk}"/>
+                                        </font>
+                                    </p:column>
+                                    <p:column headerText="Descripcion" width="510">
+                                        <font size="1">
+                                            <h:outputText value="#{etp.etapa.etpDescrip}"/>
+                                        </font>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                            <p:tab title="Actividades">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b>Clase: </b>
+                                </font>
+                                <h:outputText id="cls1" value="#{bgesRelaciones.mapaNavegacion.clase.clase.clsDescrip}"/>
+                                <br/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b>Etapa: </b>
+                                </font>
+                                <h:outputText id="etp" value="#{bgesRelaciones.mapaNavegacion.etapa.etapa.etpDescrip}"/>
+                                <br/>
+                                <b>Actividades</b>
+                                <h:selectOneMenu value="#{bgesRelaciones.actividad}" converter="jsf.beans.BConvActividades">
+                                    <f:selectItems value="#{bgesRelaciones.actividades}" var="act"
+                                                   itemLabel="#{act.actDescrip}" itemValue="#{act}"/>
+                                </h:selectOneMenu>
+                                <p:commandButton id="add2" action="#{bgesRelaciones.addActividad}" update="tabact :rel:msg" icon="ui-button-add"/>
+                                <p:commandButton id="del2" action="#{bgesRelaciones.removeActividad}" update="tabact" icon="ui-button-del"/>
+                                <p:tooltip for="add2" value="Adicionar actividad"/>
+                                <p:tooltip for="del2" value="Retirar actividad"/>
+                                <br/><br/>
+                                <p:dataTable id="tabact" style="width: 600px" value="#{bgesRelaciones.mapaNavegacion.actividades}" var="act"
+                                             scrollable="true" rowKey="#{act.actividad.actCodPk}" scrollHeight="125"
+                                             emptyMessage="#{bgenErrores.obtenerError(14)}" editable="true" editMode="cell"
+                                             scrollWidth="600" selectionMode="single"  selection="#{bgesRelaciones.mapaNavegacion.actividad}">
+                                    <p:ajax event="cellEdit"/>
+                                    <p:column headerText="Codigo" width="50">
+                                        <font size="1">
+                                            <h:outputText value="#{act.actividad.actCodPk}"/>
+                                        </font>
+                                    </p:column>
+                                    <p:column headerText="Descripcion" width="370">
+                                        <font size="1">
+                                            <h:outputText value="#{act.actividad.actDescrip}"/>
+                                        </font>
+                                    </p:column>
+                                    <p:column headerText="Paralelas/chequeo componentes" width="120">
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                #{act.componente}
+                                            </f:facet>
+                                            <f:facet name="input">
+                                        <h:panelGroup id="parl">
+                                            <h:selectOneMenu value="#{act.opcion}">
+                                                <f:selectItem itemLabel="" itemValue="N"/>
+                                                <f:selectItem itemLabel="Origen" itemValue="O"/>
+                                                <f:selectItem itemLabel="Paralela" itemValue="P"/>
+                                                <f:ajax render="parl"/>
+                                            </h:selectOneMenu>
+                                            <h:selectOneMenu value="#{act.enlace}" rendered="#{act.opcion eq 'P'}">
+                                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                                <f:ajax/>
+                                            </h:selectOneMenu>
+                                        </h:panelGroup>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                        </p:tabView>
+                        <h:panelGroup style="height: 325px; width: 650px; overflow: auto" layout="block" rendered="#{bgesRelaciones.opcion eq '2'}">
+                            <p:tree value="#{bgesRelaciones.mapaNavegacion.clase.node}" var="node" orientation="horizontal">
+                                <p:treeNode>
+                                    <h:outputText value="#{node}"/>
+                                </p:treeNode>
+                            </p:tree>
+                        </h:panelGroup>
+                        
+                        <p:confirmDialog message="Esta seguro de retirar esta clase?" widgetVar="delcls"> 
+                            <p:commandButton value="Si" update=":rel:tabs:tabcls" oncomplete="delcls.hide()" actionListener="#{bgesRelaciones.removeClase}" />  
+                            <p:commandButton value="No" onclick="delcls.hide()"/>       
+                        </p:confirmDialog>
+                        <p:confirmDialog message="Esta seguro de retirar esta etapa?" widgetVar="deletp"> 
+                            <p:commandButton value="Si" update=":rel:tabs:tabetp" oncomplete="deletp.hide()" actionListener="#{bgesRelaciones.removeEtapa}" />  
+                            <p:commandButton value="No" onclick="deletp.hide()"/>       
+                        </p:confirmDialog>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Aceptar" action="#{bgesRelaciones.crear}" update="@form"/>
+                        <p:commandButton value="Cancelar" action="#{bgesRelaciones.cancelar}" update="@form"/>
+                    </div>
+                    <p:growl id="msg" globalOnly="true"/>
+                </h:form>
+            </fieldset>
+        </div>
+    </h:body>
+</html>
+

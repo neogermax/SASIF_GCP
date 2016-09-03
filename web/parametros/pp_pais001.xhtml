@@ -1,0 +1,1808 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <link href="generales/css/css_style005.css" rel="stylesheet" type="text/css"/>
+    </h:head>
+        
+    <h:body>
+        <br/>
+        <span id="resaltar" >
+            
+            
+            <fieldset style="height: 560px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="paiss">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesPaises.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                                <p:commandButton value="Crear" action="#{bgesPaises.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                                <p:commandButton value="Actualizar" action="#{bgesPaises.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                                <p:commandButton value="Eliminar" action="#{bgesPaises.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 400px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesPaises.columnas}"
+                                              rendered="#{not bgesPaises.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Codigo" itemValue="1"/>
+                                <f:selectItem itemLabel="Nombre" itemValue="2"/>
+                                
+                                
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesPaises.opcion.equals('1') or bgesPaises.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesPaises.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px" value="#{bgesPaises.paises}" var="paiss"
+                                     scrollable="true" rowKey="#{paiss.paiCodPk}" scrollHeight="190"
+                                     emptyMessage="#{cabecera.rol_tabla_vacia}"
+                                     scrollWidth="600" selection="#{bgesPaises.pais}" selectionMode="single"
+                                 rendered="#{not bgesPaises.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            <p:column headerText="Codigo" filterBy="#{paiss.paiCodPk}" filterMatchMode="contains"
+                                      rendered="#{bgesPaises.columnas.contains('1')}"
+				      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{paiss.paiCodPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Nombre" filterBy="#{paiss.paiNom}" filterMatchMode="contains"
+                                      rendered="#{bgesPaises.columnas.contains('2')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{paiss.paiNom}"/>
+                                </font>
+                            </p:column>
+                            
+                            
+                        </p:dataTable>
+                        
+                        
+                        
+                        
+                        <h:panelGroup rendered="#{bgesPaises.opcion.equals('2')}">
+                        
+                        <fieldset  style="height: 400px;width: 600px;border-color: transparent; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            
+                            <table class="tabla1">    
+                                 <tr> 
+                                     <td style="width: 10px;">
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Codigo</b>
+                                         </font>
+                                     </td>
+                                     <td>
+                                         <h:inputText id="cod_1" value="#{bgesPaises.CPais.paiCodPk}" required="true"
+                                                      requiredMessage="#{cabecera.rol_req_descripcion}"
+                                                      validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                      
+                                                      style="color:#{cabecera.login_camposinput};width: 100px;background-color:#{cabecera.login_fondo_camposinput};">
+                                             <f:validateLength maximum="50"/>
+                                         </h:inputText>
+                                         
+                                         <h:message id="msg_cod_1" for="cod_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                         <p:tooltip for="cod_1" value="#{bgenAyudas.obtenerAyuda(128)}"/>
+                                         <p:tooltip for="msg_cod_1" value="#{bgenMessages.message('ayud:cod_1')}"/>
+                                     </td>
+                                 </tr>   
+                                     
+                                 <tr>
+                                     <td>
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Nombre</b>
+                                         </font>
+                                     </td>
+                                     <td>   
+                                         <h:inputText id="idt_1" value="#{bgesPaises.CPais.paiNom}" required="true"
+                                                      requiredMessage="#{cabecera.rol_req_descripcion}"
+                                                      validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                      
+                                                      style="color:#{cabecera.login_camposinput};width: 100px;background-color:#{cabecera.login_fondo_camposinput};">
+                                             <f:validateLength maximum="50"/>
+                                         </h:inputText>
+                                         
+                                         <h:message id="msg_idt_1" for="idt_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                         <p:tooltip for="idt_1" value="#{bgenAyudas.obtenerAyuda(129)}"/>
+                                         <p:tooltip for="msg_idt_1" value="#{bgenMessages.message('ayud:idt_1')}"/>
+                                     </td>
+                                 </tr>
+                                     
+                                     
+                                 <tr>
+                                     <td>   
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                         </font>
+                                     </td>
+                                     <td>
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Estado Dia</b>
+                                         </font>
+                                     </td>
+                                     <td align="center" colspan="2">
+                                                                                     
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Rango 1</b>
+                                         </font>
+                                     </td>
+                                     
+                                     <td align="center" colspan="2">        
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Rango 2</b>
+                                         </font>
+                                     </td>
+                                     
+                                     <td align="center" colspan="2">        
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Rango 3</b>
+                                         </font>
+                                     </td>
+                                     
+                                     <td align="center" colspan="2">        
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Rango 4</b>
+                                         </font>
+                                     </td>
+                                     
+                                 </tr>
+                                 
+                                 <tr>
+                                     <td>
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                                         </font>
+                                     </td>
+                                     <td>
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Festivo/Laboral</b>
+                                         </font>
+                                     </td>
+                                     <td>        
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Hora Inicial</b>
+                                         </font>
+                                     </td>
+                                     <td>   
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Hora Final</b>
+                                         </font>
+                                     </td>
+                                     <td>        
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Hora Inicial</b>
+                                         </font>
+                                     </td>
+                                     <td>    
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Hora Final</b>
+                                         </font>
+                                     </td>
+                                     <td>        
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Hora Inicial</b>
+                                         </font>
+                                     </td>
+                                     <td>   
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Hora Final</b>
+                                         </font>
+                                     </td>
+                                     <td>        
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Hora Inicial</b>
+                                         </font>
+                                     </td>
+                                     <td>    
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Hora Final</b>
+                                         </font>
+                                     </td>
+                                 </tr>    
+
+                           
+                                                  
+                                
+                                <tr>
+                                    <td>
+                                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                              color="#{cabecera.login_color_label}">
+                                            <b>Lunes</b>
+                                        </font>
+                                    </td>
+                                    <td>
+                                        <h:selectOneMenu value="#{bgesPaises.CPais.paiEstLun}" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                            <f:selectItem itemLabel="Laboral" itemValue="L"/>
+                                            <f:selectItem itemLabel="Festivo" itemValue="F"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar  id="inil1" styleClass="" value="#{bgesPaises.CPais.paiHoi1Lun}"
+                                                     requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                     validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                     pattern="HH:mm a" timeOnly="true" 
+                                                     />
+                                        <h:message id="msg_inil1" for="inil1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inil1" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inil1" value="#{bgenMessages.message('paiss:inil1')}"/>
+                                    </td>
+                                        
+                                    <td>           
+                                        <p:calendar id="finl1" value="#{bgesPaises.CPais.paiHof1Lun}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finl1" for="finl1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finl1" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finl1" value="#{bgenMessages.message('paiss:finl1')}"/>
+                                    </td>           
+                                    <td>      
+                                        <p:calendar id="inil2" value="#{bgesPaises.CPais.paiHoi2Lun}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inil2" for="inil2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inil2" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inil2" value="#{bgenMessages.message('paiss:inil2')}"/>
+                                    </td>      
+                                    <td>           
+                                        <p:calendar id="finl2" value="#{bgesPaises.CPais.paiHof2Lun}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finl2" for="finl2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finl2" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finl2" value="#{bgenMessages.message('paiss:finl2')}"/>
+                                    </td>       
+                                    <td>           
+                                        <p:calendar id="inil3" value="#{bgesPaises.CPais.paiHoi3Lun}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inil3" for="inil3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inil3" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inil3" value="#{bgenMessages.message('paiss:inil3')}"/>
+                                    </td>     
+                                    <td>           
+                                        <p:calendar id="finl3" value="#{bgesPaises.CPais.paiHof3Lun}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finl3" for="finl3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finl3" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finl3" value="#{bgenMessages.message('paiss:finl3')}"/>
+                                    </td>     
+                                    <td>          
+                                        <p:calendar id="inil4" value="#{bgesPaises.CPais.paiHoi4Lun}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inil4" for="inil4" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inil4" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inil4" value="#{bgenMessages.message('paiss:inil4')}"/>
+                                    </td>    
+                                    <td>         
+                                        <p:calendar id="finl4" value="#{bgesPaises.CPais.paiHof4Lun}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finl4" for="finl4" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finl44" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finl44" value="#{bgenMessages.message('paiss:finl4')}"/>
+                                    </td>   
+                                </tr>          
+                                    
+                                <tr>
+                                    <td>
+                                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                              color="#{cabecera.login_color_label}">
+                                            <b>Martes</b>
+                                        </font>
+                                    </td>
+                                    <td>
+                                        
+                                         <h:selectOneMenu value="#{bgesPaises.CPais.paiEstMar}" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                            <f:selectItem itemLabel="Laboral" itemValue="L"/>
+                                            <f:selectItem itemLabel="Festivo" itemValue="F"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                    <td>
+                                        <p:calendar id="inima1" value="#{bgesPaises.CPais.paiHoi1Mar}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inima1" for="inima1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inima11" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inima11" value="#{bgenMessages.message('paiss:inima1')}"/>
+                                    </td>
+                                    <td>
+                                        <p:calendar id="finma1" value="#{bgesPaises.CPais.paiHof1Mar}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finma1" for="finma1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finma1" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finma1" value="#{bgenMessages.message('paiss:finma1')}"/>
+                                    </td>    
+                                    <td>
+                                        <p:calendar id="inima2" value="#{bgesPaises.CPais.paiHoi2Mar}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inima2" for="inima2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inima2" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inima2" value="#{bgenMessages.message('paiss:inima2')}"/>
+                                    </td>
+                                    <td>
+                                        <p:calendar id="finma2" value="#{bgesPaises.CPais.paiHof2Mar}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finma2" for="finma2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finma2" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finma2" value="#{bgenMessages.message('paiss:finma2')}"/>
+                                    </td>
+                                    <td>
+                                        <p:calendar id="inima3" value="#{bgesPaises.CPais.paiHoi3Mar}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inima3" for="inima3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inima3" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inima3" value="#{bgenMessages.message('paiss:inima3')}"/>
+                                    </td>
+                                    <td>    
+                                        <p:calendar id="finma3" value="#{bgesPaises.CPais.paiHof3Mar}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finma3" for="finma3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finma3" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finma3" value="#{bgenMessages.message('paiss:finma3')}"/>
+                                    </td>
+                                    <td>    
+                                        <p:calendar id="inima4" value="#{bgesPaises.CPais.paiHoi4Mar}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inima4" for="inima4" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inima4" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inima4" value="#{bgenMessages.message('paiss:inima4')}"/>
+                                    </td>
+                                    <td>    
+                                        <p:calendar id="finma4" value="#{bgesPaises.CPais.paiHof4Mar}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finma4" for="finma4" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finma4" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finma4" value="#{bgenMessages.message('paiss:finma4')}"/>
+                                    </td>       
+                                </tr>
+                                    
+                                <tr>
+                                    
+                                    
+                                    <td>
+                                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                              color="#{cabecera.login_color_label}">
+                                            <b>Miercoles</b>
+                                        </font>   
+                                    </td>
+                                        
+                                    <td>       
+                                        <h:selectOneMenu value="#{bgesPaises.CPais.paiEstMie}" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                            <f:selectItem itemLabel="Laboral" itemValue="L"/>
+                                            <f:selectItem itemLabel="Festivo" itemValue="F"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inimi1" value="#{bgesPaises.CPais.paiHoi1Mie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inimi1" for="inimi1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inimi1" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inimi1" value="#{bgenMessages.message('paiss:inimi1')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finmi1" value="#{bgesPaises.CPais.paiHof1Mie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finmi1" for="finmi1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finmi1" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finmi1" value="#{bgenMessages.message('paiss:finmi1')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inimi2" value="#{bgesPaises.CPais.paiHoi2Mie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inimi2" for="inimi2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inimi2" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inimi2" value="#{bgenMessages.message('paiss:inimi2')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finmi2" value="#{bgesPaises.CPais.paiHof2Mie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finmi2" for="finmi2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finmi2" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finmi2" value="#{bgenMessages.message('paiss:finmi2')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inimi3" value="#{bgesPaises.CPais.paiHoi3Mie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inimi3" for="inimi3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inimi3" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inimi3" value="#{bgenMessages.message('paiss:inimi3')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finmi3" value="#{bgesPaises.CPais.paiHof3Mie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finmi3" for="finmi3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finmi3" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finmi3" value="#{bgenMessages.message('paiss:finmi3')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inimi4" value="#{bgesPaises.CPais.paiHoi4Mie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inimi4" for="inimi4" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inimi4" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inimi4" value="#{bgenMessages.message('paiss:inimi4')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finmi4" value="#{bgesPaises.CPais.paiHof4Mie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finmi4" for="finmi4" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finmi4" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finmi4" value="#{bgenMessages.message('paiss:finmi4')}"/>
+                                    </td>
+                                        
+                                </tr>
+                                    
+                                    
+                                <tr>
+                                    
+                                    <td>
+                                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                              color="#{cabecera.login_color_label}">
+                                            <b>Jueves</b>
+                                        </font>
+                                    </td>
+                                        
+                                    <td>
+                                        <h:selectOneMenu value="#{bgesPaises.CPais.paiEstJue}" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                            <f:selectItem itemLabel="Laboral" itemValue="L"/>
+                                            <f:selectItem itemLabel="Festivo" itemValue="F"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inij1" value="#{bgesPaises.CPais.paiHoi1Jue}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inij1" for="inij1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inij1" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inij1" value="#{bgenMessages.message('paiss:inij1')}"/>
+                                    </td>
+                                        
+                                        
+                                    <td>
+                                        <p:calendar id="finj1" value="#{bgesPaises.CPais.paiHof1Jue}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finj1" for="finj1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finj1" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finj1" value="#{bgenMessages.message('paiss:finj1')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inij2" value="#{bgesPaises.CPais.paiHoi2Jue}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inij2" for="inij2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inij2" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inij2" value="#{bgenMessages.message('paiss:inij2')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finj2" value="#{bgesPaises.CPais.paiHof2Jue}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finj2" for="finj2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finj2" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finj2" value="#{bgenMessages.message('paiss:finj2')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inij3" value="#{bgesPaises.CPais.paiHoi3Jue}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inij3" for="inij3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inij3" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inij3" value="#{bgenMessages.message('paiss:inij3')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finj3" value="#{bgesPaises.CPais.paiHof3Jue}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finj3" for="finj3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finj3" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finj3" value="#{bgenMessages.message('paiss:finj3')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inij4" value="#{bgesPaises.CPais.paiHoi4Jue}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inij4" for="inij4" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inij4" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inij4" value="#{bgenMessages.message('paiss:inij4')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finj4" value="#{bgesPaises.CPais.paiHof4Jue}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finj4" for="finj4" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finj4" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finj4" value="#{bgenMessages.message('paiss:finj4')}"/>
+                                    </td>
+                                        
+                                </tr>
+                                    
+                                <tr>
+                                    
+                                    <td>    
+                                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                              color="#{cabecera.login_color_label}">
+                                            <b>Viernes</b>
+                                        </font>
+                                    </td>
+                                        
+                                    <td>
+                                        <h:selectOneMenu value="#{bgesPaises.CPais.paiEstVie}" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                            <f:selectItem itemLabel="Laboral" itemValue="L"/>
+                                            <f:selectItem itemLabel="Festivo" itemValue="F"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="iniv1" value="#{bgesPaises.CPais.paiHoi1Vie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_iniv1" for="iniv1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="iniv1" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_iniv1" value="#{bgenMessages.message('paiss:iniv1')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finv1" value="#{bgesPaises.CPais.paiHof1Vie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finv1" for="finv1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finv1" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finv1" value="#{bgenMessages.message('paiss:finv1')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="iniv2" value="#{bgesPaises.CPais.paiHoi2Vie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_iniv2" for="iniv2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="iniv2" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_iniv2" value="#{bgenMessages.message('paiss:iniv2')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finv2" value="#{bgesPaises.CPais.paiHof2Vie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finv2" for="finv2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finv2" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finv2" value="#{bgenMessages.message('paiss:finv2')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="iniv3" value="#{bgesPaises.CPais.paiHoi3Vie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_iniv3" for="iniv3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="iniv3" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_iniv3" value="#{bgenMessages.message('paiss:iniv3')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finv3" value="#{bgesPaises.CPais.paiHof3Vie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finv3" for="finv3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finv3" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finv3" value="#{bgenMessages.message('paiss:finv3')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="iniv4" value="#{bgesPaises.CPais.paiHoi4Vie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_iniv4" for="iniv4" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="iniv4" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_iniv4" value="#{bgenMessages.message('paiss:iniv4')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finv4" value="#{bgesPaises.CPais.paiHof4Vie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finv4" for="finv4" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finv4" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finv4" value="#{bgenMessages.message('paiss:finv4')}"/>
+                                    </td>
+                                        
+                                </tr>
+                                    
+                                    
+                                <tr>
+                                    <td>
+                                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                              color="#{cabecera.login_color_label}">
+                                            <b>Sabado</b>
+                                        </font>
+                                    </td>
+                                        
+                                    <td>                                    
+                                        <h:selectOneMenu value="#{bgesPaises.CPais.paiEstSab}" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                            <f:selectItem itemLabel="Laboral" itemValue="L"/>
+                                            <f:selectItem itemLabel="Festivo" itemValue="F"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inis1" value="#{bgesPaises.CPais.paiHoi1Sab}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inis1" for="inis1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inis1" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inis1" value="#{bgenMessages.message('paiss:inis1')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="fins1" value="#{bgesPaises.CPais.paiHof1Sab}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_fins1" for="fins1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="fins1" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_fins1" value="#{bgenMessages.message('paiss:fins1')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inis2" value="#{bgesPaises.CPais.paiHoi2Sab}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inis2" for="inis2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inis2" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inis2" value="#{bgenMessages.message('paiss:inis2')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="fins2" value="#{bgesPaises.CPais.paiHof2Sab}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_fins2" for="fins2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="fins2" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_fins2" value="#{bgenMessages.message('paiss:fins2')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inis3" value="#{bgesPaises.CPais.paiHoi3Sab}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inis3" for="inis3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inis3" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inis3" value="#{bgenMessages.message('paiss:inis3')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="fins3" value="#{bgesPaises.CPais.paiHof3Sab}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_fins3" for="fins3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="fins3" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_fins3" value="#{bgenMessages.message('paiss:fins3')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inis4" value="#{bgesPaises.CPais.paiHoi4Sab}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inis4" for="inis4" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inis4" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inis4" value="#{bgenMessages.message('paiss:inis4')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="fins4" value="#{bgesPaises.CPais.paiHof4Sab}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_fins4" for="fins4" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="fins4" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_fins4" value="#{bgenMessages.message('paiss:fins4')}"/>
+                                    </td>
+                                        
+                                </tr>
+                                    
+                                    
+                                <tr>
+                                    <td>
+                                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                              color="#{cabecera.login_color_label}">
+                                            <b>Domingo</b>
+                                        </font>
+                                    </td>
+                                        
+                                    <td>
+                                        <h:selectOneMenu value="#{bgesPaises.CPais.paiEstDom}" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                            <f:selectItem itemLabel="Laboral" itemValue="L"/>
+                                            <f:selectItem itemLabel="Festivo" itemValue="F"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inid1" value="#{bgesPaises.CPais.paiHoi1Dom}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inid1" for="inid1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inid1" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inid1" value="#{bgenMessages.message('paiss:inid1')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="find1" value="#{bgesPaises.CPais.paiHof1Dom}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_find1" for="find1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="find1" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_find1" value="#{bgenMessages.message('paiss:find1')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inid2" value="#{bgesPaises.CPais.paiHoi2Dom}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inid2" for="inid2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inid2" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inid2" value="#{bgenMessages.message('paiss:inid2')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="find2" value="#{bgesPaises.CPais.paiHof2Dom}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_find2" for="find2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="find2" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_find2" value="#{bgenMessages.message('paiss:find2')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inid3" value="#{bgesPaises.CPais.paiHoi3Dom}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inid3" for="inid3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inid3" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inid3" value="#{bgenMessages.message('paiss:inid3')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="find3" value="#{bgesPaises.CPais.paiHof3Dom}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_find3" for="find3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="find3" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_find3" value="#{bgenMessages.message('paiss:find3')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inid4" value="#{bgesPaises.CPais.paiHoi4Dom}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inid4" for="inid4" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inid4" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inid4" value="#{bgenMessages.message('paiss:inid4')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="find4" value="#{bgesPaises.CPais.paiHof4Dom}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_find4" for="find4" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="find4" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_find4" value="#{bgenMessages.message('paiss:find4')}"/>
+                                    </td>
+                                        
+                                </tr>    
+                                
+                                
+                                
+                                
+                                
+                                
+                                </table>
+                    
+                            
+                        </fieldset>
+                        </h:panelGroup>
+                    </fieldset>
+                    
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesPaises.crear}" rendered="#{bgesPaises.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesPaises.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesPaises.pais.paiNom}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesPaises.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                            <h:outputText value="#{bgesPaises.pais.paiCodPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre</b>
+                                </font>
+                            <h:outputText value="#{bgesPaises.pais.paiNom}"/>
+                            
+                            
+                            
+                            
+                            
+                                
+                                
+                                
+                            </h:panelGrid>
+                    </p:dialog>
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesPaises.opcion.equals('3')}">
+                        
+                        <fieldset  style="height: 500px;width: 920px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf_1">
+                            
+                               
+
+                                
+                                
+                            </h:panelGrid>
+                            
+                            <table class="tabla1">    
+                                 <tr> 
+                                     <td style="width: 10px;">
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Codigo</b>
+                                         </font>
+                                     </td>
+                                     <td>
+                                         <h:outputText value="#{bgesPaises.pais.paiCodPk}"/>
+                                     </td>
+                                 </tr>   
+                                     
+                                 <tr>
+                                     <td>
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Nombre</b>
+                                         </font>
+                                     </td>
+                                     <td>   
+                                         <h:inputText id="idt_11" value="#{bgesPaises.pais.paiNom}" required="true"
+                                                      requiredMessage="#{cabecera.rol_req_descripcion}"
+                                                      validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                      
+                                                      style="color:#{cabecera.login_camposinput};width: 100px;background-color:#{cabecera.login_fondo_camposinput};">
+                                             <f:validateLength maximum="50"/>
+                                         </h:inputText>
+                                         
+                                         <h:message id="msg_idt_11" for="idt_11" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                         <p:tooltip for="idt_11" value="#{bgenAyudas.obtenerAyuda(129)}"/>
+                                         <p:tooltip for="msg_idt_11" value="#{bgenMessages.message('ayud:idt_11')}"/>
+                                     </td>
+                                 </tr>
+                                     
+                                     
+                                 <tr>
+                                     <td>   
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                         </font>
+                                     </td>
+                                     <td>
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Estado Dia</b>
+                                         </font>
+                                     </td>
+                                     <td align="center" colspan="2">
+                                         
+                                             
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Rango 1</b>
+                                         </font>
+                                     </td>
+                                     
+                                     <td align="center" colspan="2">        
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Rango 2</b>
+                                         </font>
+                                     </td>
+                                     
+                                     <td align="center" colspan="2">        
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Rango 3</b>
+                                         </font>
+                                     </td>
+                                     
+                                     <td align="center" colspan="2">        
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Rango 4</b>
+                                         </font>
+                                     </td>
+                                     
+                                 </tr>
+                                 
+                                 <tr>
+                                     <td>        
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b></b>
+                                         </font>
+                                     </td>
+                                     
+                                     <td>
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Festivo/Laboral</b>
+                                         </font>
+                                     </td>
+                                     <td>        
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Hora Inicial</b>
+                                         </font>
+                                     </td>
+                                     <td>   
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Hora Final</b>
+                                         </font>
+                                     </td>
+                                     <td>        
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Hora Inicial</b>
+                                         </font>
+                                     </td>
+                                     <td>    
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Hora Final</b>
+                                         </font>
+                                     </td>
+                                     <td>        
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Hora Inicial</b>
+                                         </font>
+                                     </td>
+                                     <td>   
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Hora Final</b>
+                                         </font>
+                                     </td>
+                                     <td>        
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Hora Inicial</b>
+                                         </font>
+                                     </td>
+                                     <td>    
+                                         <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                               color="#{cabecera.login_color_label}">
+                                             <b>Hora Final</b>
+                                         </font>
+                                     </td>
+                                 </tr>    
+
+                           
+                                                  
+                                
+                                <tr>
+                                    <td>
+                                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                              color="#{cabecera.login_color_label}">
+                                            <b>Lunes</b>
+                                        </font>
+                                    </td>
+                                    <td>
+                                        <h:selectOneMenu value="#{bgesPaises.pais.paiEstLun}" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                            <f:selectItem itemLabel="Laboral" itemValue="L"/>
+                                            <f:selectItem itemLabel="Festivo" itemValue="F"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar  id="inil11" styleClass="" value="#{bgesPaises.pais.paiHoi1Lun}"
+                                                     requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                     validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                     pattern="HH:mm a" timeOnly="true" 
+                                                     />
+                                        <h:message id="msg_inil11" for="inil11" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inil11" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inil11" value="#{bgenMessages.message('paiss:inil11')}"/>
+                                    </td>
+                                        
+                                    <td>           
+                                        <p:calendar id="finl11" value="#{bgesPaises.pais.paiHof1Lun}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finl11" for="finl11" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finl11" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finl11" value="#{bgenMessages.message('paiss:finl11')}"/>
+                                    </td>           
+                                    <td>      
+                                        <p:calendar id="inil22" value="#{bgesPaises.pais.paiHoi2Lun}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inil22" for="inil22" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inil22" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inil22" value="#{bgenMessages.message('paiss:inil22')}"/>
+                                    </td>      
+                                    <td>           
+                                        <p:calendar id="finl22" value="#{bgesPaises.pais.paiHof2Lun}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finl22" for="finl22" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finl22" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finl22" value="#{bgenMessages.message('paiss:finl22')}"/>
+                                    </td>       
+                                    <td>           
+                                        <p:calendar id="inil33" value="#{bgesPaises.pais.paiHoi3Lun}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inil33" for="inil33" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inil33" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inil33" value="#{bgenMessages.message('paiss:inil33')}"/>
+                                    </td>     
+                                    <td>           
+                                        <p:calendar id="finl33" value="#{bgesPaises.pais.paiHof3Lun}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finl33" for="finl33" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finl33" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finl33" value="#{bgenMessages.message('paiss:finl33')}"/>
+                                    </td>     
+                                    <td>          
+                                        <p:calendar id="inil44" value="#{bgesPaises.pais.paiHoi4Lun}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inil44" for="inil4" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inil44" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inil44" value="#{bgenMessages.message('paiss:inil44')}"/>
+                                    </td>    
+                                    <td>         
+                                        <p:calendar id="finl44" value="#{bgesPaises.pais.paiHof4Lun}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finl44" for="finl44" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finl44" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finl44" value="#{bgenMessages.message('paiss:finl44')}"/>
+                                    </td>   
+                                </tr>          
+                                    
+                                <tr>
+                                    <td>
+                                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                              color="#{cabecera.login_color_label}">
+                                            <b>Martes</b>
+                                        </font>
+                                    </td>
+                                    <td>
+                                        <h:selectOneMenu value="#{bgesPaises.pais.paiEstMar}" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                            <f:selectItem itemLabel="Laboral" itemValue="L"/>
+                                            <f:selectItem itemLabel="Festivo" itemValue="F"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                    <td>
+                                        <p:calendar id="inima11" value="#{bgesPaises.pais.paiHoi1Mar}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inima11" for="inima11" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inima11" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inima11" value="#{bgenMessages.message('paiss:inima11')}"/>
+                                    </td>
+                                    <td>
+                                        <p:calendar id="finma11" value="#{bgesPaises.pais.paiHof1Mar}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finma11" for="finma1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finma11" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finma11" value="#{bgenMessages.message('paiss:finma11')}"/>
+                                    </td>    
+                                    <td>
+                                        <p:calendar id="inima22" value="#{bgesPaises.pais.paiHoi2Mar}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inima22" for="inima22" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inima22" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inima22" value="#{bgenMessages.message('paiss:inima22')}"/>
+                                    </td>
+                                    <td>
+                                        <p:calendar id="finma22" value="#{bgesPaises.pais.paiHof2Mar}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finma22" for="finma2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finma22" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finma22" value="#{bgenMessages.message('paiss:finma22')}"/>
+                                    </td>
+                                    <td>
+                                        <p:calendar id="inima33" value="#{bgesPaises.pais.paiHoi3Mar}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inima33" for="inima3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inima33" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inima3" value="#{bgenMessages.message('paiss:inima33')}"/>
+                                    </td>
+                                    <td>    
+                                        <p:calendar id="finma33" value="#{bgesPaises.pais.paiHof3Mar}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finma33" for="finma3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finma33" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finma33" value="#{bgenMessages.message('paiss:finma33')}"/>
+                                    </td>
+                                    <td>    
+                                        <p:calendar id="inima44" value="#{bgesPaises.pais.paiHoi4Mar}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inima44" for="inima44" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inima44" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inima44" value="#{bgenMessages.message('paiss:inima44')}"/>
+                                    </td>
+                                    <td>    
+                                        <p:calendar id="finma44" value="#{bgesPaises.pais.paiHof4Mar}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finma44" for="finma44" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finma44" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finma44" value="#{bgenMessages.message('paiss:finma44')}"/>
+                                    </td>       
+                                </tr>
+                                    
+                                <tr>
+                                    
+                                    
+                                    <td>
+                                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                              color="#{cabecera.login_color_label}">
+                                            <b>Miercoles</b>
+                                        </font>   
+                                    </td>
+                                        
+                                    <td>       
+                                        <h:selectOneMenu value="#{bgesPaises.pais.paiEstMie}" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                            <f:selectItem itemLabel="Laboral" itemValue="L"/>
+                                            <f:selectItem itemLabel="Festivo" itemValue="F"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inimi11" value="#{bgesPaises.pais.paiHoi1Mie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inimi11" for="inimi11" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inimi11" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inimi11" value="#{bgenMessages.message('paiss:inimi11')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finmi11" value="#{bgesPaises.pais.paiHof1Mie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finmi11" for="finmi11" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finmi11" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finmi11" value="#{bgenMessages.message('paiss:finmi11')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inimi22" value="#{bgesPaises.pais.paiHoi2Mie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inimi22" for="inimi22" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inimi22" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inimi22" value="#{bgenMessages.message('paiss:inimi22')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finmi22" value="#{bgesPaises.pais.paiHof2Mie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finmi22" for="finmi22" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finmi22" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finmi22" value="#{bgenMessages.message('paiss:finmi22')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inimi33" value="#{bgesPaises.pais.paiHoi3Mie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inimi33" for="inimi33" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inimi33" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inimi33" value="#{bgenMessages.message('paiss:inimi33')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finmi33" value="#{bgesPaises.pais.paiHof3Mie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finmi33" for="finmi33" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finmi33" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finmi33" value="#{bgenMessages.message('paiss:finmi33')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inimi44" value="#{bgesPaises.pais.paiHoi4Mie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inimi44" for="inimi44" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inimi44" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inimi44" value="#{bgenMessages.message('paiss:inimi44')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finmi44" value="#{bgesPaises.pais.paiHof4Mie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finmi44" for="finmi44" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finmi44" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finmi44" value="#{bgenMessages.message('paiss:finmi44')}"/>
+                                    </td>
+                                        
+                                </tr>
+                                    
+                                    
+                                <tr>
+                                    
+                                    <td>
+                                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                              color="#{cabecera.login_color_label}">
+                                            <b>Jueves</b>
+                                        </font>
+                                    </td>
+                                        
+                                    <td>
+                                        <h:selectOneMenu value="#{bgesPaises.pais.paiEstJue}" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                            <f:selectItem itemLabel="Laboral" itemValue="L"/>
+                                            <f:selectItem itemLabel="Festivo" itemValue="F"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inij11" value="#{bgesPaises.pais.paiHoi1Jue}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inij11" for="inij11" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inij11" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inij1" value="#{bgenMessages.message('paiss:inij11')}"/>
+                                    </td>
+                                        
+                                        
+                                    <td>
+                                        <p:calendar id="finj11" value="#{bgesPaises.pais.paiHof1Jue}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finj11" for="finj11" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finj11" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finj11" value="#{bgenMessages.message('paiss:finj11')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inij22" value="#{bgesPaises.pais.paiHoi2Jue}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inij22" for="inij22" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inij22" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inij22" value="#{bgenMessages.message('paiss:inij22')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finj22" value="#{bgesPaises.pais.paiHof2Jue}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finj22" for="finj22" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finj22" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finj22" value="#{bgenMessages.message('paiss:finj22')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inij33" value="#{bgesPaises.pais.paiHoi3Jue}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inij33" for="inij33" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inij33" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inij33" value="#{bgenMessages.message('paiss:inij33')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finj33" value="#{bgesPaises.pais.paiHof3Jue}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finj33" for="finj33" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finj33" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finj33" value="#{bgenMessages.message('paiss:finj33')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inij44" value="#{bgesPaises.pais.paiHoi4Jue}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inij44" for="inij44" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inij44" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inij44" value="#{bgenMessages.message('paiss:inij44')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finj44" value="#{bgesPaises.pais.paiHof4Jue}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finj44" for="finj44" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finj44" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finj44" value="#{bgenMessages.message('paiss:finj44')}"/>
+                                    </td>
+                                        
+                                </tr>
+                                    
+                                <tr>
+                                    
+                                    <td>    
+                                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                              color="#{cabecera.login_color_label}">
+                                            <b>Viernes</b>
+                                        </font>
+                                    </td>
+                                        
+                                    <td>
+                                        <h:selectOneMenu value="#{bgesPaises.pais.paiEstVie}" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                            <f:selectItem itemLabel="Laboral" itemValue="L"/>
+                                            <f:selectItem itemLabel="Festivo" itemValue="F"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="iniv11" value="#{bgesPaises.pais.paiHoi1Vie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_iniv11" for="iniv11" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="iniv11" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_iniv11" value="#{bgenMessages.message('paiss:iniv11')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finv11" value="#{bgesPaises.pais.paiHof1Vie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finv11" for="finv11" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finv11" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finv11" value="#{bgenMessages.message('paiss:finv11')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="iniv22" value="#{bgesPaises.pais.paiHoi2Vie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_iniv22" for="iniv22" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="iniv22" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_iniv22" value="#{bgenMessages.message('paiss:iniv22')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finv22" value="#{bgesPaises.pais.paiHof2Vie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finv22" for="finv22" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finv22" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finv22" value="#{bgenMessages.message('paiss:finv22')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="iniv33" value="#{bgesPaises.pais.paiHoi3Vie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_iniv33" for="iniv33" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="iniv33" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_iniv33" value="#{bgenMessages.message('paiss:iniv33')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finv33" value="#{bgesPaises.pais.paiHof3Vie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finv33" for="finv33" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finv33" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finv33" value="#{bgenMessages.message('paiss:finv33')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="iniv44" value="#{bgesPaises.pais.paiHoi4Vie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_iniv44" for="iniv44" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="iniv44" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_iniv44" value="#{bgenMessages.message('paiss:iniv44')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="finv44" value="#{bgesPaises.pais.paiHof4Vie}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_finv44" for="finv44" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="finv44" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_finv44" value="#{bgenMessages.message('paiss:finv44')}"/>
+                                    </td>
+                                        
+                                </tr>
+                                    
+                                    
+                                <tr>
+                                    <td>
+                                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                              color="#{cabecera.login_color_label}">
+                                            <b>Sabado</b>
+                                        </font>
+                                    </td>
+                                        
+                                    <td>                                    
+                                        <h:selectOneMenu value="#{bgesPaises.pais.paiEstSab}" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                            <f:selectItem itemLabel="Laboral" itemValue="L"/>
+                                            <f:selectItem itemLabel="Festivo" itemValue="F"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inis11" value="#{bgesPaises.pais.paiHoi1Sab}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inis11" for="inis11" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inis11" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inis11" value="#{bgenMessages.message('paiss:inis11')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="fins11" value="#{bgesPaises.pais.paiHof1Sab}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_fins11" for="fins11" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="fins11" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_fins11" value="#{bgenMessages.message('paiss:fins11')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inis22" value="#{bgesPaises.pais.paiHoi2Sab}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inis22" for="inis22" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inis22" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inis22" value="#{bgenMessages.message('paiss:inis22')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="fins22" value="#{bgesPaises.pais.paiHof2Sab}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_fins22" for="fins22" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="fins22" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_fins22" value="#{bgenMessages.message('paiss:fins22')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inis33" value="#{bgesPaises.pais.paiHoi3Sab}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inis33" for="inis33" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inis33" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inis33" value="#{bgenMessages.message('paiss:inis33')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="fins33" value="#{bgesPaises.pais.paiHof3Sab}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_fins33" for="fins33" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="fins33" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_fins33" value="#{bgenMessages.message('paiss:fins33')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inis44" value="#{bgesPaises.pais.paiHoi4Sab}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inis44" for="inis44" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inis44" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inis44" value="#{bgenMessages.message('paiss:inis44')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="fins44" value="#{bgesPaises.pais.paiHof4Sab}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_fins44" for="fins44" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="fins44" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_fins44" value="#{bgenMessages.message('paiss:fins44')}"/>
+                                    </td>
+                                        
+                                </tr>
+                                    
+                                    
+                                <tr>
+                                    <td>
+                                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                              color="#{cabecera.login_color_label}">
+                                            <b>Domingo</b>
+                                        </font>
+                                    </td>
+                                        
+                                    <td>
+                                        <h:selectOneMenu value="#{bgesPaises.pais.paiEstDom}" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                            <f:selectItem itemLabel="Laboral" itemValue="L"/>
+                                            <f:selectItem itemLabel="Festivo" itemValue="F"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inid11" value="#{bgesPaises.pais.paiHoi1Dom}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inid11" for="inid11" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inid11" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inid11" value="#{bgenMessages.message('paiss:inid11')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="find11" value="#{bgesPaises.pais.paiHof1Dom}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_find11" for="find1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="find11" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_find11" value="#{bgenMessages.message('paiss:find11')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inid22" value="#{bgesPaises.pais.paiHoi2Dom}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inid22" for="inid22" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inid22" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inid22" value="#{bgenMessages.message('paiss:inid22')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="find22" value="#{bgesPaises.pais.paiHof2Dom}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_find22" for="find2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="find22" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_find22" value="#{bgenMessages.message('paiss:find22')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inid33" value="#{bgesPaises.pais.paiHoi3Dom}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inid33" for="inid33" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inid33" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inid33" value="#{bgenMessages.message('paiss:inid33')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="find33" value="#{bgesPaises.pais.paiHof3Dom}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_find33" for="find33" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="find33" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_find33" value="#{bgenMessages.message('paiss:find33')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="inid44" value="#{bgesPaises.pais.paiHoi4Dom}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_inid44" for="inid44" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="inid44" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_inid44" value="#{bgenMessages.message('paiss:inid44')}"/>
+                                    </td>
+                                        
+                                    <td>
+                                        <p:calendar id="find44" value="#{bgesPaises.pais.paiHof4Dom}"
+                                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                    pattern="HH:mm a" timeOnly="true" />
+                                        <h:message id="msg_find44" for="find44" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="find44" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                                        <p:tooltip for="msg_find44" value="#{bgenMessages.message('paiss:find44')}"/>
+                                    </td>
+                                        
+                                </tr>    
+                                
+                                
+                                
+                                
+                                
+                                
+                                </table>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesPaises.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </span>
+    </h:body>
+</html>
+

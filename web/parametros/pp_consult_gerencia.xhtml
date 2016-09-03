@@ -1,0 +1,366 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <script>
+        PrimeFaces.locales['es'] = {
+            closeText: 'Cerrar',
+            prevText: 'Anterior',
+            nextText: 'Siguiente',
+            monthNames: ['Enero','Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+            dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+            dayNamesShort: ['Dom','Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+            dayNamesMin: ['D','L','M','X','J','V','S'],
+            weekHeader: 'Semana',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: '',
+            timeOnlyTitle: 'Sólo hora',
+            timeText: 'Tiempo',
+            hourText: 'Hora',
+            minuteText: 'Minuto',
+            secondText: 'Segundo',
+            currentText: 'Fecha actual',
+            ampm: false,
+            month: 'Mes',
+            week: 'Semana',
+            day: 'Día',
+            allDayText : 'Todo el día'
+        };
+    </script>
+    <h:body>
+        <div id="formulario">
+            <br/>
+            <fieldset style="height: 560px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="ger">
+                    <h:panelGroup  rendered="#{bgesTodoReporte.opcion eq '1' and bgesDoccormen.opcion eq '1'}">
+                        <h:panelGroup id="consulta" rendered="#{bgesConsultGerencia.detalle eq 'verPagPrincipal'}">
+                            <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                      color="#{cabecera.login_color_label}">
+                                    <center><b>CONSULTA GERENCIAL</b></center>
+                                </font>
+                                <table border="0">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel value="Estado:"/>    
+                                            </td>
+                                            <td>
+                                                <p:selectOneMenu style="height: 28px" label="Columnas" value="#{bgesConsultGerencia.filEstado}">
+                                                    <f:selectItem itemLabel="T" itemValue="Todos" itemDescription="todos"/>
+                                                    <f:selectItem itemLabel="A" itemValue="A" itemDescription="Activo"/>
+                                                    <f:selectItem itemLabel="F" itemValue="F" itemDescription="Finalizados"/>
+                                                </p:selectOneMenu>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel value="Clases"/>
+                                            </td>
+                                            <td>
+                                                <p:selectOneMenu style="height: 28px" label="Columnas" value="#{bgesConsultGerencia.varClas}">
+                                                    <f:selectItem itemLabel="T" itemValue="false" itemDescription="Todos"/>
+                                                    <f:selectItem itemLabel="F" itemValue="true" itemDescription="Filtrar"/>
+                                                    <p:ajax update="seleClase"/>
+                                                </p:selectOneMenu>
+                                            </td>
+                                            <td>
+                                                <h:panelGroup id="seleClase">
+                                                    <h:selectOneMenu id="are" value="#{bgesConsultGerencia.clas}" converter="jsf.beans.BConvClases"
+                                                                     rendered="#{bgesConsultGerencia.varClas}">
+                                                        <f:selectItems value="#{bgesConsultGerencia.clases}" var="cls"
+                                                                       itemLabel="#{cls.clsDescrip}" itemValue="#{cls}"/>
+                                                    </h:selectOneMenu>
+                                                </h:panelGroup>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h:outputLabel value="Condición"/>
+                                            </td>
+                                            <td>
+                                                <p:selectOneMenu style="height: 28px" label="Columnas">
+                                                    <f:selectItem itemLabel="T" itemValue="T" itemDescription="Todos"/>
+                                                    <f:selectItem itemLabel="D" itemValue="D" itemDescription="Al día" />
+                                                    <f:selectItem itemLabel="A" itemValue="A" itemDescription="Atrasados"/>
+                                                </p:selectOneMenu>
+                                            </td>
+                                            <td>
+                                                <h:outputLabel value="Fecha:"/>  
+                                            </td>
+                                            <td>
+                                                <p:calendar id="fecMin" value="#{bgesConsultGerencia.fecMin}" />
+                                            </td>
+                                            <td>
+                                                <p:calendar id="fecMac" value="#{bgesConsultGerencia.fecMac}" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </fieldset>
+                            <br/>
+                            <fieldset style="height: 340px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                                <center>
+                                    <h:outputLabel value="PROYECTO" />
+                                </center>
+                                <br/>
+                                <p:dataTable id="tabla" style="width: 600px" value="#{bgesConsultGerencia.proyectos}" var="proyecto"
+                                             scrollable="true" rowKey="#{proyecto.proCodPk}" scrollHeight="220"
+                                             emptyMessage="#{bgenErrores.obtenerError(14)}"
+                                             scrollWidth="600" selection="#{bgesConsultGerencia.proyecto}" selectionMode="single" >
+                                    <!-- <p:ajax event="rowSelect" oncomplete="" update="@form"/>-->
+
+
+                                    <p:column headerText="Condi."  filterMatchMode="contains"
+                                              width="40" filterStyle="min-width: 100px; max-width: 100px" >
+                                        <font size="1">
+                                            <p:commandLink action="#{bgesConsultGerencia.seleccionar}" update="@form">
+                                                <f:param name="proyecto" value="#{proyecto.proCodPk}"/>
+                                                <f:param name="detalle" value="verResponsables"/>
+                                                <h:panelGroup id="pry2">
+                                                    <h:graphicImage width="10" height="15" url="#{bgesConsultGerencia.semaforoMini(proyecto.proCodPk)}"/> 
+                                                </h:panelGroup>
+                                            </p:commandLink>
+                                            <p:tooltip for="pry2" value="#{bgesConsultGerencia.proyFormato}"/>
+                                        </font>
+                                    </p:column>
+                                    <p:column headerText="Nro." filterMatchMode="contains"
+                                              width="30" filterStyle="min-width: 50px; max-width: 50px">
+                                        <font size="1">
+                                            <h:outputText value="#{proyecto.proCodPk}"/>
+                                        </font>
+                                    </p:column>
+                                    <p:column headerText="Descripción" filterMatchMode="contains"
+                                              width="140" filterStyle="min-width: 50px; max-width: 50px" >
+                                        <font size="1">
+                                            <p:commandLink value="#{proyecto.proDescrip}" action="#{bgesConsultGerencia.seleccionar}" update="@form">
+                                                <f:param name="proyecto" value="#{proyecto.proCodPk}"/>
+                                                <f:param name="detalle" value="verActividades"/>
+                                            </p:commandLink>
+                                        </font>
+                                    </p:column>
+                                    <p:column headerText="Clase"  filterMatchMode="contains"
+                                              width="35" filterStyle="min-width: 40px; max-width: 40px">
+                                        <font size="1">
+                                            <h:outputText value="#{proyecto.proClsCodFk.clsCodPk}" id="clsCodPk" />
+                                        </font>
+                                        <p:tooltip for="clsCodPk" value="#{proyecto.proClsCodFk.clsDescrip}"/> 
+                                    </p:column>
+                                    <p:column headerText="Etapa"  filterMatchMode="contains"
+                                              width="35" filterStyle="min-width: 40px; max-width: 40px">
+                                        <font size="1">
+                                            <h:outputText value="#{proyecto.proEtpCodFk.etpCodPk}" id="etpCodPk"/>
+                                        </font>
+                                        <p:tooltip for="etpCodPk" value="#{proyecto.proEtpCodFk.etpDescrip}"/> 
+                                    </p:column>
+                                    <p:column headerText="Activ."  filterMatchMode="contains"
+                                              width="35" filterStyle="min-width: 40px; max-width: 40px">
+                                        <font size="1">
+                                            <h:outputText value="#{proyecto.proActCodFk.actCodPk}" id="actCodPk"/>
+                                        </font>
+                                        <p:tooltip for="actCodPk" value="#{proyecto.proActCodFk.actDescrip}"/> 
+                                    </p:column>
+                                    <p:column headerText="F. Inicio"  filterMatchMode="contains"
+                                              width="80" filterStyle="min-width: 40px; max-width: 40px">
+                                        <font size="1">
+                                            <h:outputText value="#{proyecto.proFechaHora}">
+                                                <f:convertDateTime pattern="dd-MM-yyyy" />
+                                            </h:outputText>
+                                        </font>
+                                    </p:column>
+                                    <p:column headerText="Estado"  filterMatchMode="contains"
+                                              width="45" filterStyle="min-width: 40px; max-width: 40px">
+                                        <font size="1">
+                                            <h:outputText value="#{proyecto.proEstado}"/>
+                                        </font>
+                                    </p:column>
+                                </p:dataTable>
+                            </fieldset>
+                            <br/>
+                            <div align="center">
+                                <p:commandButton value="Consultar" update="@form" action="#{bgesConsultGerencia.consultar}"/>
+                            </div>
+                        </h:panelGroup>
+
+                        <!-- Menú Detalles -->
+
+                        <h:panelGroup id="detalle" rendered="#{bgesConsultGerencia.detalle eq 'verActividades' or bgesConsultGerencia.detalle eq 'verResponsables'}">
+                            <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                                <div style="width: 550px;">
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                          olor="#{cabecera.login_color_label}">
+                                        <b>Proyecto:</b>
+                                    </font>
+                                    <h:outputLabel value="#{bgesConsultGerencia.proyecto.proCodPk}"/>    
+                                    <h:outputLabel value="#{bgesConsultGerencia.proyecto.proDescrip}"/>    
+                                    <table border="0">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                                          olor="#{cabecera.login_color_label}">
+                                                        <b>F. inicio:</b>
+                                                    </font>
+                                                </td>
+                                                <td>
+                                                    <font size="1">
+                                                        <h:outputLabel value="#{bgesConsultGerencia.proyecto.proFechaHora}">
+                                                            <f:convertDateTime pattern="dd-MM-yyyy" />
+                                                        </h:outputLabel>
+                                                    </font>
+                                                </td>
+                                                <td>
+                                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                                          olor="#{cabecera.login_color_label}">
+                                                        <b>Condición:</b>
+                                                    </font>
+                                                </td>
+                                                <td>
+                                                    <font size="1">
+                                                        <h:outputLabel value="#{bgesConsultGerencia.proyecto.proEstado}"/>
+                                                    </font>
+                                                </td>
+                                                <td>
+                                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                                          olor="#{cabecera.login_color_label}">
+                                                        <b>Estado:</b>
+                                                    </font>
+                                                </td>
+                                                <td>
+                                                    <font size="1">
+                                                            <h:panelGroup id="pry" style="margin-left: .7em;">
+                                                                <h:graphicImage width="20" height="30" url="generales/images/semro.gif" rendered="#{bgesNavegacion.proRojo}"/>
+                                                                <h:graphicImage width="20" height="30" url="generales/images/semam.gif" rendered="#{bgesNavegacion.proAmarillo}"/>
+                                                                <h:graphicImage width="20" height="30" url="generales/images/semve.gif" rendered="#{bgesNavegacion.proVerde}"/>
+                                                            </h:panelGroup>
+                                                    </font>
+                                                    <h:panelGroup id="tip">
+                                                        <p:tooltip for="pry" value="#{bgesNavegacion.proyFormato}"/>
+                                                    </h:panelGroup>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <p:commandButton value="X" update="@form" action="#{bgesConsultGerencia.seleccionar}" style="font-weight: bold; position:relative; top:-80px; left: 550px;">
+                                    <f:param name="detalle" value="verPagPrincipal"/>
+                                </p:commandButton>
+                                <ui:include src="../parametros/pp_navIcon002.xhtml"/>
+                            </fieldset>
+                            <br/>
+                            
+                            
+                            <!--detalles de actividades-->
+                            <h:panelGroup rendered="#{bgesConsultGerencia.detalle eq 'verActividades'}">
+                                <fieldset style="height: 360px; background-color: #{cabecera.form_inter_border_color};margin: 0; overflow: auto" >
+                                    <p:dataGrid var="pa" value="#{bgesConsultGerencia.proyActs}" columns="1" layout="grid"
+                                                rows="1" paginator="true" paginatorPosition="top" id="cars" style="background-color: white; padding:0px;"
+                                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                                                {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+                                        <p:panel header="#{pa.clases.clsDescrip}/#{pa.etapas.etpDescrip}/#{pa.actividades.actDescrip}" style="text-align:center">
+                                            <h:dataTable value="#{bgesConsultGerencia.itemPag(pa)}" var="pri" style="text-align: left;">
+                                                <h:column>
+                                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                                          color="#{cabecera.login_color_label}">
+                                                        <b>#{pri.items.itmDescrip}</b>
+                                                    </font>
+                                                </h:column>
+                                                <h:column>
+                                                    <h:outputText value="#{pri.pryValorNum}"/>
+                                                    <h:outputText value="#{pri.pryValorAlfa}"/>
+                                                    <h:outputText value="#{pri.pryValorFecha}"/>
+                                                </h:column>
+                                            </h:dataTable>
+                                        </p:panel>
+                                    </p:dataGrid> 
+                                </fieldset>
+                            </h:panelGroup>
+                                
+                            
+                            <!--detalles de consulta responsables-->    
+                            <h:panelGroup rendered="#{bgesConsultGerencia.detalle eq 'verResponsables'}">
+                                <fieldset style="height: 360px; background-color: #{cabecera.form_inter_border_color};margin: 0; overflow: auto" >
+                                    <p:dataTable var="lis" value="#{bgesConsultGerencia.lisTiempos()}">
+                                        <p:column headerText="Est." style="width: 5px;">
+                                            <font size="1">
+                                                    <h:panelGroup id="pry2">
+                                                        <h:graphicImage width="10" height="15" url="#{bgesConsultGerencia.semaforoAct(lis)}"/> 
+                                                    </h:panelGroup>
+                                                <p:tooltip for="pry2" value="#{bgesConsultGerencia.proyFormato}"/>
+                                            </font>
+                                        </p:column>
+                                        <p:column headerText="Actividad" style="width: 90px;">
+                                            <h:outputText id="responsbls" value="#{lis.actividades.actDescrip}" style="cursor:pointer"/>
+                                            <p:overlayPanel for="responsbls" showCloseIcon="true">
+                                                <p:dataTable var="responsbls" value="#{bgesConsultGerencia.traeResponsbls(lis)}" rows="5" paginator="false">
+                                                    <p:column headerText="Nombre">
+                                                        <h:outputText value="#{responsbls.empleados.emplNombre1} #{responsbls.empleados.emplNombre2} #{responsbls.empleados.emplApellido1}" />
+                                                    </p:column>
+                
+                                                    <p:column headerText="Cargo">
+                                                        <h:outputText value="#{responsbls.empleados.emplCodCargoFk.carDescrip}"/>
+                                                    </p:column>
+                
+                                                    <p:column headerText="Telefonos" >
+                                                        <p:dataList value="#{bgesConsultGerencia.traerContactos(responsbls.empleados.empleadosPK)}" var="cont" itemType="none" >
+                                                            <h:outputText value="#{cont.conTelefono1} #{cont.conTelefono2} #{cont.conTelefono3}"/>
+                                                        </p:dataList>
+                                                    </p:column>
+                
+                                                    <p:column headerText="Correos">
+                                                        <p:dataList value="#{bgesConsultGerencia.traerContactos(responsbls.empleados.empleadosPK)}" var="cont" itemType="none">
+                                                            <h:outputLabel value="#{cont.conCorreo1} #{cont.conCorreo2} #{cont.conCorreo3}" />
+                                                        </p:dataList>
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </p:overlayPanel>
+                                        </p:column>
+                                        <p:column headerText="Inicial Planeada" style="width: 70px;">
+                                            <h:outputText value="#{lis.croproFeiPla}">
+                                                <f:convertDateTime pattern="dd-MM-yyyy" />
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Inicial Real" style="width: 70px;">
+                                            <h:outputText value="#{lis.croproFeiRea}">
+                                                <f:convertDateTime pattern="dd-MM-yyyy" />
+                                            </h:outputText>
+                                        </p:column>
+        
+                                        <p:column headerText="Final Planeada" style="width: 70px;">
+                                            <h:outputText value="#{lis.croproFefPla}">
+                                                <f:convertDateTime pattern="dd-MM-yyyy" />
+                                            </h:outputText>
+                                        </p:column>
+        
+                                        <p:column headerText="Final Real" style="width: 70px;">
+                                            <h:outputText value="#{lis.croproFefRea}">
+                                                <f:convertDateTime pattern="dd-MM-yyyy" />
+                                            </h:outputText>
+                                        </p:column>
+                                    </p:dataTable>
+                                </fieldset>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup rendered="#{bgesTodoReporte.opcion eq '2'}">
+                        <ui:include src="pp_repo002.xhtml"/>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{bgesTodoReporte.opcion eq '3'}">
+                        <ui:include src="pp_repo003.xhtml"/>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{bgesDoccormen.opcion eq '2'}">
+                        <ui:include src="pp_doccormen.xhtml"/>
+                    </h:panelGroup>
+                    <ui:include src="../parametros/pp_navDialog002.xhtml"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

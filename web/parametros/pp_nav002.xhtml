@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:body>
+        <br/>
+        <div id="formulario" layout="block">
+            <fieldset style="margin-left: -80px; height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="act1">
+                    <h:panelGroup  rendered="#{bgesTodoReporte.opcion eq '1' and bgesDoccormen.opcion eq '1'}">
+                        <h:panelGroup rendered="#{bgesNavegacion.inicio}">
+                            #{bgesProcesos.init()}
+                            <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                      color="#{cabecera.login_color_label}">
+                                    <center><b>Proyectos</b></center>
+                                </font>
+                            </fieldset>
+                            <br/>
+                            <fieldset style="height: 300px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                                <br/>
+                                <h:panelGrid columns="2" cellspacing="10">
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                          color="#{cabecera.login_color_label}">
+                                        <b>Clase</b>
+                                    </font>
+                                    <h:selectOneMenu value="#{bgesProcesos.clase}" converter="jsf.beans.BConvClaseProyEtapas">
+                                        <f:selectItems value="#{bgesProcesos.clases}" var="cls"
+                                                       itemLabel="#{cls.clase.clsDescrip}" itemValue="#{cls}"/>
+                                        <f:ajax render="et act pr"/>
+                                    </h:selectOneMenu>
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                          color="#{cabecera.login_color_label}">
+                                        <b>Etapa</b>
+                                    </font>
+                                    <h:selectOneMenu id="et" value="#{bgesProcesos.etapa}" converter="jsf.beans.BConvEtapaProyActividades">
+                                        <f:selectItems value="#{bgesProcesos.etapas}" var="etp"
+                                                       itemLabel="#{etp.etapa.etpDescrip}" itemValue="#{etp}"/>
+                                        <f:ajax render="act pr"/>
+                                    </h:selectOneMenu>
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                          color="#{cabecera.login_color_label}">
+                                        <b>Actividad</b>
+                                    </font>
+                                    <h:selectOneMenu id="act" value="#{bgesProcesos.actividad}" converter="jsf.beans.BConvActividadProyActs">
+                                        <f:selectItems value="#{bgesProcesos.actividades}" var="actt"
+                                                       itemLabel="#{actt.actividad.actDescrip}" itemValue="#{actt}"/>
+                                        <f:ajax render="pr"/>
+                                    </h:selectOneMenu>
+                                </h:panelGrid>
+                                <br/>
+                                <p:dataTable id="pr" style="width: 600px" value="#{bgesProcesos.actividad.proyActs}" var="pry"
+                                             scrollable="true" scrollHeight="115" rowKey="#{pry.proyActsPK}"
+                                             emptyMessage="No hay proyectos disponibles"
+                                             scrollWidth="600" selection="#{bgesProcesos.proyecto}" selectionMode="single">
+                                    <p:ajax event="rowSelect" update="@this"/>
+                                    <p:column headerText="Codigo" width="120">
+                                        <font size="1">
+                                            <h:outputText value="#{pry.proyectos.proCodPk}"/>
+                                        </font>
+                                    </p:column>
+                                    <p:column headerText="Descripcion" width="120">
+                                        <font size="1">
+                                            <h:outputText value="#{pry.proyectos.proDescrip}"/>
+                                        </font>
+                                    </p:column>
+                                    <p:column headerText="Componente" width="120">
+                                        <font size="1">
+                                            <h:outputText value="#{pry.proyActsPK.pryComNomFk}"/>
+                                        </font>
+                                    </p:column>
+                                    <p:column headerText="Fecha de creacion" width="120">
+                                        <font size="1">
+                                            <h:outputText value="#{pry.proyectos.proFechaHora}"/>
+                                        </font>
+                                    </p:column>
+                                </p:dataTable>
+                            </fieldset>
+                            <br/>
+                            <div align="center">
+                                <p:commandButton value="Aceptar" action="#{bgesProcesos.action}" immediate="true" update="@form"/>
+                            </div>
+                        </h:panelGroup>
+                        <h:panelGroup  rendered="#{not bgesNavegacion.inicio}">
+                            <ui:include src="../parametros/pp_navAct001.xhtml"/>
+                        </h:panelGroup>
+                    </h:panelGroup>  
+
+                    <h:panelGroup rendered="#{bgesTodoReporte.opcion eq '2'}">
+                        <ui:include src="pp_repo002.xhtml"/>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup rendered="#{bgesTodoReporte.opcion eq '3'}">
+                        <ui:include src="pp_repo003.xhtml"/>
+                    </h:panelGroup>
+                   
+                    <h:panelGroup rendered="#{bgesDoccormen.opcion eq '2'}">
+                        <ui:include src="pp_doccormen.xhtml"/>
+                    </h:panelGroup>
+                    
+                    
+                    
+                    <p:growl id="msg" globalOnly="true"/>
+                </h:form>
+            </fieldset>
+        </div>
+    </h:body>
+</html>

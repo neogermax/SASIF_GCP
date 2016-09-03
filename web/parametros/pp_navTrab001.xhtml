@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:body>
+        <font face="#{cabecera.login_tipo_letra_label}" size="5"
+                color="#{cabecera.login_color_label}">
+            <b><center>Cargas de trabajo</center></b>
+        </font>
+        <br/>
+        <p:dataTable style="overflow: scroll; width: 704px; height: 203px" value="#{bgesTrabajo.trabUsuarios}" var="trab" rowIndexVar="ind">
+             <p:columnGroup type="header">
+                <p:row>
+                    <p:column rowspan="2" headerText="Usuarios" width="240"/>
+                    <p:column rowspan="2" headerText="Proyectos pendientes" width="80"/>
+                    <c:forEach items="#{bgesTrabajo.fechaAños}" var="año">
+                        <p:column colspan="#{año.cantidad}" headerText="#{año.año}"/>
+                     </c:forEach>
+                </p:row>
+                 <p:row>
+                     <c:forEach items="#{bgesTrabajo.fechas}" var="fecha">
+                         <p:column headerText="#{fecha}" width="50"/>
+                     </c:forEach>
+                </p:row>
+            </p:columnGroup>
+            <p:column width="240">
+                #{trab.usuario} - #{trab.empleado}
+            </p:column>
+            <p:column width="80">
+                <center>
+                    <h:outputText id="pp" value="#{trab.proyPend}"/>
+                </center>
+                <p:overlayPanel for="pp" showCloseIcon="true">
+                    #{bgesTrabajo.action(ind)}
+                    <ui:include src="../parametros/pp_navTrab002.xhtml"/>
+                </p:overlayPanel>
+            </p:column>
+            <p:columns value="#{trab.valores}" var="val" columnIndexVar="index" width="50">
+                <center>
+                    <h:outputText id="pf" value="#{trab.valores[index].porcentaje}%" style="color: #{trab.valores[index].color}"/>
+                </center>
+                <p:overlayPanel for="pf" showCloseIcon="true">
+                    #{bgesTrabajo.action(ind, index)}
+                    <ui:include src="../parametros/pp_navTrab002.xhtml"/>
+                </p:overlayPanel>
+            </p:columns>
+        </p:dataTable>
+    </h:body>
+</html>
+

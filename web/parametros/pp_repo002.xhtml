@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+   
+    <body>
+       <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+            
+            
+           <fieldset  style="background-color: #{cabecera.form_inter_border_color}">
+               <table style="width: 760px" >
+                   <tr>
+                       <td align="center" >
+                           <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                 color="#{cabecera.login_color_label}">
+                               <center><b><h:outputText  value="#{bgesReportes.parametria.parNombreRep}"/> </b></center>
+                           </font>
+                       </td>
+                       <td align="right" style="width: 30px;">
+                           <h:panelGroup  rendered="#{bgesReportes.opcion eq '2' and bgesTodoReporte.opcion eq '1'}">
+                               <p:commandButton style=" background-color: lightgrey; font:bold 12px 'Arial'; "  value="X" action="#{bgesReportes.actionOpcion}"
+                                                immediate="true" update="@form" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                   <f:param name="opcion" value="1"/>
+                               </p:commandButton>    
+                           </h:panelGroup>
+
+                           <h:panelGroup  rendered="#{bgesTodoReporte.opcion eq '2'}">
+                               <p:commandButton style=" background-color: lightgrey; font:bold 12px 'Arial'; " value="X" action="#{bgesTodoReporte.actionOpcion}"
+                                                immediate="true" update="@form" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                   <f:param name="opcion" value="1"/>
+                               </p:commandButton>    
+                           </h:panelGroup>
+                         
+                       </td>
+                   </tr>
+               </table>
+                  
+           </fieldset>
+            
+
+            <!-- INICIO - SECCION DE MOSTRAR TABLA -->                           
+            <fieldset style="width: 760px; height: 380px; background-color: #{cabecera.form_inter_border_color}; overflow: auto;">
+                <div style="width: 759px; height: 249px; overflow: auto;">
+                    <h:panelGrid columns="4">
+                        <h:outputText value="&nbsp;&nbsp;&nbsp;"/>
+                        <font face="#{cabecera.login_tipo_letra_label}" 
+                              color="#{cabecera.login_color_label}">
+                            <h:outputText  style="alignment-adjust: central" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #{bgesReportes.parametria.parNombreRep}"/>
+                        </font>
+
+                        <font face="#{cabecera.login_tipo_letra_label}"  
+                              color="#{cabecera.login_color_label}">
+                            <h:outputText  value=" #{bgesReportes.parametria.parArgFil}"/>
+                        </font>
+
+                        <p:dataTable  value="#{bgesReportes.reportes}" var="rep" style="width: auto; ">
+                            <p:columns value="#{bgesReportes.columnas}" var="col" columnIndexVar="index">
+                                <f:facet name="header"> #{col} </f:facet>
+                                            #{rep[index]}
+                            </p:columns>
+                        </p:dataTable>
+                    </h:panelGrid>
+                </div>    
+            </fieldset>
+            <!-- FIN - SECCION DE MOSTRAR TABLA -->
+
+            <!-- INICIO - SECCION DE BOTONES DE GRAFICOS -->
+            <fieldset  style="background-color: #{cabecera.form_inter_border_color}">
+                <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                    <center>
+                        <b>
+                            <p:commandButton value="Columnas" action="#{bgesReportes.actionOpcion2}" rendered="#{bgesReportes.opcion3 eq 0}"
+                                             immediate="true" update="@form" >
+                                <f:param name="opcion2" value="1"/>
+                            </p:commandButton>
+                            <p:commandButton value="Lineas" action="#{bgesReportes.actionOpcion2}" 
+                                             immediate="true" update="@form" 
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T') and (bgesReportes.opcion3 eq 0)}">
+                                <f:param name="opcion2" value="2"/>
+                            </p:commandButton>
+                            <p:commandButton value="Columnas 3D" action="#{bgesReportes.actionOpcion2}"
+                                             immediate="true" update="@form" 
+                                             rendered="#{(bgesMenu.opcionRoles.opcTipoTrab.equals('T')) and (bgesReportes.opcion3 eq 0)}">
+                                <f:param name="opcion2" value="3"/>
+                            </p:commandButton>    
+
+                        </b>
+                    </center>
+                </fieldset>
+                <!-- INICIO - SECCION DE BOTONES DE GRAFICOS -->                                
+                <br/>    
+
+                <fieldset style="width: 700px; height: 390px; background-color: #{cabecera.form_inter_border_color}; overflow: auto;">
+                    <h:panelGrid columns="3">
+                        <!--p:commandButton value="Columnas" onclick="emprDialog.show()" rendered="#-{bgesAyudas.opcion.equals('1') }"/-->
+                        <!--p:commandButton value="Lineas" onclick="emprUpDialog.show()" rendered="#-{bgesAyudas.opcion.equals('2')}"/-->
+                        <!--h:graphicImage url="#-{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                    </h:panelGrid>
+
+                    <h:panelGrid  rendered="#{bgesReportes.opcion2.equals('1')}">
+                        <center><p:graphicImage cache="false" value="#{bgesGraficos.chart}" /></center>
+                    </h:panelGrid>
+
+                    <h:panelGrid  rendered="#{bgesReportes.opcion2.equals('2')}">
+                        <center><p:graphicImage cache="false" value="#{bgesGraficos2.chart}" /></center>
+                    </h:panelGrid>
+
+                    <h:panelGrid  rendered="#{bgesReportes.opcion2.equals('3')}">
+                        <center><p:graphicImage cache="false" value="#{bgesGraficos3.chart}" /></center>
+                    </h:panelGrid>
+
+                    <h:panelGrid rendered="#{bgesReportes.opcion2.equals('4')}">
+                        <center><p:graphicImage  cache="false" value="#{bgesGraficos4.chart}" /></center>
+                    </h:panelGrid>
+                    <h:panelGrid rendered="#{bgesReportes.opcion2.equals('5')}">
+                        <center><p:graphicImage  cache="false" value="#{bgesGraficos5.chart}" /></center>
+                    </h:panelGrid>
+                </fieldset>
+                <br/>
+            </fieldset>
+        </fieldset>
+
+
+
+    </body>
+</html>

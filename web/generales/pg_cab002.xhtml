@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    
+    <h:body>
+        <div id ="logo">
+            <img src="generales/images/sasif1.gif" class="img-logo"/>
+        </div>
+        <div id ="title">
+                <font face="#{cabecera.tipo_letra_titulo}" size="#{cabecera.tamaño_titulo}"
+                      color="#{cabecera.color_titulo}" style="#{cabecera.estilo}">
+                    #{cabecera.titulo_cabecera}
+                </font>
+                   
+        </div>
+        <div id ="date">
+            <center>#{bgenFecha.fechaActual}</center>
+        </div>
+        <div id ="user">
+            <font face="#{cabecera.tipo_letra_pie}" size="#{cabecera.tamaño_fecha}" 
+                  color="#{cabecera.color_titulo}">
+                <h:outputText value="#{bgesLogin.usuario}"
+                              rendered="#{bgesLogin.usuario != null}"/>
+                <br/>
+                <h:outputText value="#{bgesLogin.empleado.emplNombre1} #{bgesLogin.empleado.emplNombre2} #{bgesLogin.empleado.emplApellido1} #{bgesLogin.empleado.emplApellido2}"
+                              rendered="#{bgesLogin.empleado != null}"/>
+            </font>
+        </div>
+    </h:body>
+</html>

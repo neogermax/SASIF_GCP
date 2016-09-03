@@ -1,0 +1,1006 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="itm">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                            <p:commandButton value="Consultar" action="#{bgesItems.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                            <p:commandButton value="Crear" action="#{bgesItems.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab eq 'T'}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                            <p:commandButton value="Actualizar" action="#{bgesItems.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab eq 'T'}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                            <p:commandButton value="Eliminar" action="#{bgesItems.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab eq 'T'}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 360px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesItems.columnas}"
+                                              rendered="#{bgesItems.opcion ne '2'}">
+                                <f:selectItem itemLabel="Codigo" itemValue="1"/>
+                                <f:selectItem itemLabel="Descripcion" itemValue="2"/>
+                                <f:selectItem itemLabel="Label" itemValue="3"/>
+                                <f:selectItem itemLabel="Codigo ayuda" itemValue="4"/>
+                                <f:selectItem itemLabel="Tamaño" itemValue="5"/>
+                                <f:selectItem itemLabel="Tipo de dato" itemValue="6"/>
+                                <f:selectItem itemLabel="Tipo de contenido" itemValue="7"/>
+                                
+                                <f:selectItem itemLabel="Enviar a" itemValue="8"/>
+                                <f:selectItem itemLabel="Tipo de formato" itemValue="9"/>
+                                <f:selectItem itemLabel="Validacion estandar" itemValue="10"/>
+                                <f:selectItem itemLabel="Codigo tabla" itemValue="11"/>
+                                <f:selectItem itemLabel="Variable session" itemValue="12"/>
+                                <f:selectItem itemLabel="Constante" itemValue="13"/>
+                                <f:selectItem itemLabel="Consecutivo" itemValue="14"/>
+                                <f:selectItem itemLabel="Formula" itemValue="15"/>
+                                <f:selectItem itemLabel="Programa" itemValue="16"/>
+                                <f:selectItem itemLabel="Tabla" itemValue="17"/>
+                                <f:selectItem itemLabel="Campo" itemValue="18"/>
+                                <f:selectItem itemLabel="Seguimiento" itemValue="19"/>
+                                <f:selectItem itemLabel="Variable de desicion" itemValue="20"/>
+                                <f:selectItem itemLabel="Grupo documento" itemValue="21"/>
+                                <f:selectItem itemLabel="Nombre documento" itemValue="22"/>
+                                <f:selectItem itemLabel="Dudas" itemValue="23"/>
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesItems.opcion eq'1' or bgesItems.opcion eq '4'}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesItems.opcion eq '3'}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" value="#{bgesItems.items}" var="itm"
+                                     scrollable="true" rowKey="#{itm.itmCodPk}" scrollHeight="210"
+                                     emptyMessage="#{bgenErrores.obtenerError(14)}"
+                                     scrollWidth="600" selection="#{bgesItems.item}" selectionMode="single"
+                                 rendered="#{bgesItems.opcion ne '2'}">
+                            <p:ajax event="rowSelect" update="@form"/>
+                            <p:column headerText="Codigo" filterBy="#{itm.itmCodPk}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('1')}"
+                                      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmCodPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Descripcion" filterBy="#{itm.itmDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('2')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Label" filterBy="#{itm.itmLabel}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('3')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmLabel}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Cod ayuda" filterBy="#{itm.itmAydCod}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('4')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmAydCod}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tamaño" filterBy="#{itm.itmTamano}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('5')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmTamano}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tipo de dato" filterBy="#{itm.itmDato}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('6')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmDato}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tipo de contenido" filterBy="#{itm.itmConten}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('7')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmConten}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Enviar a" filterBy="#{itm.itmCorreo}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('22')}"
+                                      width="50" filterStyle="min-width: 40px; max-width: 40px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmCorreo}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tipo de formato" filterBy="#{itm.itmMensajes}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('23')}"
+                                      width="50" filterStyle="min-width: 40px; max-width: 40px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmMensajes}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Validacion estandar" filterBy="#{itm.itmValEstand}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('9')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmValEstand}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tabla" filterBy="#{itm.itmCodTab}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('10')}"
+                                      width="50" filterStyle="min-width: 40px; max-width: 40px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmCodTab}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Variable de sesion" filterBy="#{itm.itmSession}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('11')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmSession}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Constante" filterBy="#{itm.itmConsCodFk.consCodPk} - #{itm.itmConsCodFk.consValorNum} #{itm.itmConsCodFk.consValorAlf}"
+                                      filterMatchMode="contains" rendered="#{bgesItems.columnas.contains('12')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmConsCodFk.consCodPk} - #{itm.itmConsCodFk.consValorNum} #{itm.itmConsCodFk.consValorAlf}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Consecutivo" filterBy="#{itm.itmConsecCodFk.consecValor}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('13')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmConsecCodFk.consecValor}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Formula" filterBy="#{itm.itmForCodFk.forCodPk}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('14')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmForCodFk.forCodPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Programa" filterBy="#{itm.itmProgNomFk.progNomPk}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('15')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmProgNomFk.progNomPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tabla" filterBy="#{itm.itmTabla}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('16')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmTabla}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Campo" filterBy="#{itm.itmCampo}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('17')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmCampo}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Seguimiento" filterBy="#{itm.itmSeg}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('18')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmSeg}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Variable de desicion" filterBy="#{itm.itmDesc}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('19')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmDesc}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Grupo documento" filterBy="#{itm.itmGrupoDoc}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('20')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmGrupoDoc}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Nombre documento" filterBy="#{itm.itmDocumento}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('21')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmDocumento}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Dudas" filterBy="#{itm.itmIndDudas}" filterMatchMode="contains"
+                                      rendered="#{bgesItems.columnas.contains('24')}"
+                                      width="50" filterStyle="min-width: 40px; max-width: 40px">
+                                <font size="1">
+                                    <h:outputText value="#{itm.itmIndDudas}"/>
+                                </font>
+                            </p:column>
+                        </p:dataTable>
+                        
+                        
+                        
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesItems.opcion eq '2'}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesItems.CItem.itmCodPk}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(107)}"
+                                             converterMessage="#{bgenErrores.obtenerError(110)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(111)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod" value="#{bgenAyudas.obtenerAyuda(8)}"/>
+                                <p:tooltip for="msg_cod" value="#{bgenMessages.message('itm:cod')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Descripcion</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesItems.CItem.itmDescrip}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(108)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(22)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="30"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt" value="#{bgenAyudas.obtenerAyuda(9)}"/>
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('itm:idt')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Label</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="nom" value="#{bgesItems.CItem.itmLabel}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(20)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(21)}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="30"/>
+                                </h:inputText>
+                                <h:message id="msg_nom" for="nom" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="nom" value="#{bgenAyudas.obtenerAyuda(10)}"/>
+                                <p:tooltip for="msg_nom" value="#{bgenMessages.message('itm:nom')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo ayuda</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:selectOneMenu value="#{bgesItems.CItem.itmAydCod}">
+                                    <f:selectItems value="#{bgenAyudas.ayudas}" var="ayu"
+                                                   itemLabel="#{ayu.aydCodPk}" itemValue="#{ayu.aydCodPk}"/>
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tamaño</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="tam" value="#{bgesItems.CItem.itmTamano}"
+                                             converterMessage="#{bgenErrores.obtenerError(16)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_tam" for="tam" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="tam" value="#{bgenAyudas.obtenerAyuda(8)}"/>
+                                <p:tooltip for="msg_tam" value="#{bgenMessages.message('itm:tam')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tipo de dato</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesItems.CItem.itmDato}">
+                                <f:selectItem itemLabel="Numerico" itemValue="N"/>
+                                <f:selectItem itemLabel="Alfanumerico" itemValue="V"/>
+                                <f:selectItem itemLabel="Fecha" itemValue="F"/>
+                                <f:ajax render="label campo"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tipo de contenido</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesItems.CItem.itmConten}">
+                                <f:selectItem itemLabel="Entrada por usuario" itemValue="U"/>
+                                <f:selectItem itemLabel="Contenido de tabla" itemValue="T"/>
+                                <f:selectItem itemLabel="Variable de sesion" itemValue="S"/>
+                                <f:selectItem itemLabel="Constante" itemValue="K"/>
+                                <f:selectItem itemLabel="Cronograma" itemValue="G"/>
+                                <f:selectItem itemLabel="Consecutivo" itemValue="E"/>
+                                <f:selectItem itemLabel="Formula" itemValue="F"/>
+                                <f:selectItem itemLabel="Programa" itemValue="P"/>
+                                <f:selectItem itemLabel="Administracion de componentes" itemValue="C"/>
+                                <f:selectItem itemLabel="Actualizacion de componentes" itemValue="A"/>
+                                <f:selectItem itemLabel="Asignacion de responsabilidades" itemValue="R"/>
+                                <f:selectItem itemLabel="Asignacion por area" itemValue="W"/>
+                                <f:selectItem itemLabel="Asignacion por empresa" itemValue="Z"/>
+                                <f:selectItem itemLabel="Correo" itemValue="Q"/>
+                                <f:selectItem itemLabel="Msm" itemValue="M"/>
+                                <f:selectItem itemLabel="Otro" itemValue="O"/>
+                                <f:ajax render="label campo mensaje mensaje2 mensaje3 mensaje4"/>
+                            </h:selectOneMenu>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Validacion estandar</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesItems.CItem.itmValEstand}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                            </p:selectOneRadio>
+                            <h:panelGroup id="label">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Codigo de tabla" rendered="#{bgesItems.CItem.itmConten eq 'T'}"/></b>
+                                </font>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Variable de sesion" rendered="#{bgesItems.CItem.itmConten eq 'S'}"/></b>
+                                </font>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Constante" rendered="#{bgesItems.CItem.itmConten eq 'K'}"/></b>
+                                </font>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Consecutivo" rendered="#{bgesItems.CItem.itmConten eq 'E'}"/></b>
+                                </font>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Formula" rendered="#{bgesItems.CItem.itmConten eq 'F'}"/></b>
+                                </font>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Programa" rendered="#{bgesItems.CItem.itmConten eq 'P'}"/></b>
+                                </font>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Correo" rendered="#{bgesItems.CItem.itmConten eq 'Q'}"/></b>
+                                </font>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Msm" rendered="#{bgesItems.CItem.itmConten eq 'M'}"/></b>
+                                </font>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Otros" rendered="#{bgesItems.CItem.itmConten eq 'O'}"/></b>
+                                </font>
+                                
+                                
+                                
+                            </h:panelGroup>
+                            <h:panelGroup id="campo">
+                                <h:selectOneMenu value="#{bgesItems.CItem.itmCodTab}" rendered="#{bgesItems.CItem.itmConten eq 'T' and bgesItems.CItem.itmDato eq 'V'}">
+                                    <f:selectItems value="#{bgesAlfanumericas.alfanumericasCode}" var="code"
+                                                   itemLabel="#{code}" itemValue="#{code}"/>
+                                </h:selectOneMenu>
+                                <h:selectOneMenu value="#{bgesItems.CItem.itmCodTab}" rendered="#{bgesItems.CItem.itmConten eq 'T' and bgesItems.CItem.itmDato ne 'V'}">
+                                    <f:selectItems value="#{bgesNumericas.numericasCode}" var="code"
+                                                   itemLabel="#{code}" itemValue="#{code}"/>
+                                </h:selectOneMenu>
+                                <p:selectOneRadio value="#{bgesItems.CItem.itmSession}" rendered="#{bgesItems.CItem.itmConten eq 'S'}">
+                                    <f:selectItem itemLabel="Usuario" itemValue="U"/>
+                                    <f:selectItem itemLabel="Fecha" itemValue="F"/>
+                                    <f:selectItem itemLabel="Hora" itemValue="H"/>
+                                </p:selectOneRadio>
+                                <h:selectOneMenu value="#{bgesItems.CItem.itmConsCodFk}" rendered="#{bgesItems.CItem.itmConten eq 'K'}"
+                                                 converter="jsf.beans.BConvConstantes">
+                                    <f:selectItems value="#{bgesConstantes.constantes}" var="cons"
+                                                   itemLabel="#{cons.consCodPk} - #{cons.consValorNum}#{cons.consValorAlf}"
+                                                   itemValue="#{cons}"/>
+                                </h:selectOneMenu>
+                                <h:selectOneMenu value="#{bgesItems.CItem.itmConsecCodFk}" rendered="#{bgesItems.CItem.itmConten eq 'E'}"
+                                                 converter="jsf.beans.BConvConsecutivos">
+                                    <f:selectItems value="#{bgesConsecutivos.consecutivos}" var="consec"
+                                                   itemLabel="#{consec.consecCodPk} - #{consec.consecDescrip}" itemValue="#{consec}"/>
+                                </h:selectOneMenu>
+                                <h:selectOneMenu value="#{bgesItems.CItem.itmForCodFk}" converter="jsf.beans.BConvFormulas"
+                                                 rendered="#{bgesItems.CItem.itmConten eq 'F'}">
+                                    <f:selectItems value="#{bgesFormulas.formulas}" var="for"
+                                                   itemLabel="#{for.forCodPk}" itemValue="#{for}"/>
+                                </h:selectOneMenu>
+                                <h:selectOneMenu value="#{bgesItems.CItem.itmForCodFk}" converter="jsf.beans.BConvProgramas"
+                                                 rendered="#{bgesItems.CItem.itmConten eq 'P'}">
+                                    <f:selectItems value="#{bgesProgramas.programas}" var="prog"
+                                                   itemLabel="#{prog.progNomPk}" itemValue="#{prog}"/>
+                                </h:selectOneMenu>
+                                
+                            </h:panelGroup>
+                            <h:panelGroup id="mensaje" >
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Enviar a" rendered="#{bgesItems.CItem.itmConten eq 'Q' or bgesItems.CItem.itmConten eq 'M' or bgesItems.CItem.itmConten eq 'O'}"/></b>
+                                </font>
+                           </h:panelGroup>
+                             <h:panelGroup id="mensaje2" >
+                                <h:selectOneMenu value="#{bgesItems.CItem.itmCorreo}" rendered="#{bgesItems.CItem.itmConten eq 'Q' or bgesItems.CItem.itmConten eq 'M' or bgesItems.CItem.itmConten eq 'O'}" >
+                                    <f:selectItem itemLabel="Area" itemValue="A"/>
+                                    <f:selectItem itemLabel="Empresa" itemValue="B"/>
+                                    <f:selectItem itemLabel="Jefe de area" itemValue="C"/>
+                                    <f:selectItem itemLabel="Jefe inmediato" itemValue="D"/>
+                                    <f:selectItem itemLabel="Ambos jefes" itemValue="E"/>
+                                    <f:selectItem itemLabel="Responsables" itemValue="F"/>
+                                    <f:selectItem itemLabel="Personalizado todos" itemValue="G"/>
+                                    <f:selectItem itemLabel="personalizado Empresa" itemValue="H"/>
+                                    <f:selectItem itemLabel="personalizado area" itemValue="I"/>
+                                    <f:selectItem itemLabel="Personalizado responsables" itemValue="J"/>
+                                    <f:ajax render="mensaje3 mensaje4"/>
+                                </h:selectOneMenu>
+                            </h:panelGroup>
+                            <h:panelGroup id="mensaje3">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Tipo de formato" rendered="#{bgesItems.CItem.itmConten eq 'Q' or bgesItems.CItem.itmConten eq 'M' or bgesItems.CItem.itmConten eq 'O'}"/></b>
+                                </font>
+                            </h:panelGroup>
+                            <h:panelGroup id="mensaje4" >
+                                <h:selectOneMenu  value="#{bgesItems.CItem.itmMensajes}" rendered="#{(bgesItems.CItem.itmConten eq 'Q' or bgesItems.CItem.itmConten eq 'M' or bgesItems.CItem.itmConten eq 'O')and(bgesItems.CItem.itmCorreo eq 'A' or bgesItems.CItem.itmCorreo eq 'B' or bgesItems.CItem.itmCorreo eq 'C' or bgesItems.CItem.itmCorreo eq 'D' or bgesItems.CItem.itmCorreo eq 'E' or bgesItems.CItem.itmCorreo eq 'F')}" >
+                                    <f:selectItem itemLabel="modificable" itemValue="M"/>
+                                    <f:selectItem itemLabel="Visible consulta" itemValue="V"/>
+                                    <f:selectItem itemLabel="No visible" itemValue="N"/>
+                                </h:selectOneMenu>
+                            
+                                <h:selectOneMenu  value="#{bgesItems.CItem.itmMensajes}" rendered="#{(bgesItems.CItem.itmConten eq 'Q' or bgesItems.CItem.itmConten eq 'M' or bgesItems.CItem.itmConten eq 'O')and(bgesItems.CItem.itmCorreo eq 'G' or bgesItems.CItem.itmCorreo eq 'H' or bgesItems.CItem.itmCorreo eq 'I' or bgesItems.CItem.itmCorreo eq 'J')}" >
+                                    <f:selectItem itemLabel="modificable" itemValue="M"/>
+                                    <f:selectItem itemLabel="Visible consulta" itemValue="V"/>
+                                    
+                                    
+                                </h:selectOneMenu>
+                           </h:panelGroup>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tabla</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="tab2" value="#{bgesItems.CItem.itmTabla}"
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="20"/>
+                                </h:inputText>
+                                <h:message id="msg_tab2" for="tab2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="tab2" value="#{bgenAyudas.obtenerAyuda(8)}"/>
+                                <p:tooltip for="msg_tab2" value="#{bgenMessages.message('itm:tab2')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Campo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="camp" value="#{bgesItems.CItem.itmCampo}"
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="20"/>
+                                </h:inputText>
+                                <h:message id="msg_camp" for="camp" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="camp" value="#{bgenAyudas.obtenerAyuda(8)}"/>
+                                <p:tooltip for="msg_camp" value="#{bgenMessages.message('itm:camp')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Seguimiento</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesItems.CItem.itmSeg}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Variable de desicion</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesItems.CItem.itmDesc}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Grupo documento</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesItems.CItem.itmGrupoDoc}" converter="javax.faces.Integer">
+                                <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                <f:selectItems value="#{bgesGdocumentos.gdocumentos}" var="gd"
+                                        itemLabel="#{gd.gdoDescripcion}" itemValue="#{gd.gdoGrupoPk}"/>
+                            </h:selectOneMenu>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Nombre documento</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesItems.CItem.itmDocumento}">
+                                <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                <f:selectItems value="#{bgesPdocumentos.pdocumentos}" var="pd"
+                                               itemLabel="#{pd.pdoDescripcion}" itemValue="#{pd.pdoDocumentoPk}"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Dudas</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesItems.CItem.itmIndDudas}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                            </p:selectOneRadio>
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesItems.crear}" rendered="#{bgesItems.opcion eq '2'}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesItems.opcion eq '4'}"
+                                             onclick="del.show()"/>
+                    </div>
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesItems.item.itmDescrip}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesItems.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmCodPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Descripcion</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmDescrip}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Label</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmLabel}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo ayuda</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmAydCod}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tamaño</b>
+                            </font>
+                            <h:outputText value="#{bgesItems.item.itmTamano}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo de dato</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmDato}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo de contenido</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmConten}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Validacion estandar</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmValEstand}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo Tabla</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmCodTab}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Variable sesion</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmSession}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Constante</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmConsCodFk.consCodPk} - #{bgesItems.item.itmConsCodFk.consValorNum} #{bgesItems.item.itmConsCodFk.consValorAlf}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Consecutivo</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmConsecCodFk.consecValor}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Formula</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmForCodFk.forCodPk}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Programa</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmProgNomFk.progNomPk}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tabla</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmTabla}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Campo</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmCampo}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Seguimiento</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmSeg}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Variable de desicion</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmDesc}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Grupo documento</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmGrupoDoc}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Documento</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmDocumento}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Correo</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmCorreo}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Mensajes</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmMensajes}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Dudas</b>
+                                </font>
+                            <h:outputText value="#{bgesItems.item.itmIndDudas}"/>
+                            </h:panelGrid>
+                    </p:dialog>
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesItems.opcion eq '3'}">
+                        #{bgesItems.mostrar()}
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesItems.AItem.itmCodPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Descripcion</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="idt1" value="#{bgesItems.AItem.itmDescrip}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(18)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(22)}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="30"/>
+                                    </h:inputText>
+                                    <h:message id="msg_idt1" for="idt1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="idt1" value="#{bgenAyudas.obtenerAyuda(9)}"/>
+                                    <p:tooltip for="msg_idt1" value="#{bgenMessages.message('itm:idt1')}"/>
+                                </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b>Label</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="nom1" value="#{bgesItems.AItem.itmLabel}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(20)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(21)}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="30"/>
+                                    </h:inputText>
+                                    <h:message id="msg_nom1" for="nom1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="nom1" value="#{bgenAyudas.obtenerAyuda(10)}"/>
+                                    <p:tooltip for="msg_nom1" value="#{bgenMessages.message('itm:nom1')}"/>
+                                </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo ayuda</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:selectOneMenu value="#{bgesItems.AItem.itmAydCod}">
+                                    <f:selectItems value="#{bgenAyudas.ayudas}" var="ayu"
+                                                   itemLabel="#{ayu.aydCodPk}" itemValue="#{ayu.aydCodPk}"/>
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b>Tamaño</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="tam2" value="#{bgesItems.AItem.itmTamano}"
+                                             converterMessage="#{bgenErrores.obtenerError(16)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:convertNumber/>
+                                        <f:validateLongRange minimum="0" maximum="99999"/>
+                                    </h:inputText>
+                                    <h:message id="msg_tam2" for="tam2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="tam2" value="#{bgenAyudas.obtenerAyuda(8)}"/>
+                                    <p:tooltip for="msg_tam2" value="#{bgenMessages.message('itm:tam2')}"/>
+                                </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo de dato</b>
+                                </font>
+                                <p:selectOneRadio value="#{bgesItems.AItem.itmDato}">
+                                    <f:selectItem itemLabel="Numerico" itemValue="N"/>
+                                    <f:selectItem itemLabel="Alfanumerico" itemValue="V"/>
+                                    <f:selectItem itemLabel="Fecha" itemValue="F"/>
+                                    <f:ajax render="lab campos"/>
+                                </p:selectOneRadio>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo de contenido</b>
+                                </font>
+                                <h:selectOneMenu value="#{bgesItems.AItem.itmConten}">
+                                    <f:selectItem itemLabel="Entrada por usuario" itemValue="U"/>
+                                    <f:selectItem itemLabel="Contenido de tabla" itemValue="T"/>
+                                    <f:selectItem itemLabel="Variable de sesion" itemValue="S"/>
+                                    <f:selectItem itemLabel="Codigo constante" itemValue="K"/>
+                                    <f:selectItem itemLabel="Cronograma" itemValue="G"/>
+                                    <f:selectItem itemLabel="Consecutivo" itemValue="E"/>
+                                    <f:selectItem itemLabel="Formula" itemValue="F"/>
+                                    <f:selectItem itemLabel="Programa" itemValue="P"/>
+                                    <f:selectItem itemLabel="Administracion de componentes" itemValue="C"/>
+                                    <f:selectItem itemLabel="Actualizacion de componentes" itemValue="A"/>
+                                    <f:selectItem itemLabel="Asignacion de responsabilidades" itemValue="R"/>
+                                    <f:selectItem itemLabel="Asignacion por area" itemValue="W"/>
+                                    <f:selectItem itemLabel="Asignacion por empresa" itemValue="Z"/>
+                                    <f:selectItem itemLabel="Correo" itemValue="Q"/>
+                                    <f:selectItem itemLabel="Msm" itemValue="M"/>
+                                    <f:selectItem itemLabel="Otro" itemValue="O"/>
+                                    <f:ajax render="lab campos mensajes mensajes2 mensajes3 mensajes4"/>
+                                </h:selectOneMenu>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b>Validacion estandar</b>
+                                </font>
+                                <p:selectOneRadio value="#{bgesItems.AItem.itmValEstand}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>
+                                </p:selectOneRadio>
+                                <h:panelGroup id="lab">
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Codigo de tabla" rendered="#{bgesItems.AItem.itmConten eq 'T'}"/></b>
+                                    </font>
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Variable de sesion" rendered="#{bgesItems.AItem.itmConten eq 'S'}"/></b>
+                                    </font>
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Constante" rendered="#{bgesItems.AItem.itmConten eq 'K'}"/></b>
+                                    </font>
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Consecutivo" rendered="#{bgesItems.AItem.itmConten eq 'E'}"/></b>
+                                    </font>
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Formula" rendered="#{bgesItems.AItem.itmConten eq 'F'}"/></b>
+                                    </font>
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Programa" rendered="#{bgesItems.AItem.itmConten eq 'P'}"/></b>
+                                    </font>
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Correo" rendered="#{bgesItems.AItem.itmConten eq 'Q'}"/></b>
+                                    </font>
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Msm" rendered="#{bgesItems.AItem.itmConten eq 'M'}"/></b>
+                                    </font>
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Otro" rendered="#{bgesItems.AItem.itmConten eq 'O'}"/></b>
+                                    </font>
+                                </h:panelGroup>
+                                <h:panelGroup id="campos">
+                                    <h:selectOneMenu value="#{bgesItems.AItem.itmCodTab}" rendered="#{bgesItems.AItem.itmConten eq 'T' and bgesItems.AItem.itmDato eq 'V'}">
+                                        <f:selectItems value="#{bgesAlfanumericas.alfanumericasCode}" var="code"
+                                                   itemLabel="#{code}" itemValue="#{code}"/>
+                                    </h:selectOneMenu>
+                                    <h:selectOneMenu value="#{bgesItems.AItem.itmCodTab}" rendered="#{bgesItems.AItem.itmConten eq 'T' and bgesItems.AItem.itmDato ne 'V'}">
+                                        <f:selectItems value="#{bgesNumericas.numericasCode}" var="code"
+                                                   itemLabel="#{code}" itemValue="#{code}"/>
+                                    </h:selectOneMenu>
+                                    <p:selectOneRadio value="#{bgesItems.AItem.itmSession}" rendered="#{bgesItems.AItem.itmConten eq 'S'}">
+                                        <f:selectItem itemLabel="Usuario" itemValue="U"/>
+                                        <f:selectItem itemLabel="Fecha" itemValue="F"/>
+                                        <f:selectItem itemLabel="Hora" itemValue="H"/>
+                                    </p:selectOneRadio>
+                                    <h:selectOneMenu value="#{bgesItems.AItem.itmConsCodFk}" rendered="#{bgesItems.AItem.itmConten eq 'K'}"
+                                                 converter="jsf.beans.BConvConstantes">
+                                        <f:selectItems value="#{bgesConstantes.constantes}" var="cons"
+                                                   itemLabel="#{cons.consCodPk} - #{cons.consValorNum}#{cons.consValorAlf}"
+                                                   itemValue="#{cons}"/>
+                                    </h:selectOneMenu>
+                                    <h:selectOneMenu value="#{bgesItems.AItem.itmConsecCodFk}" rendered="#{bgesItems.AItem.itmConten eq 'E'}"
+                                                 converter="jsf.beans.BConvConsecutivos">
+                                        <f:selectItems value="#{bgesConsecutivos.consecutivos}" var="consec"
+                                                       itemLabel="#{consec.consecCodPk} - #{consec.consecDescrip}" itemValue="#{consec}"/>
+                                    </h:selectOneMenu>
+                                    <h:selectOneMenu value="#{bgesItems.AItem.itmForCodFk}" converter="jsf.beans.BConvFormulas"
+                                                 rendered="#{bgesItems.AItem.itmConten eq 'F'}">
+                                        <f:selectItems value="#{bgesFormulas.formulas}" var="for"
+                                                   itemLabel="#{for.forCodPk}" itemValue="#{for}"/>
+                                    </h:selectOneMenu>
+                                    <h:selectOneMenu value="#{bgesItems.AItem.itmForCodFk}" converter="jsf.beans.BConvProgramas"
+                                                 rendered="#{bgesItems.AItem.itmConten eq 'P'}">
+                                        <f:selectItems value="#{bgesProgramas.programas}" var="prog"
+                                                   itemLabel="#{prog.progNomPk}" itemValue="#{prog}"/>
+                                    </h:selectOneMenu>
+                                    
+                                </h:panelGroup>
+                                <h:panelGroup id="mensajes" >
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Enviar a" rendered="#{bgesItems.AItem.itmConten eq 'Q' or bgesItems.AItem.itmConten eq 'M' or bgesItems.AItem.itmConten eq 'O'}"/></b>
+                                </font>
+                                </h:panelGroup>
+                                
+                                <h:panelGroup id="mensajes2" >
+                                <h:selectOneMenu value="#{bgesItems.AItem.itmCorreo}" rendered="#{bgesItems.AItem.itmConten eq 'Q' or bgesItems.AItem.itmConten eq 'M' or bgesItems.AItem.itmConten eq 'O'}" >
+                                    <f:selectItem itemLabel="Area" itemValue="A"/>
+                                    <f:selectItem itemLabel="Empresa" itemValue="B"/>
+                                    <f:selectItem itemLabel="Jefe de area" itemValue="C"/>
+                                    <f:selectItem itemLabel="Jefe inmediato" itemValue="D"/>
+                                    <f:selectItem itemLabel="Ambos jefes" itemValue="E"/>
+                                    <f:selectItem itemLabel="Responsables" itemValue="F"/>
+                                    <f:selectItem itemLabel="Personalizado todos" itemValue="G"/>
+                                    <f:selectItem itemLabel="personalizado Empresa" itemValue="H"/>
+                                    <f:selectItem itemLabel="personalizado area" itemValue="I"/>
+                                    <f:selectItem itemLabel="Personalizado responsables" itemValue="J"/>
+                                    <f:ajax render="mensajes3 mensajes4"/>
+                                </h:selectOneMenu>
+                            </h:panelGroup>
+                            <h:panelGroup id="mensajes3">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Tipo de formato" rendered="#{bgesItems.AItem.itmConten eq 'Q' or bgesItems.AItem.itmConten eq 'M' or bgesItems.AItem.itmConten eq 'O'}"/></b>
+                                </font>
+                            </h:panelGroup>
+                            <h:panelGroup id="mensajes4" >
+                                <h:selectOneMenu  value="#{bgesItems.AItem.itmMensajes}" rendered="#{(bgesItems.AItem.itmConten eq 'Q' or bgesItems.AItem.itmConten eq 'M' or bgesItems.AItem.itmConten eq 'O')and(bgesItems.AItem.itmCorreo eq 'A' or bgesItems.AItem.itmCorreo eq 'B' or bgesItems.AItem.itmCorreo eq 'C' or bgesItems.AItem.itmCorreo eq 'D' or bgesItems.AItem.itmCorreo eq 'E' or bgesItems.AItem.itmCorreo eq 'F')}" >
+                                    <f:selectItem itemLabel="modificable" itemValue="M"/>
+                                    <f:selectItem itemLabel="Visible consulta" itemValue="V"/>
+                                    <f:selectItem itemLabel="No visible" itemValue="N"/>
+                                </h:selectOneMenu>
+                            
+                                <h:selectOneMenu  value="#{bgesItems.AItem.itmMensajes}" rendered="#{(bgesItems.AItem.itmConten eq 'Q' or bgesItems.AItem.itmConten eq 'M' or bgesItems.AItem.itmConten eq 'O')and(bgesItems.AItem.itmCorreo eq 'G' or bgesItems.AItem.itmCorreo eq 'H' or bgesItems.AItem.itmCorreo eq 'I' or bgesItems.AItem.itmCorreo eq 'J')}" >
+                                    <f:selectItem itemLabel="modificable" itemValue="M"/>
+                                    <f:selectItem itemLabel="Visible consulta" itemValue="V"/>
+                                    
+                                    
+                                </h:selectOneMenu>
+                           </h:panelGroup>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                      color="#{cabecera.login_color_label}">
+                                    <b>Tabla</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="tab4" value="#{bgesItems.AItem.itmTabla}"
+                                                 validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                                 style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="20"/>
+                                    </h:inputText>
+                                    <h:message id="msg_tab4" for="tab4" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="tab4" value="#{bgenAyudas.obtenerAyuda(8)}"/>
+                                    <p:tooltip for="msg_tab4" value="#{bgenMessages.message('itm:tab4')}"/>
+                                </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Campo</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="camp2" value="#{bgesItems.AItem.itmCampo}"
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="20"/>
+                                    </h:inputText>
+                                    <h:message id="msg_camp2" for="camp2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="camp2" value="#{bgenAyudas.obtenerAyuda(8)}"/>
+                                    <p:tooltip for="msg_camp2" value="#{bgenMessages.message('itm:camp2')}"/>
+                                </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Seguimiento</b>
+                                </font>
+                                <p:selectOneRadio value="#{bgesItems.AItem.itmSeg}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>
+                                </p:selectOneRadio>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Variable de desicion</b>
+                                </font>
+                                <p:selectOneRadio value="#{bgesItems.AItem.itmDesc}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>
+                                </p:selectOneRadio>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Grupo documento</b>
+                                </font>
+                                <h:selectOneMenu value="#{bgesItems.AItem.itmGrupoDoc}" converter="javax.faces.Integer">
+                                    <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{bgesGdocumentos.gdocumentos}" var="gd"
+                                                   itemLabel="#{gd.gdoDescripcion}" itemValue="#{gd.gdoGrupoPk}"/>
+                                </h:selectOneMenu>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre documento</b>
+                                </font>
+                                <h:selectOneMenu value="#{bgesItems.AItem.itmDocumento}">
+                                    <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{bgesPdocumentos.pdocumentos}" var="pd"
+                                                   itemLabel="#{pd.pdoDescripcion}" itemValue="#{pd.pdoDocumentoPk}"/>
+                                </h:selectOneMenu>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Correo</b>
+                                </font>
+                                <p:selectOneRadio value="#{bgesItems.AItem.itmCorreo}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>
+                                </p:selectOneRadio>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Mensajes</b>
+                                </font>
+                                <p:selectOneRadio value="#{bgesItems.AItem.itmMensajes}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>
+                                </p:selectOneRadio>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Dudas</b>
+                                </font>
+                                <p:selectOneRadio value="#{bgesItems.AItem.itmIndDudas}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>
+                                </p:selectOneRadio>
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesItems.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <font face="#{cabecera.login_tipo_letra_label}" size="5"
+                color="#{cabecera.login_color_label}">
+            <b><center>Asignaciones</center></b>
+        </font>
+        <br/>
+        #{bgesAsignacion.init(bgesNavegacion.proyecto, bgesNavegacion.relaciones, bgesNavegacion.relacion, bgesNavegacion.contenido)}
+        <p:dataTable var="user" value="#{bgesAsignacion.permisoUsuarios}" scrollable="true" scrollWidth="600"
+                editable="true" editMode="cell"
+                scrollHeight="230" selection="#{bgesAsignacion.selectedUsuarios}" rowKey="#{user}">
+            <p:column selectionMode="multiple" width="20"/>
+            <p:column sortBy="#{user.actividad}" width="120">
+                <f:facet name="header">
+                    Actividad
+                </f:facet>
+                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                        color="#{cabecera.login_color_label}">
+                    <b>#{user.actividad}</b>
+                </font>
+            </p:column>
+            <p:column sortBy="#{user.usuario}" width="80">
+                <f:facet name="header">
+                    Usuario
+                </f:facet>
+                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                        color="#{cabecera.login_color_label}">
+                    <b>
+                        <h:commandLink value="#{user.usuario}" action="#{bgesNavegacion.iconos}">
+                            <f:param name="tipo" value="3"/>
+                            <f:ajax execute="@form" render="@form"/>
+                        </h:commandLink>
+                    </b>
+                </font>
+            </p:column>
+            <p:column sortBy="#{user.empleado}" width="120">
+                <f:facet name="header">
+                    Empleado
+                </f:facet>
+                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                        color="#{cabecera.login_color_label}">
+                    <b>#{user.empleado}</b>
+                </font>
+            </p:column>
+            <p:column headerText="Carga de trabajo" sortBy="#{user.porcentaje}" width="120">
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <center>#{user.porcentaje}%</center>
+                    </f:facet>
+                    <f:facet name="input">
+                        <h:panelGrid columns="1" style="margin-bottom: 10px">
+                            <h:outputText id="output" value="Porcentaje #{user.porcentaje}%"/>
+                            <h:inputHidden id="txt" value="#{user.porcentaje}"/>
+                            <p:slider for="txt" display="output" style="width: 110px" displayTemplate="Porcentaje {value}%"/>
+                        </h:panelGrid>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            <p:column sortBy="#{user.empresaArea}" width="150">
+                <f:facet name="header">
+                    Empresa - Area
+                </f:facet>
+                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                        color="#{cabecera.login_color_label}">
+                    <b>#{user.empresaArea}</b>
+                </font>
+            </p:column>
+            <p:column sortBy="#{user.grupo}" width="80">
+                <f:facet name="header">
+                    Grupo
+                </f:facet>
+                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                        color="#{cabecera.login_color_label}">
+                    <b>#{user.grupo}</b>
+                </font>
+            </p:column>
+        </p:dataTable>
+    </h:body>
+</html>
+

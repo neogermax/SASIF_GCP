@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <div id="login">
+            <h2 align="center" style="#{cabecera.login_color_titulo}">
+                #{cabecera.login_titulo}
+            </h2> 
+            
+            <h:form id="auth">
+                <fieldset style="background-color:#{cabecera.login_borde_color};">
+                    <h:panelGrid>
+                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                            color="#{cabecera.login_color_label}">
+                            <b>Nombre de usuario</b>
+                        </font> 
+                        <h:panelGrid columns="2">
+                            <h:inputText id="login" binding="#{bgesLogin.inputLogin}" requiredMessage="#{bgenErrores.obtenerError(5)}" 
+                                     required="true" value="#{bgesLogin.usuario}"
+                                     style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};"/>
+                            <h:message id="msg_login" for="login" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                            <p:tooltip for="login" value="#{bgenAyudas.obtenerAyuda(4)}"/>
+                            <p:tooltip for="msg_login" value="#{bgenMessages.message('auth:login')}"/>
+                        </h:panelGrid>
+                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                            color="#{cabecera.login_color_label}">
+                            <b>Contraseña</b>
+                        </font>
+                        <h:panelGrid columns="2">
+                            <h:inputSecret id="pass" required="true" requiredMessage="#{bgenErrores.obtenerError(6)}"
+                                       value="#{bgesLogin.password}"
+                                       style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};"/>
+                            <h:message id="msg_pass" for="pass" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                            <p:tooltip for="pass" value="#{bgenAyudas.obtenerAyuda(5)}"/>
+                            <p:tooltip for="msg_pass" value="#{bgenMessages.message('auth:pass')}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Entrar" action="#{bgesLogin.accionLogin}" update="@form"/>
+                    </div>
+                </fieldset>
+            </h:form>
+        </div>
+    </h:body>
+</html>
+

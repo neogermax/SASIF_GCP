@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:body>
+        <ui:include src="../parametros/pp_navCab001.xhtml"/>
+        <br/>
+        <fieldset style="height: 340px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+            <ui:include src="../parametros/pp_navIcon001.xhtml"/>
+            
+            <h:panelGroup rendered="#{bgesNavegacion.actividad.actAutorizar ne 0}">
+                <ui:include src="../parametros/pp_navAut001.xhtml"/>
+                <br/>
+            </h:panelGroup>
+            
+            <h:dataTable id="tabla" value="#{bgesNavegacion.itemsValues}" rendered="#{bgesNavegacion.tipo eq '1'}"
+                            var="itemValue" cellspacing="10" cellpadding="5">
+                <h:column>
+                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                            color="#{cabecera.login_color_label}">
+                        <b>#{itemValue.actItem.acitmItmCodFk.itmLabel}</b>
+                    </font>
+                </h:column>
+                <h:column>
+                    <h:outputText value="#{itemValue.proyItem.pryValorNum}"
+                                rendered="#{itemValue.actItem.acitmProteg eq 'S' and itemValue.actItem.acitmItmCodFk.itmDato eq 'N'}"/>
+                    <h:outputText value="#{itemValue.proyItem.pryValorAlfa}"
+                            rendered="#{itemValue.actItem.acitmProteg eq 'S' and itemValue.actItem.acitmItmCodFk.itmDato eq 'V'}"/>
+                    <h:outputText value="#{itemValue.proyItem.pryValorFecha}"
+                                  rendered="#{itemValue.actItem.acitmProteg eq 'S' and itemValue.actItem.acitmItmCodFk.itmDato eq 'F'}">
+                        <f:convertDateTime pattern="yyyyMMdd"/>
+                    </h:outputText>
+                    <h:selectOneMenu value="#{itemValue.proyItem.pryValorAlfa}"
+                                rendered="#{itemValue.actItem.acitmProteg eq 'N' and itemValue.actItem.acitmItmCodFk.itmDato eq 'V' and itemValue.actItem.acitmItmCodFk.itmCodTab ne null}">
+                        <f:selectItems value="#{bgesNavegacion.obtenerTablasAlfa(itemValue.actItem.acitmItmCodFk.itmCodTab)}"
+                                var="alf" itemLabel="#{alf.alfanumericasPK.alfValor} - #{alf.alfDescrip}" itemValue="#{alf.alfanumericasPK.alfValor}"/>
+                    </h:selectOneMenu>
+                    <h:selectOneMenu value="#{itemValue.proyItem.pryValorNum}" converter="javax.faces.BigDecimal"
+                                rendered="#{itemValue.actItem.acitmProteg eq 'N' and itemValue.actItem.acitmItmCodFk.itmDato eq 'N' and itemValue.actItem.acitmItmCodFk.itmCodTab ne null}">
+                        <f:selectItems value="#{bgesNavegacion.obtenerTablasNum(itemValue.actItem.acitmItmCodFk.itmCodTab)}"
+                                var="num" itemLabel="#{num.numericasPK.numValor} - #{num.numDescrip}" itemValue="#{num.numericasPK.numValor}"/>
+                    </h:selectOneMenu>
+                    <h:inputText id="cod" value="#{itemValue.proyItem.pryValorNum}" size="5"
+                            required="#{itemValue.actItem.acitmItmCodFk.itmValEstand eq 'S'}"
+                            rendered="#{itemValue.actItem.acitmProteg eq 'N' and itemValue.actItem.acitmItmCodFk.itmDato eq 'N' and itemValue.actItem.acitmItmCodFk.itmConten eq 'U'}"
+                            requiredMessage="#{bgenErrores.obtenerError(2)}" converterMessage="#{bgenErrores.obtenerError(1)}"
+                            validatorMessage="#{bgenErrores.obtenerError(112)}"
+                            style="width: #{bgesNavegacion.getWidth(itemValue.actItem.acitmItmCodFk.itmTamano)}px; color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                        <f:convertNumber/>
+                        <f:validator validatorId="tamanoValidator" />
+                        <f:attribute name="tamano" value="#{itemValue.actItem.acitmItmCodFk.itmTamano}" />
+                    </h:inputText>
+                    <p:tooltip for="cod" value="#{bgenAyudas.obtenerAyuda(itemValue.actItem.acitmItmCodFk.itmAydCod)}"
+                            rendered="#{itemValue.actItem.acitmItmCodFk.itmAydCod != null}"/>
+                    <h:inputText id="cod_1" value="#{itemValue.proyItem.pryValorAlfa}" size="5"
+                            required="#{itemValue.actItem.acitmItmCodFk.itmValEstand eq 'S'}" 
+                            rendered="#{itemValue.actItem.acitmProteg eq 'N' and itemValue.actItem.acitmItmCodFk.itmDato eq 'V' and itemValue.actItem.acitmItmCodFk.itmConten eq 'U'}"
+                            requiredMessage="#{bgenErrores.obtenerError(2)}"
+                            validatorMessage="#{bgenErrores.obtenerError(112)}"
+                            style="width: #{bgesNavegacion.getWidth(itemValue.actItem.acitmItmCodFk.itmTamano)}px; color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                        <f:validator validatorId="tamanoValidator" />
+                        <f:attribute name="tamano" value="#{itemValue.actItem.acitmItmCodFk.itmTamano}" />
+                    </h:inputText>
+                    <p:tooltip for="cod_1" value="#{bgenAyudas.obtenerAyuda(itemValue.actItem.acitmItmCodFk.itmAydCod)}"
+                            rendered="#{itemValue.actItem.acitmItmCodFk.itmAydCod != null}"/>
+                    <p:inputMask id="cod_2" value="#{itemValue.proyItem.pryValorFecha}" mask="9999/99/99"
+                            required="#{itemValue.actItem.acitmItmCodFk.itmValEstand eq 'S'}"
+                            rendered="#{itemValue.actItem.acitmProteg eq 'N' and itemValue.actItem.acitmItmCodFk.itmDato eq 'F' and itemValue.actItem.acitmItmCodFk.itmConten eq 'U'}"
+                            requiredMessage="#{bgenErrores.obtenerError(2)}"
+                            converterMessage="#{bgenErrores.obtenerError(4)}" style="width: 80px">
+                        <f:convertDateTime pattern="yyyy/MM/dd"/>
+                    </p:inputMask>
+                    <p:tooltip for="cod_2" value="#{bgenAyudas.obtenerAyuda(itemValue.actItem.acitmItmCodFk.itmAydCod)}"
+                            rendered="#{itemValue.actItem.acitmItmCodFk.itmAydCod != null}"/>
+                </h:column>
+                <h:column>
+                    <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                    <p:tooltip for="msg_cod" value="#{bgenMessages.message('act:tabla:',bgesNavegacion.actividad.actItemsList.indexOf(itemValue.actItem),':cod')}"/>
+                    <h:message id="msg_cod_1" for="cod_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                    <p:tooltip for="msg_cod_1" value="#{bgenMessages.message('act:tabla:',bgesNavegacion.actividad.actItemsList.indexOf(itemValue.actItem),':cod_1')}"/>
+                    <h:message id="msg_cod_2" for="cod_2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                    <p:tooltip for="msg_cod_2" value="#{bgenMessages.message('act:tabla:',bgesNavegacion.actividad.actItemsList.indexOf(itemValue.actItem),':cod_2')}"/>
+                </h:column>
+            </h:dataTable>
+            
+            <h:panelGroup id="comp" rendered="#{bgesNavegacion.tipo eq '2'}">
+                <ui:include src="../parametros/pp_navComp001.xhtml"/>
+            </h:panelGroup>
+            
+            <h:panelGroup rendered="#{bgesNavegacion.tipo eq '3'}">
+                <ui:include src="../parametros/pp_navTrab001.xhtml"/>
+            </h:panelGroup>
+            
+            <h:panelGroup rendered="#{bgesNavegacion.tipo eq '4'}">
+                 <ui:include src="../parametros/pp_navSelect001.xhtml"/>                 
+            </h:panelGroup>
+            
+            <h:panelGroup rendered="#{bgesNavegacion.tipo eq '5'}">
+                  <ui:include src="../parametros/pp_navAsig001.xhtml"/>                  
+            </h:panelGroup>
+            
+            <h:panelGroup rendered="#{bgesNavegacion.tipo eq '6'}">
+                <ui:include src="../parametros/pp_navCron001.xhtml"/>
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{bgesNavegacion.tipo eq '7'}">
+                 <ui:include src="../parametros/pp_navDoc001.xhtml"/>               
+            </h:panelGroup>
+        </fieldset>
+        <br/>
+        <div align="center">
+            <p:commandButton value="Aceptar" action="#{bgesNavegacion.continuar}" update="@form" rendered="#{not bgesNavegacion.termino}"/>
+            <p:commandButton value="Terminar" rendered="#{bgesNavegacion.termino}" onclick="actv.show()"/>
+            <p:commandButton value="Cancelar" action="#{bgesNavegacion.cancelar}" update="@form" immediate="true" rendered="#{bgesNavegacion.retornar}"/>
+            <p:commandButton value="Cancelar" onclick="PF('cro').show();" immediate="true" rendered="#{not bgesNavegacion.retornar}"/>
+        </div>
+        <ui:include src="../parametros/pp_navDialog001.xhtml"/>
+    </h:body>
+</html>
+

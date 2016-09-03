@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="CGPLUISPU" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>jdbc/sasif</jta-data-source>
+    <class>jpa.valores.Areas</class>
+    <class>jpa.valores.Ayudas</class>
+    <class>jpa.valores.Cargos</class>
+    <class>jpa.valores.Contactos</class>
+    <class>jpa.valores.Empleados</class>
+    <class>jpa.valores.Empresas</class>
+    <class>jpa.valores.Errores</class>
+    <class>jpa.valores.HistoricoClaves</class>
+    <class>jpa.valores.Links</class>
+    <class>jpa.valores.OpcionRoles</class>
+    <class>jpa.valores.PoliticaGrupos</class>
+    <class>jpa.valores.Festivos</class>
+    <class>jpa.valores.Paises</class>
+    <class>jpa.valores.Roles</class>
+    <class>jpa.valores.Gdocumentos</class>
+    <class>jpa.valores.Pdocumentos</class>
+    <class>jpa.valores.Rutas</class>
+    <class>jpa.valores.Usuarios</class>
+    <class>jpa.valores.PermisosDocUsu</class>
+    <class>jpa.valores.InfoDocumentos</class>
+    <class>jpa.valores.DocExistentes</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
+    </properties>
+  </persistence-unit>
+  <persistence-unit name="CGPLUISPU2" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>jdbc/gestion</jta-data-source>
+    <class>jpa.valores.ActItems</class>
+    <class>jpa.valores.Clases</class>
+    <class>jpa.valores.Consecutivos</class>
+    <class>jpa.valores.Etapas</class>
+    <class>jpa.valores.Formulas</class>
+    <class>jpa.valores.Items</class>
+    <class>jpa.valores.Programas</class>
+    <class>jpa.valores.ProyItems</class>
+    <class>jpa.valores.Proyectos</class>
+    <class>jpa.valores.Permisos</class>
+    <class>jpa.valores.Relaciones</class>
+    <class>jpa.valores.Alfanumericas</class>
+    <class>jpa.valores.Numericas</class>
+    <class>jpa.valores.Paralelas</class>
+    <class>jpa.valores.ProyActs</class>
+    <class>jpa.valores.Responsables</class>
+    <class>jpa.valores.Componentes</class>
+    <class>jpa.valores.TipoComps</class>
+    <class>jpa.valores.Actividades</class>
+    <class>jpa.valores.AsignActs</class>
+    <class>jpa.valores.GrupoTrabajos</class>
+    <class>jpa.valores.GrupoUsuarios</class>
+    <class>jpa.valores.DocmActv</class>
+    <class>jpa.valores.CronoProye</class>
+    <class>jpa.valores.ValorHora</class>
+    <class>jpa.valores.CondicionComunicacion</class>
+    <class>jpa.valores.Constantes</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
+    </properties>
+  </persistence-unit>
+  <persistence-unit name="CGPLUISPU3" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>reporte</jta-data-source>
+    <class>jpa.valores.Caracteristicas</class>
+    <class>jpa.valores.Parametrias</class>
+    <class>jpa.valores.Reportes</class>
+    <class>jpa.valores.AccesoRepUsu</class>
+    <class>jpa.valores.GrupoReportes</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
+    </properties>
+  </persistence-unit>
+</persistence>

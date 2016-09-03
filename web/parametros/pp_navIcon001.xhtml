@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <h:commandButton id="au" style="width: 45px; height: 45px" image="/generales/images/success.png"
+                         rendered="#{bgesNavegacion.actividad.actAutorizar ne 0}"
+                         onclick="queryDialog.show()">
+            <f:ajax/>
+        </h:commandButton>
+        &nbsp;
+        <h:commandButton id="cmp" style="width: 45px; height: 45px" action="#{bgesNavegacion.iconos}" image="/generales/images/componentes.gif"
+                         rendered="#{bgesNavegacion.actividad.actIco2 eq 'S'}">
+            <f:param name="tipo" value="2"/>
+            <f:ajax render="@form"/>
+        </h:commandButton>
+        &nbsp;
+        <p:commandLink id="crg" update="@form" style="width: 45px; height: 45px" oncomplete="presimg.show();" immediate="true"
+                       rendered="#{bgesNavegacion.actividad.actIcoCrono eq 'S'}" action="#{bgesSelectReporte.valores}">
+            <p:graphicImage style="width: 45px; height: 45px;" value="generales/images/cronograma.gif"/>
+            <f:param name="valor" value="C"/>
+        </p:commandLink>
+        &nbsp;
+        <h:commandButton id="br" style="width: 45px; height: 45px" image="/generales/images/barra_de_progreso.gif"
+                         rendered="#{bgesNavegacion.cronoProye ne null}" onclick="PF('croi').show();">
+            <f:ajax/>
+        </h:commandButton>
+        &nbsp;
+        <p:commandLink id="pre" update="@form" style="width: 45px; height: 45px;" oncomplete="presimg.show();" immediate="true"
+                       rendered="#{bgesNavegacion.actividad.actIco3 eq 'S'}" action="#{bgesSelectReporte.valores}">
+            <p:graphicImage style="width: 45px; height: 45px;" value="generales/images/presupuesto.gif"/>
+            <f:param name="valor" value="P"/>
+        </p:commandLink>
+        &nbsp;
+        <p:commandLink id="car" update="@form" style="width: 45px; height: 45px;" oncomplete="presimg.show();" immediate="true"
+                       rendered="#{bgesNavegacion.actividad.actIco4 eq 'S'}" action="#{bgesSelectReporte.valores}">
+            <p:graphicImage style="width: 45px; height: 45px;" value="generales/images/carga.gif"/>
+            <f:param name="valor" value="T"/>
+        </p:commandLink>
+        &nbsp;
+        <p:commandLink id="doc" update="@form" style="width: 45px; height: 45px;"  immediate="true"
+                       rendered="#{bgesNavegacion.actividad.actIco5 eq 'S'}" action="#{bgesDoccormen.action()}">
+            <p:graphicImage style="width: 45px; height: 45px;" value="generales/images/Documentos.gif"/>
+            <f:param name="valor" value="D"/>
+            <f:param name="proyecto" value="#{bgesNavegacion.proyecto.proCodPk}"/>
+        </p:commandLink>
+        &nbsp;
+        <p:commandLink id="cor" update="@form" style="width: 45px; height: 45px;" immediate="true"
+                       rendered="#{bgesNavegacion.actividad.actIco6 eq 'S'}" action="#{bgesDoccormen.action()}">
+            <p:graphicImage style="width: 45px; height: 45px;" value="generales/images/correo.gif"/>
+            <f:param name="valor" value="C"/>
+            <f:param name="proyecto" value="#{bgesNavegacion.proyecto.proCodPk}"/>
+        </p:commandLink>
+        &nbsp;
+        <p:commandLink id="men" update="@form" style="width: 45px; height: 45px;" immediate="true"
+                       rendered="#{bgesNavegacion.actividad.actIco7 eq 'S'}" action="#{bgesDoccormen.action()}">
+            <p:graphicImage style="width: 45px; height: 45px;" value="generales/images/mensajes.gif"/>
+            <f:param name="valor" value="M"/>
+            <f:param name="proyecto" value="#{bgesNavegacion.proyecto.proCodPk}"/>
+        </p:commandLink>
+       
+        
+        <p:tooltip for="au" value="Autorizaciones"/>
+        <p:tooltip for="cmp" value="Administracion de componentes"/>
+        <p:tooltip for="crg" value="Cronograma"/>
+        <p:tooltip for="br" value="Porcentaje real de avance"/>
+        <p:tooltip for="pre" value="Presupuesto"/>
+        <p:tooltip for="car" value="Carga de trabajo"/>
+        <p:tooltip for="doc" value="Documentos"/>
+        <p:tooltip for="cor" value="Correos"/>
+        <p:tooltip for="men" value="Mensajes"/>
+    </h:body>
+</html>
+

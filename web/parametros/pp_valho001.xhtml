@@ -1,0 +1,241 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <div id="formulario">
+            <br/>
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="valho">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                             <p:commandButton value="Consultar" action="#{bgesValorHora.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                            <p:commandButton value="Crear" action="#{bgesValorHora.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                            <p:commandButton value="Actualizar" action="#{bgesValorHora.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                            <p:commandButton value="Eliminar" action="#{bgesValorHora.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 360px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesValorHora.columnas}"
+                                              rendered="#{not bgesValorHora.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Fecha" itemValue="1"/>
+                                <f:selectItem itemLabel="Actividad" itemValue="2"/>
+                                <f:selectItem itemLabel="Usuario" itemValue="3"/>
+                                <f:selectItem itemLabel="Valor" itemValue="4"/>
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesValorHora.opcion.equals('1') or bgesValorHora.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesValorHora.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px" value="#{bgesValorHora.valorHora}" var="valho"
+                                     scrollable="true" rowKey="#{valho.valorHoraPK}" scrollHeight="220"
+                                     emptyMessage="#{bgenErrores.obtenerError(14)}"
+                                     scrollWidth="600" selection="#{bgesValorHora.valorHor}" selectionMode="single"
+                                 rendered="#{not bgesValorHora.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            
+                            <p:column headerText="Fecha" filterBy="#{valho.valorHoraPK.valhoFecha}" filterMatchMode="contains"
+                                      rendered="#{bgesValorHora.columnas.contains('1')}"
+                                      width="60" filterStyle="min-width: 60px; max-width: 60px">
+                                <font size="1">
+                                    <h:outputText value="#{valho.valorHoraPK.valhoFecha}" >
+                                       <f:convertDateTime type="date" pattern="yyyy/MM/dd" timeZone="America/Bogota" />
+                                    </h:outputText>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Actividad" filterBy="#{valho.valorHoraPK.valhoActCodFk}" filterMatchMode="contains"
+                                      rendered="#{bgesValorHora.columnas.contains('2')}"
+                                      width="120" filterStyle="min-width: 120px; max-width: 120px">
+                                <font size="1">
+                                    <h:outputText value="#{valho.valorHoraPK.valhoActCodFk} #{valho.actividades.actDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Usuario" filterBy="#{valho.valorHoraPK.valhoUsuCod}" filterMatchMode="contains"
+                                      rendered="#{bgesValorHora.columnas.contains('3')}"
+                                      width="90" filterStyle="min-width: 90px; max-width: 90px">
+                                <font size="1">
+                                    <h:outputText value="#{valho.valorHoraPK.valhoUsuCod}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Valor" filterBy="#{valho.valhoValor}" filterMatchMode="contains"
+                                      rendered="#{bgesValorHora.columnas.contains('3')}"
+                                      width="120" filterStyle="min-width: 120px; max-width: 120px">
+                                <font size="1">
+                                    <h:outputText value="#{valho.valhoValor}"/>
+                                </font>
+                            </p:column>
+                        </p:dataTable>
+                        
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesValorHora.opcion.equals('2')}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Fecha</b>
+                            </font>
+                            
+                                      
+                                      
+                            <p:calendar value="#{bgesValorHora.CValorHor.valorHoraPK.valhoFecha}"
+                                
+                                requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                                            validatorMessage="#{cabecera.rol_val_descripcion}"
+                                                            pattern="yyyy/MM/dd"
+                                                            timeZone="America/Bogota">
+                            </p:calendar>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Actividad</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:selectOneMenu value="#{bgesValorHora.CValorHor.valorHoraPK.valhoActCodFk}">
+                                    <f:selectItems value="#{bgesActividades.actividades}" var="act"
+                                                   itemLabel="#{act.actCodPk} #{act.actDescrip}" itemValue="#{act.actCodPk}"/>
+                                    <f:converter converterId="javax.faces.Integer"/>
+                                </h:selectOneMenu>
+                                
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Usuario</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:selectOneMenu value="#{bgesValorHora.CValorHor.valorHoraPK.valhoUsuCod}">
+                                    <f:selectItem itemLabel="" itemValue=" "/>
+                                    <f:selectItems value="#{bgesUsuarios.usuarios}" var="usu"
+                                                   itemLabel="#{usu.usuCodPk}" itemValue="#{usu.usuCodPk}"/>
+                                    
+                                </h:selectOneMenu>
+                                
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Valor</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesValorHora.CValorHor.valhoValor}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(18)}"
+                                             converterMessage="#{bgenErrores.obtenerError(16)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(22)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                   <f:converter converterId="javax.faces.Long"/>
+                                    <f:validateLongRange minimum="0" maximum="999999999999999"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt" value="#{bgenAyudas.obtenerAyuda(142)}"/>
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('valho:idt')}"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesValorHora.crear}" rendered="#{bgesValorHora.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesValorHora.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesValorHora.valorHor.valorHoraPK.valhoActCodFk}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesValorHora.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Fecha</b>
+                                </font>
+                            <h:outputText value="#{bgesValorHora.valorHor.valorHoraPK.valhoFecha}" >
+                                       <f:convertDateTime type="date" pattern="yyyy/MM/dd" timeZone="America/Bogota" />
+                            </h:outputText>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Actividad</b>
+                                </font>
+                            <h:outputText value="#{bgesValorHora.valorHor.valorHoraPK.valhoActCodFk} #{bgesValorHora.valorHor.actividades.actDescrip}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Usuario</b>
+                                </font>
+                            <h:outputText value="#{bgesValorHora.valorHor.valorHoraPK.valhoUsuCod}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Valor</b>
+                                </font>
+                            <h:outputText value="#{bgesValorHora.valorHor.valhoValor}"/>
+                        </h:panelGrid>
+                    </p:dialog>
+                    
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesValorHora.opcion.equals('3')}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Fecha</b>
+                                </font>
+                                
+                                <h:outputText value="#{bgesValorHora.valorHor.valorHoraPK.valhoFecha}" >
+                                       <f:convertDateTime type="date" pattern="yyyy/MM/dd" timeZone="America/Bogota" />
+                                </h:outputText>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Actividad</b>
+                                </font>
+                                <h:outputText value="#{bgesValorHora.valorHor.valorHoraPK.valhoActCodFk} #{bgesValorHora.valorHor.actividades.actDescrip}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Usuario</b>
+                                </font>
+                                <h:outputText value="#{bgesValorHora.valorHor.valorHoraPK.valhoUsuCod}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Valor</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                <h:inputText id="idt1" value="#{bgesValorHora.valorHor.valhoValor}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(18)}"
+                                             converterMessage="#{bgenErrores.obtenerError(16)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(22)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                   <f:converter converterId="javax.faces.Long"/>
+                                    <f:validateLongRange minimum="0" maximum="999999999999999"/>
+                                </h:inputText>
+                                <h:message id="msg_idt1" for="idt1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt1" value="#{bgenAyudas.obtenerAyuda(142)}"/>
+                                <p:tooltip for="msg_idt1" value="#{bgenMessages.message('valho:idt1')}"/>
+                            </h:panelGrid>
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesValorHora.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>

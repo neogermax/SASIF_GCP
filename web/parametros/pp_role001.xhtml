@@ -1,0 +1,261 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="role">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesRoles.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                                <p:commandButton value="Crear" action="#{bgesRoles.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                                <p:commandButton value="Actualizar" action="#{bgesRoles.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                                <p:commandButton value="Eliminar" action="#{bgesRoles.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesRoles.columnas}"
+                                              rendered="#{not bgesRoles.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Codigo" itemValue="1"/>
+                                <f:selectItem itemLabel="Descripcion" itemValue="2"/>
+                                <f:selectItem itemLabel="Sigla" itemValue="3"/>
+                                <f:selectItem itemLabel="Estado" itemValue="4"/>
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesRoles.opcion.equals('1') or bgesRoles.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesRoles.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+
+
+                        <p:dataTable id="tabla" style="width: 600px; table-layout: fixed;" value="#{bgesRoles.roles}" var="role"
+                                     scrollable="true" rowKey="#{role.rolRolPk}" scrollHeight="190"
+                                     emptyMessage="#{cabecera.rol_tabla_vacia}"
+                                     scrollWidth="600" selection="#{bgesRoles.rol}" selectionMode="single"
+                                 rendered="#{not bgesRoles.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            <p:column headerText="Codigo" filterBy="#{role.rolRolPk}" filterMatchMode="contains"
+                                      rendered="#{bgesRoles.columnas.contains('1')}"
+				      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{role.rolRolPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Descripcion" filterBy="#{role.rolDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesRoles.columnas.contains('2')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{role.rolDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Sigla" filterBy="#{role.rolSigla}" filterMatchMode="contains"
+                                      rendered="#{bgesRoles.columnas.contains('3')}" 
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{role.rolSigla}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Estado" filterBy="#{role.rolEstado}" filterMatchMode="contains"
+                                      rendered="#{bgesRoles.columnas.contains('4')}" 
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{role.rolEstado}"/>
+                                </font>
+                            </p:column>
+                            
+                        </p:dataTable>
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesRoles.opcion.equals('2')}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesRoles.CRol.rolRolPk}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_codigo}"
+                                             validatorMessage="#{cabecera.rol_val_codigo}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="10"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod">
+                                    #{bgenAyudas.obtenerAyuda(95)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_cod" value="#{bgenMessages.message('role:cod')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Descripción</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesRoles.CRol.rolDescrip}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt">
+                                       #{bgenAyudas.obtenerAyuda(96)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('role:idt')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Sigla</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="nom" value="#{bgesRoles.CRol.rolSigla}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_sigla}"
+                                             validatorMessage="#{cabecera.rol_val_sigla}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="5"/>
+                                </h:inputText>
+                                <h:message id="msg_nom" for="nom" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="nom">
+                                       #{bgenAyudas.obtenerAyuda(97)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_nom" value="#{bgenMessages.message('role:nom')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Estado</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesRoles.CRol.rolEstado}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:selectItem itemLabel="Activo" itemValue="A"/>
+                                <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                            </p:selectOneRadio>
+                            
+                                                                                    
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesRoles.crear}" rendered="#{bgesRoles.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesRoles.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesRoles.rol.rolDescrip}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesRoles.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesRoles.rol.rolRolPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Descripcion</b>
+                                </font>
+                                <h:outputText value="#{bgesRoles.rol.rolDescrip}"/>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Sigla</b>
+                                </font>
+                                <h:outputText value="#{bgesRoles.rol.rolSigla}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Estado</b>
+                                </font>
+                                <h:outputText value="#{bgesRoles.rol.rolEstado}"/>
+                                
+                            </h:panelGrid>
+                    </p:dialog>
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesRoles.opcion.equals('3')}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesRoles.rol.rolRolPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Descripción</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="idt_1" value="#{bgesRoles.rol.rolDescrip}" required="true"
+                                                 requiredMessage="#{cabecera.rol_req_id}"
+                                                 converterMessage="#{cabecera.rol_conver_id}"
+                                                 validatorMessage="#{cabecera.rol_val_id}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                            <f:validateLength maximum="50"/>
+                                    </h:inputText>
+                                    <h:message id="msg_idt_1" for="idt_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="idt_1">
+                                         #{bgenAyudas.obtenerAyuda(96)} 
+                                    </p:tooltip>
+                                    <p:tooltip for="msg_idt_1" value="#{bgenMessages.message('role:idt_1')}"/>
+                                </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Sigla</b>
+                                </font>
+                                
+                                
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="nom_1" value="#{bgesRoles.rol.rolSigla}" required="true"
+                                                 requiredMessage="#{cabecera.cont_req_nombre}"
+                                                 validatorMessage="#{cabecera.cont_val_nombre}"
+                                                 style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="5"/>
+                                    </h:inputText>
+                                    <h:message id="msg_nom_1" for="nom_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="nom_1">
+                                         #{bgenAyudas.obtenerAyuda(97)} 
+                                    </p:tooltip>
+                                    <p:tooltip for="msg_nom_1" value="#{bgenMessages.message('role:nom_1')}"/>
+                                </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Estado</b>
+                                </font>
+                                <p:selectOneRadio value="#{bgesRoles.rol.rolEstado}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Activo" itemValue="A"/>
+                                    <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                                </p:selectOneRadio>
+                                
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesRoles.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

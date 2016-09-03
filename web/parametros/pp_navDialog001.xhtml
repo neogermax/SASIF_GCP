@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <p:dialog widgetVar="queryDialog" rendered="#{bgesNavegacion.actividad.actAutorizar ne 0}">
+            <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                #{bgesAutorizaciones.init(bgesNavegacion.proyAct)}
+                <font face="#{cabecera.login_tipo_letra_label}" size="5"
+                        color="#{cabecera.login_color_label}">
+                    <b><center>Consulta de autorizaciones</center></b>
+                </font>
+                <br/>
+                <table>
+                    <tr>
+                        <td align="center" width="200">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Autorizaciones: #{bgesNavegacion.actividad.actAutorizar}</b>
+                            </font>
+                        </td>
+                        <td align="center" width="200">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Autorizadas: #{bgesNavegacion.autorizadas}</b>
+                            </font>
+                        </td>
+                    </tr>
+                </table>
+                <br/><br/>
+                <p:dataTable var="resp" value="#{bgesAutorizaciones.responsables}">
+                <p:column headerText="Usuario" width="80">
+                    <font size="1">
+                        <h:outputText value="#{resp.usuario}"/>
+                    </font>
+                 </p:column>
+                 <p:column headerText="Empleado" width="120">
+                    <font size="1">
+                        <h:outputText value="#{resp.empleado}"/>
+                    </font>
+                 </p:column>
+                 <p:column headerText="Autorizacion" width="20">
+                    <font size="1">
+                        <h:outputText value="#{resp.autoriza}"/>
+                    </font>
+                 </p:column>
+                </p:dataTable>
+            </fieldset>
+        </p:dialog>
+                            
+        <p:confirmDialog message="Desea terminar #{bgesNavegacion.actividad.actDescrip}?" widgetVar="actv"> 
+            <p:commandButton value="Si" update="@form" actionListener="#{bgesNavegacion.terminar}" oncomplete="actv.hide()"/>  
+            <p:commandButton value="No" update="@form" actionListener="#{bgesNavegacion.noTerminar()}" oncomplete="actv.hide()"/>       
+        </p:confirmDialog>
+        
+        <p:dialog widgetVar="cro" rendered="#{bgesNavegacion.cronoProye ne null}">
+            <h:panelGrid id="sl" columns="1" style="margin-bottom: 10px">
+                <h:outputText id="output" value="Porcentaje real de avance %#{bgesNavegacion.cronoProye.croproPorRea}"/>
+                <h:inputHidden id="txt" value="#{bgesNavegacion.cronoProye.croproPorRea}" />
+                <p:slider for="txt" display="output" style="width: 200px" displayTemplate="Porcentaje real de avance %{value}">
+                    <p:ajax event="slideEnd" update="sl1" listener="#{bgesNavegacion.onSlideEnd}"/>
+                </p:slider>
+            </h:panelGrid>
+            <div align="center">
+                <p:commandButton value="Aceptar" update="@form" immediate="true" actionListener="#{bgesNavegacion.cancelar}" oncomplete="cro.hide()"/>
+            </div>
+        </p:dialog>
+        
+        <p:dialog widgetVar="croi" rendered="#{bgesNavegacion.cronoProye ne null}">
+            <h:panelGrid id="sl1" columns="1" style="margin-bottom: 10px">
+                <h:outputText id="outputi" value="Porcentaje real de avance %#{bgesNavegacion.cronoProye.croproPorRea}"/>
+                <h:inputHidden id="txti" value="#{bgesNavegacion.cronoProye.croproPorRea}" />
+                <p:slider for="txti" display="outputi"  style="width: 200px" displayTemplate="Porcentaje real de avance %{value}">
+                    <p:ajax event="slideEnd" update="sl" listener="#{bgesNavegacion.onSlideEnd}"/>
+                </p:slider>
+            </h:panelGrid>
+            <div align="center">
+                <p:commandButton value="Aceptar" action="#{bgesNavegacion.progreso}" immediate="true" update="pry actv tip" oncomplete="croi.hide()"/>
+            </div>
+        </p:dialog>
+        
+        <p:dialog id="press" widgetVar="presimg">
+            #{bgesSelectReporte.init(bgesNavegacion.proyecto)}
+            <p:dataTable var="parametria"  value="#{bgesSelectReporte.presupuesto}" scrollable="true" scrollWidth="600" selectionMode="single"
+                         scrollHeight="230" selection="#{bgesSelectReporte.parametria}" rowKey="#{parametria.parCodRepPk}">
+                <p:ajax event="rowSelect"/>
+                <p:column headerText="Codigo" width="20">
+                                        #{parametria.parCodRepPk}
+                </p:column>
+                <p:column headerText="Descripcion" width="180">
+                                        #{parametria.parNombreRep}
+                </p:column>
+            </p:dataTable>
+            <div align="center">
+                <p:commandButton value="Aceptar" action="#{bgesSelectReporte.action}" update="@form" immediate="true" oncomplete="presimg.hide()"/>
+            </div>
+        </p:dialog>
+    </h:body>
+</html>
+

@@ -1,0 +1,883 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="indo">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesInfoDocumentos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                                <p:commandButton value="Crear" action="#{bgesInfoDocumentos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                                <p:commandButton value="Actualizar" action="#{bgesInfoDocumentos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                                <p:commandButton value="Eliminar" action="#{bgesInfoDocumentos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesInfoDocumentos.columnas}"
+                                              rendered="#{not bgesInfoDocumentos.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Codigo Documento" itemValue="1"/>
+                                <f:selectItem itemLabel="Secuencia del dato en la plantilla" itemValue="2"/>
+                                <f:selectItem itemLabel="Nombre" itemValue="3"/>
+                                <f:selectItem itemLabel="Tipo de Dato" itemValue="4"/>
+                                <f:selectItem itemLabel="Formato" itemValue="13"/>
+                                <f:selectItem itemLabel="Identificador del Dato" itemValue="5"/>
+                                <f:selectItem itemLabel="Codigo de Item" itemValue="6"/>
+                                <f:selectItem itemLabel="Numero de Variable de sesión" itemValue="7"/>
+                                <f:selectItem itemLabel="Nombre de Tabla" itemValue="8"/>
+                                <f:selectItem itemLabel="Nombre de Campo" itemValue="9"/>
+                                <f:selectItem itemLabel="Numero de la constante" itemValue="10"/>
+                                <f:selectItem itemLabel="Secuencia" itemValue="14"/>
+                                <f:selectItem itemLabel="Repetición" itemValue="15"/>
+                                <f:selectItem itemLabel="Nombre tabla de secuencia" itemValue="16"/>
+                                <f:selectItem itemLabel="Nombre campo de secuencia" itemValue="17"/>
+                                <f:selectItem itemLabel="Metadato" itemValue="11"/>
+                                <f:selectItem itemLabel="numero de Tabla" itemValue="12"/>
+                                
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesInfoDocumentos.opcion.equals('1') or bgesInfoDocumentos.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesInfoDocumentos.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px" value="#{bgesInfoDocumentos.infoDocumentos}" var="indo"
+                                     scrollable="true" rowKey="#{indo.infoDocumentosPK}" scrollHeight="190"
+                                     emptyMessage="#{cabecera.usu_tabla_vacia}"
+                                     scrollWidth="600" selection="#{bgesInfoDocumentos.infoDocumento}" selectionMode="single"
+                                 rendered="#{not bgesInfoDocumentos.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            
+                            <p:column headerText="Codigo Documento" filterBy="#{indo.infoDocumentosPK.idocCodDocFk}" filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('1')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{indo.infoDocumentosPK.idocCodDocFk}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Secuencia del dato en la plantilla" filterBy="#{indo.infoDocumentosPK.idocSec} " filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('2')}"
+                                      width="110" filterStyle="min-width: 100px; max-width: 100px">
+                                      
+                                <font size="1">
+                                    <h:outputText value="#{indo.infoDocumentosPK.idocSec}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Nombre" filterBy="#{indo.idocNombre}" filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('3')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{indo.idocNombre}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Tipo Dato" filterBy="#{indo.idocTipoDato}" filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('4')}"
+                                      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{indo.idocTipoDato}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Formato" filterBy="#{indo.idocFormato}" filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('13')}"
+                                      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{indo.idocFormato}"/>
+                                </font>
+                            </p:column>
+                            
+                                              
+                            <p:column headerText="Identificador del Dato" filterBy="#{indo.idocIdeDato}" filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('5')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{indo.idocIdeDato}">
+                                        
+                                        <f:convertDateTime pattern="yyyy/MM/dd"/>
+                                    </h:outputText>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Codigo Item" filterBy="#{indo.idocCodItem}" filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('6')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{indo.idocCodItem}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Numero de Variable de sesión" filterBy="#{indo.idocNumVarSesion}" filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('7')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{indo.idocNumVarSesion}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Nombre Tabla" filterBy="#{indo.idocNomTabla}" filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('8')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{indo.idocNomTabla}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Nombre Campo" filterBy="#{indo.idocNomCampo}" filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('9')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{indo.idocNomCampo}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Numero Constante" filterBy="#{indo.idocNumCons}" filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('10')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{indo.idocNumCons}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Secuencia" filterBy="#{indo.idocSecuencia}" filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('14')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{indo.idocSecuencia}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Repetición" filterBy="#{indo.idocRepeticion}" filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('15')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{indo.idocRepeticion}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Nombre tabla de secuencia" filterBy="#{indo.idocTabla}" filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('16')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{indo.idocTabla}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Nombre campo de secuencia" filterBy="#{indo.idocCampo}" filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('17')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{indo.idocCampo}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Metadato" filterBy="#{indo.idocMetadato}" filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('11')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{indo.idocMetadato}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Numero de Tabla" filterBy="#{indo.idocNumTabla}" filterMatchMode="contains"
+                                      rendered="#{bgesInfoDocumentos.columnas.contains('12')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{indo.idocNumTabla}"/>
+                                </font>
+                            </p:column>
+                        </p:dataTable>
+                        
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesInfoDocumentos.opcion.equals('2')}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo Documento</b>
+                            </font>
+                            
+                            <h:panelGrid columns="2">
+                                <h:selectOneMenu value="#{bgesInfoDocumentos.CInfoDocumento.pdocumentos}">
+                                    <f:selectItems value="#{bgesInfoDocumentos.pdocumentos}" var="pdo"
+                                                   itemLabel="#{pdo.pdoDocumentoPk}" itemValue="#{pdo}"/>
+                                    <f:converter converterId="jsf.beans.BConvPdocumentos"/>
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Secuencia</b>
+                            </font>
+                            
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesInfoDocumentos.CInfoDocumento.infoDocumentosPK.idocSec}" required="true"
+                                             requiredMessage="#{cabecera.usu_req_codigo}"
+                                             validatorMessage="#{cabecera.usu_val_codigo}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="10"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod">
+                                    #{bgenAyudas.obtenerAyuda(143)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_cod" value="#{bgenMessages.message('indo:cod')}"/>
+                            </h:panelGrid>
+                            
+                                                        
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Nombre</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="nom" value="#{bgesInfoDocumentos.CInfoDocumento.idocNombre}" required="true"
+                                             requiredMessage="#{cabecera.usu_req_codigo}"
+                                             validatorMessage="#{cabecera.usu_val_codigo}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_nom" for="nom" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="nom">
+                                    #{bgenAyudas.obtenerAyuda(144)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_nom" value="#{bgenMessages.message('indo:nom')}"/>
+                            </h:panelGrid>                
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tipo Dato</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesInfoDocumentos.CInfoDocumento.idocTipoDato}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:selectItem itemLabel="Numérico" itemValue="N"/>
+                                <f:selectItem itemLabel="Fecha" itemValue="F"/>
+                                <f:selectItem itemLabel="Alfanumérico" itemValue="A"/>
+                                <f:ajax render="fc11 fc12"/>
+                            </h:selectOneMenu>
+                            
+                            <h:panelGroup id="fc11">
+                                <h:panelGroup rendered="#{bgesInfoDocumentos.CInfoDocumento.idocTipoDato ne 'A'}">
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                        <b>Formato</b>
+                                    </font>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup id="fc12">
+                                <h:panelGrid columns="2" rendered="#{bgesInfoDocumentos.CInfoDocumento.idocTipoDato ne 'A'}">
+                                    <h:inputText id="format" value="#{bgesInfoDocumentos.CInfoDocumento.idocFormato}" required="true"
+                                             requiredMessage="#{cabecera.usu_req_codigo}"
+                                             validatorMessage="#{cabecera.usu_val_codigo}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="30"/>
+                                    </h:inputText>
+                                    <p:overlayPanel for="format">
+                                        <p:selectOneListbox immediate="true" value="#{bgesInfoDocumentos.CInfoDocumento.idocFormato}"
+                                                            rendered="#{bgesInfoDocumentos.CInfoDocumento.idocTipoDato eq 'F'}" style="width: 400px">
+                                            <f:selectItem itemLabel="yyyy/MM/dd (2010/01/01)" itemValue="yyyy/MM/dd"/>
+                                            <f:selectItem itemLabel="MMMM dd 'de' yyyy (enero 1 de 2010)" itemValue="MMMM dd 'de' yyyy"/>
+                                            <f:selectItem itemLabel="dd 'de' MMMM 'de' yyyy (1 de enero de 2010)" itemValue="dd 'de' MMMM 'de' yyyy"/>
+                                            <f:selectItem itemLabel="EEEE dd 'de' MMMM 'de' yyyy (viernes 1 de enero de 2010)" itemValue="EEEE dd 'de' MMMM 'de' yyyy"/>
+                                            <f:selectItem itemLabel="HH:mm:ss (13:15:00)" itemValue="HH:mm:ss"/>
+                                            <f:selectItem itemLabel="hh:mm:ss aaa (01:15:00 PM)" itemValue="hh:mm:ss aaa"/>
+                                            <p:ajax update="@form"/>
+                                        </p:selectOneListbox>
+                                        
+                                        <p:selectOneListbox immediate="true" value="#{bgesInfoDocumentos.CInfoDocumento.idocFormato}"
+                                                            rendered="#{bgesInfoDocumentos.CInfoDocumento.idocTipoDato eq 'N'}" style="width: 400px">
+                                            <f:selectItem itemLabel="$##,###.## ($150.000,25)" itemValue="$##,###.##"/>
+                                            <f:selectItem itemLabel="##,###.## (150.000,25)" itemValue="##,###.##"/>
+                                            <f:selectItem itemLabel="##.## (150000,25)" itemValue="##.##"/>
+                                            <p:ajax update="@form"/>
+                                        </p:selectOneListbox>
+                                    </p:overlayPanel>
+                                    <h:message id="msg_format" for="format" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="format">
+                                        #{bgenAyudas.obtenerAyuda(149)} 
+                                    </p:tooltip>
+                                    <p:tooltip for="msg_format" value="#{bgenMessages.message('indo:format')}"/>
+                                </h:panelGrid>
+                            </h:panelGroup>
+                                
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Identificador Dato</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesInfoDocumentos.CInfoDocumento.idocIdeDato}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:selectItem itemLabel="Ítem" itemValue="1"/>
+                                <f:selectItem itemLabel="Variable de sesión" itemValue="2"/>
+                                <f:selectItem itemLabel="Dato de tabla" itemValue="3"/>
+                                <f:selectItem itemLabel="Constante" itemValue="4"/>
+                                <f:ajax render="fc21 fc31 fc22 fc32 fc23 fc33 fc24 fc34 fc25 fc35"/>
+                            </h:selectOneMenu>
+                          
+                            <h:panelGroup id="fc21" >    
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Codigo Item" rendered="#{bgesInfoDocumentos.CInfoDocumento.idocIdeDato eq '1'}" /></b>
+                                </font>
+                            </h:panelGroup>
+                            
+                            <h:panelGroup id="fc31" >     
+                                <h:selectOneMenu value="#{bgesInfoDocumentos.CInfoDocumento.idocCodItem}" rendered="#{bgesInfoDocumentos.CInfoDocumento.idocIdeDato eq '1'}"> 
+                                    <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{bgesItems.items}" var="itm"
+                                                   itemLabel="#{itm.itmCodPk} #{itm.itmDescrip}" itemValue="#{itm.itmCodPk}"/>
+                                </h:selectOneMenu>
+                            </h:panelGroup>
+                            
+                            <h:panelGroup id="fc22" >    
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Numero de variable de sesión" rendered="#{bgesInfoDocumentos.CInfoDocumento.idocIdeDato eq '2'}" /></b>
+                                </font>
+                                </h:panelGroup>
+                            
+                                <h:panelGroup id="fc32" >     
+                                    <h:selectOneMenu value="#{bgesInfoDocumentos.CInfoDocumento.idocNumVarSesion}"  rendered="#{bgesInfoDocumentos.CInfoDocumento.idocIdeDato eq '2'}">
+                                        <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                        <f:selectItem itemLabel="Usuario" itemValue="1"/>
+                                        <f:selectItem itemLabel="Nombre Usuario" itemValue="2"/>
+                                        <f:selectItem itemLabel="Empresa Usuario" itemValue="3"/>
+                                        <f:selectItem itemLabel="Area Usuario" itemValue="4"/>
+                                        <f:selectItem itemLabel="Cargo Usuario" itemValue="5"/>
+                                        <f:selectItem itemLabel="Jefe Inmediato Usuario" itemValue="6"/>
+                                        <f:selectItem itemLabel="Fecha" itemValue="7"/>
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                                
+                                <h:panelGroup id="fc23" >    
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Nombre Tabla" rendered="#{bgesInfoDocumentos.CInfoDocumento.idocIdeDato eq '3'}" /></b>
+                                    </font>
+                                </h:panelGroup>
+                            
+                                <h:panelGroup id="fc33" >
+                                    <h:panelGrid columns="2" rendered="#{bgesInfoDocumentos.CInfoDocumento.idocIdeDato eq '3'}">
+                                        <h:inputText id="nomt" value="#{bgesInfoDocumentos.CInfoDocumento.idocNomTabla}" 
+                                             validatorMessage="#{cabecera.usu_val_codigo}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                            <f:validateLength maximum="20"/>
+                                        </h:inputText>
+                                        <h:message id="msg_nomt" for="nomt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="nomt">
+                                            #{bgenAyudas.obtenerAyuda(145)} 
+                                        </p:tooltip>
+                                        <p:tooltip for="msg_nomt" value="#{bgenMessages.message('indo:nomt')}"/>
+                                    </h:panelGrid>
+                                </h:panelGroup>
+                            
+                                <h:panelGroup id="fc24" >    
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Nombre Campo" rendered="#{bgesInfoDocumentos.CInfoDocumento.idocIdeDato eq '3'}" /></b>
+                                    </font>
+                                </h:panelGroup>
+                                <h:panelGroup id="fc34" >
+                                    <h:panelGrid columns="2" rendered="#{bgesInfoDocumentos.CInfoDocumento.idocIdeDato eq '3'}">
+                                        <h:inputText id="nomc" value="#{bgesInfoDocumentos.CInfoDocumento.idocNomCampo}"
+                                             validatorMessage="#{cabecera.usu_val_codigo}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                            <f:validateLength maximum="20"/>
+                                        </h:inputText>
+                                        <h:message id="msg_nomc" for="nomc" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="nomc">
+                                            #{bgenAyudas.obtenerAyuda(145)} 
+                                        </p:tooltip>
+                                        <p:tooltip for="msg_nomc" value="#{bgenMessages.message('indo:nomc')}"/>
+                                    </h:panelGrid>
+                                </h:panelGroup>    
+                            
+                                <h:panelGroup id="fc25" >    
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Numero Constante" rendered="#{bgesInfoDocumentos.CInfoDocumento.idocIdeDato eq '4'}" /></b>
+                                    </font>
+                                </h:panelGroup>
+                                
+                                <h:panelGroup id="fc35">     
+                                   <h:selectOneMenu value="#{bgesInfoDocumentos.CInfoDocumento.idocNumCons}" rendered="#{bgesInfoDocumentos.CInfoDocumento.idocIdeDato eq '4'}">
+                                       <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                       <f:selectItems value="#{bgesConstantes.constantes}" var="cons"
+                                                      itemLabel="#{cons.consCodPk} - #{cons.consDescripcion}" itemValue="#{cons.consCodPk}"/>
+                                   </h:selectOneMenu>
+                                </h:panelGroup>
+                            
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Secuencia de tabla</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="sec" value="#{bgesInfoDocumentos.CInfoDocumento.idocSecuencia}"
+                                                 converterMessage="#{cabecera.usu_val_codigo}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="4"/>
+                                    </h:inputText>
+                                    <h:message id="msg_sec" for="sec" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="sec">
+                                        #{bgenAyudas.obtenerAyuda(150)} 
+                                    </p:tooltip>
+                                    <p:tooltip for="msg_sec" value="#{bgenMessages.message('indo:sec')}"/>
+                                </h:panelGrid>
+                            
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Repetición de tabla</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="rep" value="#{bgesInfoDocumentos.CInfoDocumento.idocRepeticion}"
+                                                 converterMessage="#{cabecera.usu_val_codigo}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="4"/>
+                                    </h:inputText>
+                                    <h:message id="msg_rep" for="rep" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="rep">
+                                        #{bgenAyudas.obtenerAyuda(151)} 
+                                    </p:tooltip>
+                                    <p:tooltip for="msg_rep" value="#{bgenMessages.message('indo:rep')}"/>
+                                </h:panelGrid>
+                            
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre tabla de secuencia</b>
+                                </font>
+                                <h:selectOneMenu value="#{bgesInfoDocumentos.CTabla}" immediate="true">
+                                    <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{bgesInfoDocumentos.tablas}" var="tb" itemLabel="#{tb.nombre}" itemValue="#{tb}"/>
+                                    <f:converter converterId="jsf.beans.BConvTablaCampo"/>
+                                    <f:ajax render="cp"/>
+                                </h:selectOneMenu>
+                            
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre campo de secuencia</b>
+                                </font>
+                                <h:selectOneMenu id="cp" value="#{bgesInfoDocumentos.CInfoDocumento.idocCampo}">
+                                    <f:selectItems value="#{bgesInfoDocumentos.CCampos}" var="cp" itemLabel="#{cp}" itemValue="#{cp}"/>
+                                </h:selectOneMenu>
+                            
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Metadato</b>
+                                </font>
+                                <p:selectOneRadio value="#{bgesInfoDocumentos.CInfoDocumento.idocMetadato}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>    
+                                </p:selectOneRadio>
+                            
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Numero Tabla</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="numt" value="#{bgesInfoDocumentos.CInfoDocumento.idocNumTabla}"
+                                             validatorMessage="#{cabecera.usu_val_codigo}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="20"/>
+                                    </h:inputText>
+                                    <h:message id="msg_numt" for="numt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="numt">
+                                        #{bgenAyudas.obtenerAyuda(146)} 
+                                    </p:tooltip>
+                                    <p:tooltip for="msg_numt" value="#{bgenMessages.message('indo:numt')}"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesInfoDocumentos.crear}" rendered="#{bgesInfoDocumentos.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesInfoDocumentos.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesInfoDocumentos.infoDocumento.infoDocumentosPK.idocCodDocFk}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesInfoDocumentos.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo Documento</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.infoDocumentosPK.idocCodDocFk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Secuencia</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.infoDocumentosPK.idocSec} "/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.idocNombre} "/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo Dato</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.idocTipoDato} "/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Formato</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.idocFormato} "/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Identificador Dato</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.idocIdeDato} "/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo Item</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.idocCodItem} "/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Numero de variable de sesión</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.idocNumVarSesion} "/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre Tabla</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.idocNomTabla} "/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre Campo</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.idocNomCampo} "/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre Constante</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.idocNumCons} "/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Secuencia de tabla</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.idocSecuencia} "/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Repeticion de tabla</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.idocRepeticion} "/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre tabla de secuencia</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.idocTabla} "/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre campo de secuencia</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.idocCampo} "/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Metadato</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.idocMetadato} "/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Numero de Tabla</b>
+                                </font>
+                            <h:outputText value="#{bgesInfoDocumentos.infoDocumento.idocNumTabla} "/>
+                           
+                            
+                        </h:panelGrid>
+                    </p:dialog>
+                    
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesInfoDocumentos.opcion.equals('3')}">
+                              #{bgesInfoDocumentos.mostrar()}
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo Documento</b>
+                                </font>
+                                <h:outputText value="#{bgesInfoDocumentos.UInfoDocumento.infoDocumentosPK.idocCodDocFk}"/>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Secuencia</b>
+                                </font>
+                                <h:outputText value="#{bgesInfoDocumentos.UInfoDocumento.infoDocumentosPK.idocSec}"/>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                    <b>Nombre</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="nom1" value="#{bgesInfoDocumentos.UInfoDocumento.idocNombre}" required="true"
+                                             requiredMessage="#{cabecera.usu_req_codigo}"
+                                             validatorMessage="#{cabecera.usu_val_codigo}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="50"/>
+                                    </h:inputText>
+                                    <h:message id="msg_nom1" for="nom1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="nom1">
+                                        #{bgenAyudas.obtenerAyuda(144)} 
+                                    </p:tooltip>
+                                    <p:tooltip for="msg_nom1" value="#{bgenMessages.message('indo:nom1')}"/>
+                                </h:panelGrid>            
+                            
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                    <b>Tipo Dato</b>
+                                </font>
+                                <h:selectOneMenu value="#{bgesInfoDocumentos.UInfoDocumento.idocTipoDato}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Numérico" itemValue="N"/>
+                                    <f:selectItem itemLabel="Fecha" itemValue="F"/>
+                                    <f:selectItem itemLabel="Alfanumérico" itemValue="A"/>
+                                    <f:ajax render="jc11 jc12"/>
+                                </h:selectOneMenu>
+                                
+                                <h:panelGroup id="jc11">
+                                    <h:panelGroup rendered="#{bgesInfoDocumentos.UInfoDocumento.idocTipoDato ne 'A'}">
+                                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                            color="#{cabecera.login_color_label}">
+                                            <b>Formato</b>
+                                        </font>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <h:panelGroup id="jc12">
+                                    <h:panelGrid columns="2" rendered="#{bgesInfoDocumentos.UInfoDocumento.idocTipoDato ne 'A'}">
+                                        <h:inputText id="format_1" value="#{bgesInfoDocumentos.UInfoDocumento.idocFormato}" required="true"
+                                                 requiredMessage="#{cabecera.usu_req_codigo}"
+                                                 validatorMessage="#{cabecera.usu_val_codigo}"
+                                                style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                            <f:validateLength maximum="30"/>
+                                        </h:inputText>
+                                        <p:overlayPanel for="format_1">
+                                            <p:selectOneListbox immediate="true" value="#{bgesInfoDocumentos.UInfoDocumento.idocFormato}"
+                                                            rendered="#{bgesInfoDocumentos.UInfoDocumento.idocTipoDato eq 'F'}" style="width: 400px">
+                                                <f:selectItem itemLabel="yyyy/MM/dd (2010/01/01)" itemValue="yyyy/MM/dd"/>
+                                                <f:selectItem itemLabel="MMMM dd 'de' yyyy (enero 1 de 2010)" itemValue="MMMM dd 'de' yyyy"/>
+                                                <f:selectItem itemLabel="dd 'de' MMMM 'de' yyyy (1 de enero de 2010)" itemValue="dd 'de' MMMM 'de' yyyy"/>
+                                                <f:selectItem itemLabel="EEEE dd 'de' MMMM 'de' yyyy (viernes 1 de enero de 2010)" itemValue="EEEE dd 'de' MMMM 'de' yyyy"/>
+                                                <f:selectItem itemLabel="HH:mm:ss (13:15:00)" itemValue="HH:mm:ss"/>
+                                                <f:selectItem itemLabel="hh:mm:ss aaa (01:15:00 PM)" itemValue="hh:mm:ss aaa"/>
+                                            </p:selectOneListbox>
+                                        
+                                            <p:selectOneListbox immediate="true" value="#{bgesInfoDocumentos.UInfoDocumento.idocFormato}"
+                                                            rendered="#{bgesInfoDocumentos.UInfoDocumento.idocTipoDato eq 'N'}" style="width: 400px">
+                                                <f:selectItem itemLabel="$##,###.## ($150.000,25)" itemValue="$##,###.##"/>
+                                                <f:selectItem itemLabel="##,###.## (150.000,25)" itemValue="##,###.##"/>
+                                                <f:selectItem itemLabel="##.## (150000,25)" itemValue="##.##"/>
+                                            </p:selectOneListbox>
+                                        </p:overlayPanel>
+                                        <h:message id="msg_format_1" for="format_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="format_1">
+                                            #{bgenAyudas.obtenerAyuda(149)} 
+                                        </p:tooltip>
+                                        <p:tooltip for="msg_format_1" value="#{bgenMessages.message('indo:format_1')}"/>
+                                    </h:panelGrid>
+                                </h:panelGroup>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                      color="#{cabecera.login_color_label}">
+                                    <b>Identificador Dato</b>
+                                </font>
+                                <h:selectOneMenu value="#{bgesInfoDocumentos.UInfoDocumento.idocIdeDato}" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Ítem" itemValue="1"/>
+                                    <f:selectItem itemLabel="Variable de sesión" itemValue="2"/>
+                                    <f:selectItem itemLabel="Dato de tabla" itemValue="3"/>
+                                    <f:selectItem itemLabel="Constante" itemValue="4"/>
+                                    <f:ajax render="jc21 jc31 jc22 jc32 jc23 jc33 jc24 jc34 jc25 jc35"/>
+                                </h:selectOneMenu>
+                          
+                                <h:panelGroup id="jc21" >    
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                          color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Codigo Item" rendered="#{bgesInfoDocumentos.UInfoDocumento.idocIdeDato eq '1'}" /></b>
+                                    </font>
+                                </h:panelGroup>
+                                <h:panelGroup id="jc31" >     
+                                   <h:selectOneMenu value="#{bgesInfoDocumentos.UInfoDocumento.idocCodItem}" rendered="#{bgesInfoDocumentos.UInfoDocumento.idocIdeDato eq '1'}"> 
+                                       <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                       <f:selectItems value="#{bgesItems.items}" var="itm"
+                                                   itemLabel="#{itm.itmCodPk} #{itm.itmDescrip}" itemValue="#{itm.itmCodPk}"/>
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                            
+                            
+                                <h:panelGroup id="jc22" >    
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                          color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Numero de variable de sesión" rendered="#{bgesInfoDocumentos.UInfoDocumento.idocIdeDato eq '2'}" /></b>
+                                    </font>
+                                </h:panelGroup>
+                            
+                                <h:panelGroup id="jc32" >     
+                                    <h:selectOneMenu value="#{bgesInfoDocumentos.UInfoDocumento.idocNumVarSesion}"  rendered="#{bgesInfoDocumentos.UInfoDocumento.idocIdeDato eq '2'}">
+                                        <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                        <f:selectItem itemLabel="Usuario" itemValue="1"/>
+                                        <f:selectItem itemLabel="Nombre Usuario" itemValue="2"/>
+                                        <f:selectItem itemLabel="Empresa Usuario" itemValue="3"/>
+                                        <f:selectItem itemLabel="Area Usuario" itemValue="4"/>
+                                        <f:selectItem itemLabel="Cargo Usuario" itemValue="5"/>
+                                        <f:selectItem itemLabel="Jefe Inmediato Usuario" itemValue="6"/>
+                                        <f:selectItem itemLabel="Fecha" itemValue="7"/>
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                            
+                                <h:panelGroup id="jc23">    
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Nombre Tabla" rendered="#{bgesInfoDocumentos.UInfoDocumento.idocIdeDato eq '3'}" /></b>
+                                    </font>
+                                </h:panelGroup>
+                                <h:panelGroup id="jc33" >
+                                    <h:panelGrid columns="2" rendered="#{bgesInfoDocumentos.UInfoDocumento.idocIdeDato eq '3'}">
+                                        <h:inputText id="nomt1" value="#{bgesInfoDocumentos.UInfoDocumento.idocNomTabla}"
+                                                validatorMessage="#{cabecera.usu_val_codigo}"
+                                                style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                            <f:validateLength maximum="20"/>
+                                        </h:inputText>
+                                        <h:message id="msg_nomt1" for="nomt1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="nomt1">
+                                            #{bgenAyudas.obtenerAyuda(145)} 
+                                        </p:tooltip>
+                                        <p:tooltip for="msg_nomt1" value="#{bgenMessages.message('indo:nomt1')}"/>
+                                    </h:panelGrid>
+                                </h:panelGroup>
+                            
+                                <h:panelGroup id="jc24" >    
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Nombre Campo" rendered="#{bgesInfoDocumentos.UInfoDocumento.idocIdeDato eq '3'}" /></b>
+                                    </font>
+                                </h:panelGroup>
+                                <h:panelGroup id="jc34" >
+                                    <h:panelGrid columns="2" rendered="#{bgesInfoDocumentos.UInfoDocumento.idocIdeDato eq '3'}">
+                                        <h:inputText id="nomc1" value="#{bgesInfoDocumentos.UInfoDocumento.idocNomCampo}"      
+                                               validatorMessage="#{cabecera.usu_val_codigo}"
+                                               style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                            <f:validateLength maximum="20"/>
+                                        </h:inputText>
+                                        <h:message id="msg_nomc1" for="nomc1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="nomc1">
+                                            #{bgenAyudas.obtenerAyuda(145)} 
+                                        </p:tooltip>
+                                        <p:tooltip for="msg_nomc1" value="#{bgenMessages.message('indo:nomc1')}"/>
+                                    </h:panelGrid>
+                                </h:panelGroup>    
+                                <h:panelGroup id="jc25" >    
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Numero Constante" rendered="#{bgesInfoDocumentos.UInfoDocumento.idocIdeDato eq '4'}" /></b>
+                                    </font>
+                                </h:panelGroup>
+                                
+                                <h:panelGroup id="jc35" >     
+                                    <h:selectOneMenu value="#{bgesInfoDocumentos.UInfoDocumento.idocNumCons}" rendered="#{bgesInfoDocumentos.UInfoDocumento.idocIdeDato eq '4'}">
+                                       <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                       <f:selectItems value="#{bgesConstantes.constantes}" var="cons"
+                                                      itemLabel="#{cons.consCodPk} - #{cons.consDescripcion}" itemValue="#{cons.consCodPk}"/>
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Secuencia de tabla</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="sec1" value="#{bgesInfoDocumentos.UInfoDocumento.idocSecuencia}"
+                                                 converterMessage="#{cabecera.usu_val_codigo}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="4"/>
+                                    </h:inputText>
+                                    <h:message id="msg_sec1" for="sec1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="sec1">
+                                        #{bgenAyudas.obtenerAyuda(150)} 
+                                    </p:tooltip>
+                                    <p:tooltip for="msg_sec1" value="#{bgenMessages.message('indo:sec1')}"/>
+                                </h:panelGrid>
+                            
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Repetición de tabla</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="rep1" value="#{bgesInfoDocumentos.UInfoDocumento.idocRepeticion}"
+                                                 converterMessage="#{cabecera.usu_val_codigo}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="4"/>
+                                    </h:inputText>
+                                    <h:message id="msg_rep1" for="rep1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="rep1">
+                                        #{bgenAyudas.obtenerAyuda(151)} 
+                                    </p:tooltip>
+                                    <p:tooltip for="msg_rep1" value="#{bgenMessages.message('indo:rep1')}"/>
+                                </h:panelGrid>
+                            
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre tabla de secuencia</b>
+                                </font>
+                                <h:selectOneMenu value="#{bgesInfoDocumentos.UTabla}" immediate="true">
+                                    <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{bgesInfoDocumentos.tablas}" var="tb" itemLabel="#{tb.nombre}" itemValue="#{tb}"/>
+                                    <f:converter converterId="jsf.beans.BConvTablaCampo"/>
+                                    <f:ajax render="cp1"/>
+                                </h:selectOneMenu>
+                            
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre campo de secuencia</b>
+                                </font>
+                                <h:selectOneMenu id="cp1" value="#{bgesInfoDocumentos.UInfoDocumento.idocCampo}">
+                                    <f:selectItems value="#{bgesInfoDocumentos.UCampos}" var="cp" itemLabel="#{cp}" itemValue="#{cp}"/>
+                                </h:selectOneMenu>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Metadato</b>
+                                </font>
+                                <p:selectOneRadio value="#{bgesInfoDocumentos.UInfoDocumento.idocMetadato}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>    
+                                </p:selectOneRadio>
+                            
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Numero Tabla</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="numt1" value="#{bgesInfoDocumentos.UInfoDocumento.idocNumTabla}"
+                                             validatorMessage="#{cabecera.usu_val_codigo}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="20"/>
+                                    </h:inputText>
+                                    <h:message id="msg_numt1" for="numt1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="numt1">
+                                        #{bgenAyudas.obtenerAyuda(146)} 
+                                    </p:tooltip>
+                                    <p:tooltip for="msg_numt1" value="#{bgenMessages.message('indo:numt1')}"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesInfoDocumentos.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

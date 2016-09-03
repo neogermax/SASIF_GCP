@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            
+            <fieldset style="height: 530px; width: 705px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="conse">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesConsecutivos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                                <p:commandButton value="Crear" action="#{bgesConsecutivos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab eq 'T'}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                                <p:commandButton value="Actualizar" action="#{bgesConsecutivos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab eq 'T'}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                                <p:commandButton value="Eliminar" action="#{bgesConsecutivos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab eq 'T'}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesConsecutivos.columnas}"
+                                              rendered="#{bgesConsecutivos.opcion ne '2'}">
+                                <f:selectItem itemLabel="Codigo" itemValue="1"/>
+                                <f:selectItem itemLabel="Valor" itemValue="2"/>
+                                <f:selectItem itemLabel="Descripcion" itemValue="3"/>
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesConsecutivos.opcion eq '1' or bgesConsecutivos.opcion eq'4'}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesConsecutivos.opcion eq '3'}"/>
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px; table-layout: fixed;" value="#{bgesConsecutivos.consecutivos}" var="conse"
+                                     scrollable="true" rowKey="#{conse.consecCodPk}" scrollHeight="190"
+                                     emptyMessage="#{bgenErrores.obtenerError(14)}"
+                                     scrollWidth="600" selection="#{bgesConsecutivos.consecutivo}" selectionMode="single"
+                                 rendered="#{bgesConsecutivos.opcion ne '2'}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            <p:column headerText="Codigo" filterBy="#{conse.consecCodPk}" filterMatchMode="contains"
+                                      rendered="#{bgesConsecutivos.columnas.contains('1')}"
+				      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{conse.consecCodPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Valor" filterBy="#{conse.consecValor}" filterMatchMode="contains"
+                                      rendered="#{bgesConsecutivos.columnas.contains('2')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{conse.consecValor}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Descripcion" filterBy="#{conse.consecDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesConsecutivos.columnas.contains('2')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{conse.consecDescrip}"/>
+                                </font>
+                            </p:column>
+                        </p:dataTable>
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesConsecutivos.opcion.equals('2')}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesConsecutivos.CConsecutivo.consecCodPk}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(90)}"
+                                             converterMessage="#{bgenErrores.obtenerError(91)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(92)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod" value="#{bgenAyudas.obtenerAyuda(64)}"/>
+                                <p:tooltip for="msg_cod" value="#{bgenMessages.message('ayud:cod')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Valor</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesConsecutivos.CConsecutivo.consecValor}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(90)}"
+                                             converterMessage="#{bgenErrores.obtenerError(91)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(92)}"
+                                           style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLength minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt" value="#{bgenAyudas.obtenerAyuda(65)}"/>
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('ayud:idt')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Descripcion</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="des" value="#{bgesConsecutivos.CConsecutivo.consecDescrip}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(90)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(92)}"
+                                           style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_des" for="des" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="des" value="#{bgenAyudas.obtenerAyuda(118)}"/>
+                                <p:tooltip for="msg_des" value="#{bgenMessages.message('conse:des')}"/>
+                            </h:panelGrid>
+                            
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesConsecutivos.crear}" rendered="#{bgesConsecutivos.opcion eq '2'}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesConsecutivos.opcion eq '4'}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesConsecutivos.consecutivo.consecCodPk} - #{bgesConsecutivos.consecutivo.consecValor}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesConsecutivos.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                            <h:outputText value="#{bgesConsecutivos.consecutivo.consecCodPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Valor</b>
+                                </font>
+                            <h:outputText value="#{bgesConsecutivos.consecutivo.consecValor}"/>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Descripcion</b>
+                                </font>
+                            <h:outputText value="#{bgesConsecutivos.consecutivo.consecDescrip}"/>
+                                
+                            </h:panelGrid>
+                    </p:dialog>
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesConsecutivos.opcion eq '3'}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesConsecutivos.consecutivo.consecCodPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Valor</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt_1" value="#{bgesConsecutivos.consecutivo.consecValor}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(90)}"
+                                             converterMessage="#{bgenErrores.obtenerError(91)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(92)}"
+                                           style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLength minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_idt_1" for="idt_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt_1" value="#{bgenAyudas.obtenerAyuda(65)}"/>
+                                <p:tooltip for="msg_idt_1" value="#{bgenMessages.message('conse:idt_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Descripcion</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="des_1" value="#{bgesConsecutivos.consecutivo.consecDescrip}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(90)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(92)}"
+                                           style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_des_1" for="des_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="des_1" value="#{bgenAyudas.obtenerAyuda(118)}"/>
+                                <p:tooltip for="msg_des_1" value="#{bgenMessages.message('conse:des_1')}"/>
+                            </h:panelGrid>
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesConsecutivos.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

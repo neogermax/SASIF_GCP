@@ -1,0 +1,444 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="para">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesParametrias.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                                <p:commandButton value="Crear" action="#{bgesParametrias.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                                <p:commandButton value="Actualizar" action="#{bgesParametrias.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                                <p:commandButton value="Eliminar" action="#{bgesParametrias.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 330px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesParametrias.columnas}"
+                                              rendered="#{not bgesParametrias.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Reporte" itemValue="1"/>
+                                <f:selectItem itemLabel="Nombre" itemValue="2"/>
+                                <f:selectItem itemLabel="Argumento Fila" itemValue="3"/>
+                                <f:selectItem itemLabel="Argumento Columna" itemValue="4"/>
+                                <f:selectItem itemLabel="Argumento Z" itemValue="5"/>
+                                <f:selectItem itemLabel="Tipo Reporte" itemValue="6"/>
+                                <f:selectItem itemLabel="Grupo Reporte" itemValue="7"/>
+                                <f:selectItem itemLabel="Programa a Llamar" itemValue="8"/>
+                                
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesParametrias.opcion.equals('1') or bgesParametrias.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesParametrias.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+
+
+
+                        <p:dataTable id="tabla" style="width: 600px; table-layout: fixed;" value="#{bgesParametrias.parametrias}" var="para"
+                                     scrollable="true" rowKey="#{para.parCodRepPk}" scrollHeight="190"
+                                     emptyMessage="#{cabecera.rol_tabla_vacia}"
+                                     scrollWidth="600" selection="#{bgesParametrias.parametria}" selectionMode="single"
+                                     rendered="#{not bgesParametrias.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            <p:column headerText="Reporte" filterBy="#{para.parCodRepPk}" filterMatchMode="contains"
+                                      rendered="#{bgesParametrias.columnas.contains('1')}"
+				      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{para.parCodRepPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Nombre" filterBy="#{para.parNombreRep}" filterMatchMode="contains"
+                                      rendered="#{bgesParametrias.columnas.contains('2')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{para.parNombreRep}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tipo Reporte" filterBy="#{para.parTipoRep}" filterMatchMode="contains"
+                                      rendered="#{bgesParametrias.columnas.contains('6')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{para.parTipoRep}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Grupo Reporte" filterBy="#{para.parCodGrpRepFk}" filterMatchMode="contains"
+                                      rendered="#{bgesParametrias.columnas.contains('7')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{para.parCodGrpRepFk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Argumento Fila" filterBy="#{para.parArgFil}" filterMatchMode="contains"
+                                      rendered="#{bgesParametrias.columnas.contains('3')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{para.parArgFil}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Argumento Columna" filterBy="#{para.parArgCol}" filterMatchMode="contains"
+                                      rendered="#{bgesParametrias.columnas.contains('4')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{para.parArgCol}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Argumento Z" filterBy="#{para.parArgDz}" filterMatchMode="contains"
+                                      rendered="#{bgesParametrias.columnas.contains('5')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{para.parArgDz}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Programa a Llamar" filterBy="#{para.parProgLlam}" filterMatchMode="contains"
+                                      rendered="#{bgesParametrias.columnas.contains('8')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{para.parProgLlam}"/>
+                                </font>
+                            </p:column>
+                            
+                            
+                            
+                            
+                        </p:dataTable>
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesParametrias.opcion.equals('2')}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Reporte</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesParametrias.CParametria.parCodRepPk}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(15)}"
+                                             converterMessage="#{bgenErrores.obtenerError(16)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod" value="#{bgenAyudas.obtenerAyuda(112)}"/>
+                                     
+                                <p:tooltip for="msg_cod" value="#{bgenMessages.message('para:cod')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Nombre</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesParametrias.CParametria.parNombreRep}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt" value="#{bgenAyudas.obtenerAyuda(113)}"/>
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('para:idt')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tipo Reportes</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesParametrias.CParametria.parTipoRep}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:selectItem itemLabel="Cronograma" itemValue="C"/>
+                                <f:selectItem itemLabel="Presupuesto" itemValue="P"/>
+                                <f:selectItem itemLabel="Otros" itemValue="O"/>
+                            </h:selectOneMenu>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Grupo Reportes</b>
+                            </font>
+                                
+                            <h:selectOneMenu value="#{bgesParametrias.CParametria.parCodGrpRepFk}" >
+                                        <f:selectItem itemLabel="Sin Grupo" itemValue="0"/>
+                                        <f:selectItems value="#{bgesGrupoReportes.grupoReportes}" var="grep"
+                                                       itemLabel="#{grep.grpCodPk} #{grep.grpDescrip}" itemValue="#{grep.grpCodPk}"/>
+                                <f:converter converterId="javax.faces.Integer"/>
+                            </h:selectOneMenu>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Argumento Fila</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="arf" value="#{bgesParametrias.CParametria.parArgFil}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_arf" for="arf" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="arf" value="#{bgenAyudas.obtenerAyuda(114)}"/>
+                                <p:tooltip for="msg_arf" value="#{bgenMessages.message('para:arf')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Argumento Columna</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="arc" value="#{bgesParametrias.CParametria.parArgCol}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_arc" for="arc" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="arc" value="#{bgenAyudas.obtenerAyuda(115)}"/>
+                                <p:tooltip for="msg_arc" value="#{bgenMessages.message('para:arc')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Argumento Z</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="arz" value="#{bgesParametrias.CParametria.parArgDz}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_arz" for="arz" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="arz" value="#{bgenAyudas.obtenerAyuda(116)}"/>
+                                <p:tooltip for="msg_arz" value="#{bgenMessages.message('para:arz')}"/>
+                            </h:panelGrid>
+                            
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Programa a llamar</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="prl" value="#{bgesParametrias.CParametria.parProgLlam}" 
+                                             
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="20"/>
+                                </h:inputText>
+                                <h:message id="msg_prl" for="prl" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="prl" value="#{bgenAyudas.obtenerAyuda(116)}"/>
+                                <p:tooltip for="msg_prl" value="#{bgenMessages.message('para:prl')}"/>
+                            </h:panelGrid>
+                            
+                            
+                            
+                            
+                            
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesParametrias.crear}" rendered="#{bgesParametrias.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesParametrias.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesParametrias.parametria.parNombreRep}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesParametrias.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Reporte</b>
+                                </font>
+                            <h:outputText value="#{bgesParametrias.parametria.parCodRepPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre</b>
+                                </font>
+                            <h:outputText value="#{bgesParametrias.parametria.parNombreRep}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo Reporte</b>
+                                </font>
+                            <h:outputText value="#{bgesParametrias.parametria.parTipoRep}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Grupo Repote</b>
+                                </font>
+                            <h:outputText value="#{bgesParametrias.parametria.parCodGrpRepFk}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Argumento Fila</b>
+                                </font>
+                            <h:outputText value="#{bgesParametrias.parametria.parArgFil}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Argumento Columna</b>
+                                </font>
+                            <h:outputText value="#{bgesParametrias.parametria.parArgCol}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Argumento Z</b>
+                                </font>
+                            <h:outputText value="#{bgesParametrias.parametria.parArgDz}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Programa a Llamar</b>
+                                </font>
+                            <h:outputText value="#{bgesParametrias.parametria.parProgLlam}"/>
+                            
+                                
+                                
+                                
+                            </h:panelGrid>
+                    </p:dialog>
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesParametrias.opcion.equals('3')}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Reporte</b>
+                                </font>
+                                <h:outputText value="#{bgesParametrias.parametria.parCodRepPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="idt_1" value="#{bgesParametrias.parametria.parNombreRep}" required="true"
+                                                 requiredMessage="#{cabecera.rol_req_id}"
+                                                 converterMessage="#{cabecera.rol_conver_id}"
+                                                 validatorMessage="#{cabecera.rol_val_id}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                            <f:validateLength maximum="50"/>
+                                    </h:inputText>
+                                    <h:message id="msg_idt_1" for="idt_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="idt_1" value="#{bgenAyudas.obtenerAyuda(113)}"/>
+                                    <p:tooltip for="msg_idt_1" value="#{bgenMessages.message('ayud:idt_1')}"/>
+                                </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tipo Reportes</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesParametrias.parametria.parTipoRep}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:selectItem itemLabel="Cronograma" itemValue="C"/>
+                                <f:selectItem itemLabel="Presupuesto" itemValue="P"/>
+                                <f:selectItem itemLabel="Otros" itemValue="O"/>
+                            </h:selectOneMenu>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Grupo Reportes</b>
+                            </font>
+                                
+                            <h:selectOneMenu value="#{bgesParametrias.parametria.parCodGrpRepFk}" >
+                                        <f:selectItem itemLabel="Sin Grupo" itemValue="0"/>
+                                        <f:selectItems value="#{bgesGrupoReportes.grupoReportes}" var="grep"
+                                               itemLabel="#{grep.grpCodPk} #{grep.grpDescrip}" itemValue="#{grep.grpCodPk}"/>
+                                <f:converter converterId="javax.faces.Integer"/>
+                            </h:selectOneMenu>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Argumento Fila</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="arf_1" value="#{bgesParametrias.parametria.parArgFil}" required="true"
+                                                 requiredMessage="#{cabecera.rol_req_id}"
+                                                 converterMessage="#{cabecera.rol_conver_id}"
+                                                 validatorMessage="#{cabecera.rol_val_id}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                            <f:validateLength maximum="50"/>
+                                    </h:inputText>
+                                    <h:message id="msg_arf_1" for="arf_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="arf_1" value="#{bgenAyudas.obtenerAyuda(114)}"/>
+                                    <p:tooltip for="msg_arf_1" value="#{bgenMessages.message('ayud:arf_1')}"/>
+                                </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Argumento Columna</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="arc_1" value="#{bgesParametrias.parametria.parArgCol}" required="true"
+                                                 requiredMessage="#{cabecera.rol_req_id}"
+                                                 converterMessage="#{cabecera.rol_conver_id}"
+                                                 validatorMessage="#{cabecera.rol_val_id}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                            <f:validateLength maximum="50"/>
+                                    </h:inputText>
+                                    <h:message id="msg_arc_1" for="arc_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="arc_1" value="#{bgenAyudas.obtenerAyuda(115)}"/>
+                                    <p:tooltip for="msg_arc_1" value="#{bgenMessages.message('ayud:arc_1')}"/>
+                                </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Argumento Z</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="arz_1" value="#{bgesParametrias.parametria.parArgDz}" required="true"
+                                                 requiredMessage="#{cabecera.rol_req_id}"
+                                                 converterMessage="#{cabecera.rol_conver_id}"
+                                                 validatorMessage="#{cabecera.rol_val_id}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                            <f:validateLength maximum="50"/>
+                                    </h:inputText>
+                                    <h:message id="msg_arz_1" for="arz_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="arz_1" value="#{bgenAyudas.obtenerAyuda(116)}"/>
+                                    <p:tooltip for="msg_arz_1" value="#{bgenMessages.message('ayud:arz_1')}"/>
+                                </h:panelGrid>
+                                
+                                
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Programa a llamar</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="prl2" value="#{bgesParametrias.parametria.parProgLlam}" 
+                                             
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="20"/>
+                                </h:inputText>
+                                <h:message id="msg_prl2" for="prl2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="prl2" value="#{bgenAyudas.obtenerAyuda(116)}"/>
+                                <p:tooltip for="msg_prl2" value="#{bgenMessages.message('para:prl2')}"/>
+                            </h:panelGrid>
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesParametrias.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

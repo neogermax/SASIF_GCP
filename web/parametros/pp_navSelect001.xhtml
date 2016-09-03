@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <font face="#{cabecera.login_tipo_letra_label}" size="5"
+                color="#{cabecera.login_color_label}">
+            <b><center>Escoja componente</center></b>
+        </font>
+        <b>
+            <p:selectOneRadio value="#{bgesNavegacion.proyAct}" layout="pageDirection"
+                    converter="jsf.beans.BConvProyActs">  
+                <f:selectItems value="#{bgesNavegacion.proyActs}" var="proyAct"
+                        itemLabel="#{proyAct.actividades.actDescrip} #{proyAct.proyActsPK.pryComNomFk}"
+                        itemValue="#{proyAct}"/>  
+            </p:selectOneRadio>
+        </b>
+    </h:body>
+</html>
+

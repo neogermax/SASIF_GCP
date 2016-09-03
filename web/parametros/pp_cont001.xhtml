@@ -1,0 +1,547 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="cont">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesContactos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                                <p:commandButton value="Crear" action="#{bgesContactos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                                <p:commandButton value="Actualizar" action="#{bgesContactos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                                <p:commandButton value="Eliminar" action="#{bgesContactos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesContactos.columnas}"
+                                              rendered="#{not bgesContactos.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Identificación" itemValue="1"/>
+                                <f:selectItem itemLabel="Tipo" itemValue="2"/>
+                                <f:selectItem itemLabel="Consecutivo" itemValue="3"/>
+                                <f:selectItem itemLabel="Direccion" itemValue="4"/>
+                                <f:selectItem itemLabel="Telefono1" itemValue="5"/>
+                                <f:selectItem itemLabel="Telefono2" itemValue="6"/>
+                                <f:selectItem itemLabel="Telefono3" itemValue="7"/>
+                                <f:selectItem itemLabel="Correo1" itemValue="8"/>
+                                <f:selectItem itemLabel="Correo2" itemValue="9"/>
+                                <f:selectItem itemLabel="Correo3" itemValue="10"/>
+                                
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesContactos.opcion.equals('1') or bgesContactos.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesContactos.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px; table-layout: fixed;" value="#{bgesContactos.contactos}" var="cont"
+                                     scrollable="true" rowKey="#{cont.contactosPK}" scrollHeight="190"
+                                     emptyMessage="#{bgenErrores.obtenerError(14)}"
+                                     scrollWidth="600" selection="#{bgesContactos.contacto}" selectionMode="single"
+                                 rendered="#{not bgesContactos.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            <p:column headerText="Identificación" filterBy="#{cont.contactosPK.conEmplIdPk}" filterMatchMode="contains"
+                                      rendered="#{bgesContactos.columnas.contains('1')}"
+				      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{cont.contactosPK.conEmplIdPk} "/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Tipo" filterBy="#{cont.contactosPK.conEmplTipPk}" filterMatchMode="contains"
+                                      rendered="#{bgesContactos.columnas.contains('2')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{cont.contactosPK.conEmplTipPk}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Consecutivo" filterBy="#{cont.contactosPK.conConsecPk}" filterMatchMode="contains"
+                                      rendered="#{bgesContactos.columnas.contains('3')}"
+				      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{cont.contactosPK.conConsecPk}"/>
+                                </font>
+                            </p:column>
+                            
+                            
+                            
+                            <p:column headerText="Direccion" filterBy="#{cont.conDireccion}" filterMatchMode="contains"
+                                      rendered="#{bgesContactos.columnas.contains('4')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{cont.conDireccion}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Telefono" filterBy="#{cont.conTelefono1}" filterMatchMode="contains"
+                                      rendered="#{bgesContactos.columnas.contains('5')}" 
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{cont.conTelefono1}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Telefono2" filterBy="#{cont.conTelefono2}" filterMatchMode="contains"
+                                      rendered="#{bgesContactos.columnas.contains('6')}" 
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{cont.conTelefono2}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Telefono3" filterBy="#{cont.conTelefono3}" filterMatchMode="contains"
+                                      rendered="#{bgesContactos.columnas.contains('7')}" 
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{cont.conTelefono3}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Correo1" filterBy="#{cont.conCorreo1}" filterMatchMode="contains"
+                                      rendered="#{bgesContactos.columnas.contains('8')}" 
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{cont.conCorreo1}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Correo2" filterBy="#{cont.conCorreo2}" filterMatchMode="contains"
+                                      rendered="#{bgesContactos.columnas.contains('9')}" 
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{cont.conCorreo2}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Correo3" filterBy="#{cont.conCorreo3}" filterMatchMode="contains"
+                                      rendered="#{bgesContactos.columnas.contains('10')}" 
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{cont.conCorreo3}"/>
+                                </font>
+                            </p:column>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                        </p:dataTable>
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesContactos.opcion.equals('2')}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Identificación</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesContactos.CContacto.empleados}">
+                                <f:selectItems value="#{bgesContactos.empleados}" var="empl"
+                                               itemLabel="#{empl.empleadosPK.emplId}" itemValue="#{empl}"/>
+                                    <f:converter converterId="jsf.beans.BConvEmpleados"/>
+                               </h:selectOneMenu>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tipo</b>
+                            </font>
+                            
+                            <h:selectOneMenu id="tid" value="#{bgesContactos.CContacto.contactosPK.conEmplTipPk}">
+                                <f:selectItem itemLabel="CEDULA DE CIUDADANIA" itemValue="CC"/>
+                                <f:selectItem itemLabel="NUIP" itemValue="NU"/>
+                                <f:selectItem itemLabel="CEDULA DE EXTRANJERIA" itemValue="CE"/>
+                                <f:selectItem itemLabel="NIT" itemValue="NI"/>
+                            </h:selectOneMenu>
+                        
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Consecutivo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="con" value="#{bgesContactos.CContacto.contactosPK.conConsecPk}" required="true" 
+                                             requiredMessage="#{cabecera.cont_req_codigo}"
+                                             converterMessage="#{cabecera.cont_conver_codigo}"
+                                             validatorMessage="#{cabecera.cont_val_codigo}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:converter converterId="javax.faces.Integer"/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_con" for="con" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="con" value="#{bgenAyudas.obtenerAyuda(136)}"/>
+                                <p:tooltip for="msg_con" value="#{bgenMessages.message('cont:con')}"/>
+                            </h:panelGrid>
+                            
+                            
+                            
+                        
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Direccion</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesContactos.CContacto.conDireccion}" required="true"
+                                             requiredMessage="#{cabecera.cont_req_direccion}"
+                                             validatorMessage="#{cabecera.cont_val_direccion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt" value="#{bgenAyudas.obtenerAyuda(137)}"/>
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('cont:idt')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Telefono1</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="nom" value="#{bgesContactos.CContacto.conTelefono1}" required="true"
+                                             requiredMessage="#{cabecera.cont_req_telefono1}"
+                                             validatorMessage="#{cabecera.cont_val_telefono1}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength minimum="7" maximum="20"/>
+                                </h:inputText>
+                                <h:message id="msg_nom" for="nom" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="nom" value="#{bgenAyudas.obtenerAyuda(138)}"/>
+                                <p:tooltip for="msg_nom" value="#{bgenMessages.message('cont:nom')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Telefono2</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="tel" value="#{bgesContactos.CContacto.conTelefono2}" required="false"
+                                             validatorMessage="#{cabecera.cont_val_telefono2}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="20"/>
+                                </h:inputText>
+                                <h:message id="msg_tel" for="tel" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="tel" value="#{bgenAyudas.obtenerAyuda(138)}"/>
+                                <p:tooltip for="msg_tel" value="#{bgenMessages.message('cont:tel')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Telefono3</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="tel2" value="#{bgesContactos.CContacto.conTelefono3}" required="false"
+                                             validatorMessage="#{cabecera.cont_val_telefono3}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="20"/>
+                                </h:inputText>
+                                <h:message id="msg_tel2" for="tel2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="tel2" value="#{bgenAyudas.obtenerAyuda(138)}"/>
+                                <p:tooltip for="msg_tel2" value="#{bgenMessages.message('cont:tel2')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Correo1</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="corr1" value="#{bgesContactos.CContacto.conCorreo1}" required="true"
+                                             requiredMessage="#{cabecera.cont_req_correo1}"
+                                             validatorMessage="#{cabecera.cont_val_correo1}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_corr1" for="corr1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="corr1" value="#{bgenAyudas.obtenerAyuda(139)}"/>
+                                <p:tooltip for="msg_corr1" value="#{bgenMessages.message('cont:corr1')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Correo2</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="corr2" value="#{bgesContactos.CContacto.conCorreo2}"
+                                             validatorMessage="#{cabecera.cont_val_correo2}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_corr2" for="corr2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="corr2" value="#{bgenAyudas.obtenerAyuda(139)}"/>
+                                <p:tooltip for="msg_corr2" value="#{bgenMessages.message('cont:corr2')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Correo3</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="corr3" value="#{bgesContactos.CContacto.conCorreo3}" required="false"
+                                             validatorMessage="#{cabecera.cont_val_correo3}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_corr3" for="corr3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="corr3" value="#{bgenAyudas.obtenerAyuda(139)}"/>
+                                <p:tooltip for="msg_corr3" value="#{bgenMessages.message('cont:corr3')}"/>
+                            </h:panelGrid>
+                          </h:panelGrid>  
+                            
+                        
+                        
+                        
+                        
+                        
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesContactos.crear}" rendered="#{bgesContactos.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesContactos.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesContactos.contacto.contactosPK.conEmplIdPk}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesContactos.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Identificación</b>
+                                </font>
+                            <h:outputText value="#{bgesContactos.contacto.contactosPK.conEmplIdPk}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo</b>
+                                </font>
+                            <h:outputText value="#{bgesContactos.contacto.contactosPK.conEmplTipPk}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Consecutivo</b>
+                                </font>
+                            <h:outputText value="#{bgesContactos.contacto.contactosPK.conConsecPk}"/>
+                            
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Dirección</b>
+                                </font>
+                            <h:outputText value="#{bgesContactos.contacto.conDireccion}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Telefono1</b>
+                                </font>
+                            <h:outputText value="#{bgesContactos.contacto.conTelefono1}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Telefono2</b>
+                                </font>
+                            <h:outputText value="#{bgesContactos.contacto.conTelefono2}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Telefono3</b>
+                                </font>
+                            <h:outputText value="#{bgesContactos.contacto.conTelefono3}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Correo1</b>
+                                </font>
+                            <h:outputText value="#{bgesContactos.contacto.conCorreo1}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Correo2</b>
+                                </font>
+                            <h:outputText value="#{bgesContactos.contacto.conCorreo2}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Correo3</b>
+                                </font>
+                            <h:outputText value="#{bgesContactos.contacto.conCorreo3}"/>
+                            
+                                
+                            
+                            
+                            
+                            </h:panelGrid>
+                    </p:dialog>
+                    
+                    
+                    
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesContactos.opcion.equals('3')}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Identificación</b>
+                                </font>
+                                <h:outputText value="#{bgesContactos.contacto.contactosPK.conEmplIdPk}"/>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo</b>
+                                </font>
+                                <h:outputText value="#{bgesContactos.contacto.contactosPK.conEmplTipPk}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Consecutivo</b>
+                                </font>
+                                <h:outputText value="#{bgesContactos.contacto.contactosPK.conConsecPk}"/>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Direccion</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="idt_1" value="#{bgesContactos.contacto.conDireccion}" required="true"
+                                                 requiredMessage="#{cabecera.cont_req_direccion}"
+                                                
+                                                 validatorMessage="#{cabecera.cont_val_direccion}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        
+                                         <f:validateLength maximum="50"/>
+                                    </h:inputText>
+                                    <h:message id="msg_idt_1" for="idt_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="idt_1" value="#{bgenAyudas.obtenerAyuda(137)}"/>
+                                    <p:tooltip for="msg_idt_1" value="#{bgenMessages.message('cont:idt_1')}"/>
+                                </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Telefono1</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="nom_1" value="#{bgesContactos.contacto.conTelefono1}" required="true"
+                                                 requiredMessage="#{cabecera.cont_req_telefono1}"
+                                                 converterMessage="#{cabecera.cont_conver_telefono1}"
+                                                 validatorMessage="#{cabecera.cont_val_telefono1}"
+                                                 style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength minimum="7" maximum="20"/>
+                                    </h:inputText>
+                                    <h:message id="msg_nom_1" for="nom_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="nom_1" value="#{bgenAyudas.obtenerAyuda(138)}"/>
+                                    <p:tooltip for="msg_nom_1" value="#{bgenMessages.message('cont:nom_1')}"/>
+                                </h:panelGrid>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Telefono2</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="tel_2" value="#{bgesContactos.contacto.conTelefono2}" required="false"
+                                                
+                                                 validatorMessage="#{cabecera.cont_val_telefono2}"
+                                                 style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                         <f:validateLength maximum="20"/>
+                                    </h:inputText>
+                                    <h:message id="msg_tel_2" for="tel_2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="tel_2" value="#{bgenAyudas.obtenerAyuda(138)}"/>
+                                    <p:tooltip for="msg_tel_2" value="#{bgenMessages.message('cont:tel_2')}"/>
+                                </h:panelGrid>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Telefono3</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="tel_3" value="#{bgesContactos.contacto.conTelefono3}" required="false"
+                                                 
+                                                 validatorMessage="#{cabecera.cont_val_telefono3}"
+                                                 style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="20"/>
+                                    </h:inputText>
+                                    <h:message id="msg_tel_3" for="tel_3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="tel_3" value="#{bgenAyudas.obtenerAyuda(138)}"/>
+                                    <p:tooltip for="msg_tel_3" value="#{bgenMessages.message('cont:tel_3')}"/>
+                                </h:panelGrid>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Correo1</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="corr_1" value="#{bgesContactos.contacto.conCorreo1}" required="true"
+                                                 requiredMessage="#{cabecera.cont_req_correo1}"
+                                                 validatorMessage="#{cabecera.cont_val_correo1}"
+                                                 style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="50"/>
+                                    </h:inputText>
+                                    <h:message id="msg_corr_1" for="corr_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="corr_1" value="#{bgenAyudas.obtenerAyuda(139)}"/>
+                                    <p:tooltip for="msg_corr_1" value="#{bgenMessages.message('cont:corr_1')}"/>
+                                </h:panelGrid>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Correo2</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="corr_2" value="#{bgesContactos.contacto.conCorreo2}" required="false"
+                                                
+                                                 validatorMessage="#{cabecera.cont_val_correo2}"
+                                                 style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="50"/>
+                                    </h:inputText>
+                                    <h:message id="msg_corr_2" for="corr_2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="corr_2" value="#{bgenAyudas.obtenerAyuda(139)}"/>
+                                    <p:tooltip for="msg_corr_2" value="#{bgenMessages.message('cont:corr_2')}"/>
+                                </h:panelGrid>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Correo3</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="corr_3" value="#{bgesContactos.contacto.conCorreo3}" required="false"
+                                              
+                                                 validatorMessage="#{cabecera.cont_val_correo3}"
+                                                 style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="50"/>
+                                    </h:inputText>
+                                    <h:message id="msg_corr_3" for="corr_3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="corr_3" value="#{bgenAyudas.obtenerAyuda(139)}"/>
+                                    <p:tooltip for="msg_corr_3" value="#{bgenMessages.message('cont:corr_3')}"/>
+                                </h:panelGrid>
+                                
+                                
+                                
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesContactos.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

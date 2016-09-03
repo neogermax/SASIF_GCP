@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <p:accordionPanel>
+            <p:tab title="Menu">
+                <h:form>
+                    <p:tree value="#{bgesMenu.root}" var="node" selectionMode="single" style="height: 635px; border: none; overflow: hidden; overflow-x: hidden">
+                        <p:ajax event="select" update="@this :der" listener="#{bgesMenu.onNodeSelect}" disabled="#{bgesMenu.link != null}"/> 
+                        <p:ajax event="select" update="@this :msg" listener="#{bgesMenu.onNodeSelect}" disabled="#{bgesMenu.link == null}"/>
+                        <p:ajax event="expand" listener="#{bgesMenu.onNodeExpand}"/>
+                        <p:ajax event="collapse" listener="#{bgesMenu.onNodeCollapse}"/>
+                        <p:treeNode type="folder" collapsedIcon="ui-folder-collapsed" expandedIcon="ui-folder-extended">
+                            <h:outputText id="id_node" value="#{node.rolSigla}"/>
+                            <p:tooltip for="id_node" value="#{node.rolDescrip}"/>
+                        </p:treeNode>
+                        <p:treeNode type="document" icon="ui-document">
+                            <h:outputText id="id_nod" value="#{node.opcNombre.linkCodPk}"/>
+                            <p:tooltip for="id_nod" value="#{node.opcNombre.linkDescrip}"/>
+                        </p:treeNode>
+                    </p:tree>
+                </h:form>
+            </p:tab>
+        </p:accordionPanel>
+        <p:growl id="msg" globalOnly="true"/>
+    </h:body>
+</html>
+

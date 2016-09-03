@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <font face="#{cabecera.login_tipo_letra_label}" size="5"
+                color="#{cabecera.login_color_label}">
+            <b><center>Cronograma por Proyecto</center></b>
+        </font>
+        <br/>
+        #{bgesCronoProye.init(bgesNavegacion.proyecto, bgesNavegacion.relaciones, bgesNavegacion.relacion)}
+
+        <p:dataTable id="cro1" var="cropro" value="#{bgesCronoProye.cronogramaProyect}" editable="true" editMode="cell" scrollable="true" style=" width: 200px" scrollWidth="740" scrollHeight="230">
+            
+            <p:column width="150" headerText="actividad">
+                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                        color="#{cabecera.login_color_label}">
+                    <b> #{cropro.actividades.actDescrip} / #{cropro.croproComNomFk}</b>
+                </font>
+            </p:column>
+
+            <p:column width="130" headerText="Fecha inicial planeada">
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{cropro.croproFeiPla}" > 
+                            <f:convertDateTime type="date" pattern="yyyy/MM/dd HH:mm" timeZone="America/Bogota"/>
+                        </h:outputText>
+                    </f:facet>
+                    
+                    <f:facet name="input">
+                        <p:calendar id="finl1" value="#{cropro.croproFeiPla}"
+                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                    pattern="yyyy/MM/dd HH:mm"
+                                    timeZone="America/Bogota"
+                                    maxdate="#{cropro.croproFefPla}">
+                            <f:attribute name="finl1" value="#{cropro.croproFeiPla}" rendered="true" />
+                            <p:ajax event="dateSelect"   update="cro1"/>
+                        </p:calendar>
+                        <h:message id="msg_finl1" for="finl1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                        <p:tooltip for="finl1" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                        <p:tooltip for="msg_finl1" value="#{bgenMessages.message('cropro:finl1')}"/>
+                    </f:facet>
+                </p:cellEditor>
+
+            </p:column>      
+
+            <p:column width="130" headerText="Fecha final planeada" >
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{cropro.croproFefPla}" >
+                            <f:convertDateTime type="date" pattern="yyyy/MM/dd HH:mm" timeZone="America/Bogota" />
+                        </h:outputText>
+                    </f:facet>
+                    <f:facet name="input">
+                        <p:calendar id="fins1" value="#{cropro.croproFefPla}"
+                                    requiredMessage="#{cabecera.rol_req_descripcion}" required="true"
+                                    validatorMessage="#{cabecera.rol_val_descripcion}"
+                                    pattern="yyyy/MM/dd HH:mm"
+                                    timeZone="America/Bogota"
+                                    mindate="#{cropro.croproFeiPla}">
+                            <f:attribute name="finl1" value="#{cropro.croproFeiPla}" rendered="true" />
+                            <p:ajax event="dateSelect"   update="cro1"/>  
+                            <!--p:ajax update="@form" /-->
+                        </p:calendar>
+                        <h:message id="msg_fins1" for="fins1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                        <p:tooltip for="fins1" value="#{bgenAyudas.obtenerAyuda(130)}"/>
+                        <p:tooltip for="msg_fins1" value="#{bgenMessages.message('cropro:fins1')}"/>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+
+            <p:column width="70" headerText="Tiempo planeado">
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{cropro.union}" />
+                    </f:facet>
+                    <f:facet name="input">
+                        <h:inputText id="idt_1" value="#{cropro.croproTiePla}" required="true"
+                                     requiredMessage="#{cabecera.rol_req_descripcion}"
+                                     validatorMessage="#{cabecera.rol_val_descripcion}"
+                                     style="color:#{cabecera.login_camposinput};width: 100px;background-color:#{cabecera.login_fondo_camposinput};">
+                            <f:validateLength maximum="50"/>
+                            <f:convertNumber/>
+                            <f:ajax render="cro1"/>
+                        </h:inputText>
+
+                        <h:message id="msg_idt_1" for="idt_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                        <p:tooltip for="idt_1" value="#{bgenAyudas.obtenerAyuda(129)}"/>
+                        <p:tooltip for="msg_idt_1" value="#{bgenMessages.message('cropro:idt_1')}"/>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+                                        
+            <p:column width="70" headerText="Valor Hora">
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{cropro.croproVahPla}" >
+                            <f:convertNumber type="number" pattern="###,###.###"  />
+                        </h:outputText>
+                    </f:facet>
+                    <f:facet name="input">
+                        <h:inputText id="idt_2" value="#{cropro.croproVahPla}" required="true"
+                                     requiredMessage="#{cabecera.rol_req_descripcion}"
+                                     validatorMessage="#{cabecera.rol_val_descripcion}"
+                                     disabled="true"       
+                                     style="color:#{cabecera.login_camposinput};width: 100px;background-color:#{cabecera.login_fondo_camposinput};">
+                            <f:validateLength maximum="50"/>
+                            <f:convertNumber/>
+                        </h:inputText>
+                        <h:message id="msg_idt_2" for="idt_2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                        <p:tooltip for="idt_2" value="#{bgenAyudas.obtenerAyuda(129)}"/>
+                        <p:tooltip for="msg_idt_2" value="#{bgenMessages.message('cropro:idt_2')}"/>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+            
+            <p:column width="70" headerText="Costo Planeado">
+                <p:cellEditor>
+                    <f:facet name="output">
+                        <h:outputText value="#{cropro.croproCosPla}" >
+                            <f:convertNumber type="number" pattern="###,###.###"  />
+                        </h:outputText>
+                    </f:facet>
+                                                
+                    <f:facet name="input">
+                        <h:inputText id="idt_3" value="#{cropro.croproCosPla}" required="true"
+                                     requiredMessage="#{cabecera.rol_req_descripcion}"
+                                     validatorMessage="#{cabecera.rol_val_descripcion}"
+                                     disabled="true"       
+                                     style="color:#{cabecera.login_camposinput};width: 100px;background-color:#{cabecera.login_fondo_camposinput};">
+                            <f:validateLength maximum="50"/>
+                            <f:convertNumber/>
+                            <f:ajax render="cro1"/>
+                        </h:inputText>
+                        <h:message id="msg_idt_3" for="idt_3" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                        <p:tooltip for="idt_3" value="#{bgenAyudas.obtenerAyuda(129)}"/>
+                        <p:tooltip for="msg_idt_3" value="#{bgenMessages.message('cropro:idt_3')}"/>
+                    </f:facet>
+                </p:cellEditor>
+            </p:column>
+         </p:dataTable>
+    </h:body>
+</html>
+

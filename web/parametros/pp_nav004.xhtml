@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:body>
+        <br/>
+        <div id="formulario" layout="block">
+            <fieldset style="margin-left: -80px; height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="act3">
+                    <h:panelGroup  rendered="#{bgesTodoReporte.opcion eq '1' and bgesDoccormen.opcion eq '1'}">
+
+                        <h:panelGroup rendered="#{bgesNavegacion.inicio}">
+                            #{bgesProyResp.init()}
+                            <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                      color="#{cabecera.login_color_label}">
+                                    <center><b>Proyectos</b></center>
+                                </font>
+                            </fieldset>
+                            <br/>
+                            <fieldset style="height: 300px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                                <br/>
+                                <p:dataTable id="pr" style="width: 600px" value="#{bgesProyResp.proyActs}" var="pr"
+                                             scrollable="true" scrollHeight="250" rowKey="#{pr.proyActsPK}"
+                                             emptyMessage="No hay proyectos disponibles"
+                                             scrollWidth="600" selection="#{bgesProyResp.proyAct}" selectionMode="single">
+                                    <p:ajax event="rowSelect"/>
+                                    <p:column headerText="Codigo" style="min-width: 120px; max-width: 120px"
+                                              filterStyle="min-width: 120px; max-width: 120px">
+                                        <font size="1">
+                                            <h:outputText value="#{pr.proyectos.proCodPk}"/>
+                                        </font>
+                                    </p:column>
+                                    <p:column headerText="Descripcion" style="min-width: 120px; max-width: 120px"
+                                              filterStyle="min-width: 120px; max-width: 120px">
+                                        <font size="1">
+                                            <h:outputText value="#{pr.proyectos.proDescrip}"/>
+                                        </font>
+                                    </p:column>
+                                    <p:column headerText="Clase" style="min-width: 120px; max-width: 120px"
+                                              filterStyle="min-width: 120px; max-width: 120px">
+                                        <font size="1">
+                                            <h:outputText value="#{pr.clases.clsDescrip}"/>
+                                        </font>
+                                    </p:column>
+                                    <p:column headerText="Etapa" style="min-width: 120px; max-width: 120px"
+                                              filterStyle="min-width: 120px; max-width: 120px">
+                                        <font size="1">
+                                            <h:outputText value="#{pr.etapas.etpDescrip}"/>
+                                        </font>
+                                    </p:column>
+                                    <p:column headerText="Actividad" style="min-width: 120px; max-width: 120px"
+                                              filterStyle="min-width: 120px; max-width: 120px">
+                                        <font size="1">
+                                            <h:outputText value="#{pr.actividades.actDescrip}"/>
+                                        </font>
+                                    </p:column>
+                                    <p:column headerText="Componente" style="min-width: 120px; max-width: 120px"
+                                              filterStyle="min-width: 120px; max-width: 120px">
+                                        <font size="1">
+                                            <h:outputText value="#{pr.proyActsPK.pryComNomFk}"/>
+                                        </font>
+                                    </p:column>
+                                </p:dataTable>
+                            </fieldset>
+                            <br/>
+                            <div align="center">
+                                <p:commandButton value="Aceptar" action="#{bgesProyResp.action}" immediate="true" update="@form"/>
+                            </div>
+                        </h:panelGroup>
+                        <h:panelGroup  rendered="#{not bgesNavegacion.inicio}">
+                            <ui:include src="../parametros/pp_navAct001.xhtml"/>
+                        </h:panelGroup>
+                    </h:panelGroup>   
+                    <h:panelGroup rendered="#{bgesTodoReporte.opcion eq '2'}">
+                        <ui:include src="pp_repo002.xhtml"/>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup rendered="#{bgesTodoReporte.opcion eq '3'}">
+                        <ui:include src="pp_repo003.xhtml"/>
+                    </h:panelGroup>
+                   
+                    <h:panelGroup rendered="#{bgesDoccormen.opcion eq '2'}">
+                        <ui:include src="pp_doccormen.xhtml"/>
+                    </h:panelGroup>
+                    
+                    <p:growl id="msg" globalOnly="true"/>
+                </h:form>
+            </fieldset>
+        </div>
+    </h:body>
+</html>

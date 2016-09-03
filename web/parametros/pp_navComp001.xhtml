@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        #{bgesComponentes.init(bgesNavegacion.proyecto, bgesNavegacion.relaciones, bgesNavegacion.relacion)}
+        <font face="#{cabecera.login_tipo_letra_label}" size="5"
+                color="#{cabecera.login_color_label}">
+            <b><center>Componentes</center></b>
+        </font>
+        <br/>
+        <b>Tipo de componentes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+        <h:selectOneMenu value="#{bgesComponentes.componente.tipoComps}">
+            <f:selectItems value="#{bgesComponentes.tipoComps}" var="tc"
+                           itemLabel="#{tc.tipNombre}" itemValue="#{tc}"/>
+            <f:converter converterId="jsf.beans.BConvTipoComps"/>
+        </h:selectOneMenu>
+        <br/>
+        <b>Nombre del componente&nbsp;</b>
+        <h:inputText id="nom" value="#{bgesComponentes.comNom}"
+                style="width: 250px; color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+        </h:inputText>
+        <p:tooltip for="nom" value="#{bgenAyudas.obtenerAyuda(57)}"/>
+        <p:commandButton id="add" action="#{bgesComponentes.addComponente}" update="tab" icon="ui-button-add"/>
+        <p:commandButton id="del" action="#{bgesComponentes.delComponente}" update="tab" icon="ui-button-del"/>
+        <p:tooltip for="add" value="Adicionar componente"/>
+        <p:tooltip for="del" value="Retirar componentes"/>
+        <br/><br/>
+        <p:dataTable id="tab" var="actComp" value="#{bgesComponentes.actComps}" scrollable="true" scrollWidth="600"
+                scrollHeight="150" selection="#{bgesComponentes.selectedActComps}" rowKey="#{actComp}">
+            <p:column selectionMode="multiple" width="20"/>
+            <p:column sortBy="#{actComp.relacion.relActCodFk.actDescrip}" width="120">
+                <f:facet name="header">
+                    Actividad
+                </f:facet>
+                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                        color="#{cabecera.login_color_label}">
+                    <b>#{actComp.relacion.relActCodFk.actDescrip}</b>
+                </font>
+            </p:column>
+            <p:column sortBy="#{actComp.componente.componentesPK.comNomPk}" width="120">
+                <f:facet name="header">
+                    Componente
+                </f:facet>
+                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                        color="#{cabecera.login_color_label}">
+                    <b>#{actComp.componente.componentesPK.comNomPk}</b>
+                </font>
+            </p:column>
+            <p:column sortBy="#{actComp.componente.tipoComps.tipNombre}" width="120">
+                <f:facet name="header">
+                    Tipo Componente
+                </f:facet>
+                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                        color="#{cabecera.login_color_label}">
+                    <b>#{actComp.componente.tipoComps.tipNombre}</b>
+                </font>
+            </p:column>
+        </p:dataTable>
+    </h:body>
+</html>
+

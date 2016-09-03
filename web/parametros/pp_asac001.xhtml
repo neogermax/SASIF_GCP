@@ -1,0 +1,354 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="asac">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesAsignActs.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                            <p:commandButton value="Crear" action="#{bgesAsignActs.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab eq 'T'}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                            <p:commandButton value="Actualizar" action="#{bgesAsignActs.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                            <p:commandButton value="Eliminar" action="#{bgesAsignActs.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab eq 'T'}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 360px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesAsignActs.columnas}"
+                                              rendered="#{bgesAsignActs.opcion ne '2'}">
+                                
+                                <f:selectItem itemLabel="Clase Origen" itemValue="1"/>
+                                <f:selectItem itemLabel="Etapa Origen" itemValue="2"/>
+                                <f:selectItem itemLabel="Actividad Origen" itemValue="3"/>
+                                <f:selectItem itemLabel="Clase Destino" itemValue="4"/>
+                                <f:selectItem itemLabel="Etapa Destino" itemValue="5"/>
+                                <f:selectItem itemLabel="Actividad Destino" itemValue="6"/>
+                                <f:selectItem itemLabel="Tipo" itemValue="7"/>
+                                
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesAsignActs.opcion.equals('1') or bgesAsignActs.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesAsignActs.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px" value="#{bgesAsignActs.asignActs}" var="asac"
+                                     scrollable="true" rowKey="#{asac.asignActsPK}" scrollHeight="220"
+                                     emptyMessage="#{bgenErrores.obtenerError(14)}"
+                                     scrollWidth="600" selection="#{bgesAsignActs.asignAct}" selectionMode="single"
+                                     rendered="#{bgesAsignActs.opcion ne '2'}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            
+                                                  
+                            <p:column headerText="Clase Origen" filterBy="#{asac.clases.clsDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesAsignActs.columnas.contains('1')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{asac.clases.clsCodPk} #{asac.clases.clsDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Etapa Origen" filterBy="#{asac.etapas.etpDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesAsignActs.columnas.contains('2')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{asac.etapas.etpCodPk} #{asac.etapas.etpDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Actividad Origen" filterBy="#{asac.actividades.actDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesAsignActs.columnas.contains('3')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{asac.actividades.actCodPk} #{asac.actividades.actDescrip}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Clase Destino" filterBy="#{asac.clases1.clsDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesAsignActs.columnas.contains('4')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{asac.clases1.clsCodPk} #{asac.clases1.clsDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Etapa Destino" filterBy="#{asac.etapas1.etpDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesAsignActs.columnas.contains('5')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{asac.etapas1.etpCodPk} #{asac.etapas1.etpDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Actividad Destino" filterBy="#{asac.actividades1.actDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesAsignActs.columnas.contains('6')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{asac.actividades1.actCodPk} #{asac.actividades1.actDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tipo" filterBy="#{asac.asignTipo}" filterMatchMode="contains"
+                                      rendered="#{bgesAsignActs.columnas.contains('7')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{asac.asignTipo}"/>
+                                </font>
+                            </p:column>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                        </p:dataTable>
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesAsignActs.opcion eq '2'}">
+                            
+                         
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Clase Origen</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesAsignActs.CMapaRelacion.clase}" converter="jsf.beans.BConvClaseEtps">
+                                <f:selectItems value="#{bgesAsignActs.CMapaRelacion.clases}" var="clas"
+                                               itemLabel="#{clas.clase.clsCodPk} #{clas.clase.clsDescrip}" itemValue="#{clas}"/>
+                                <f:ajax render="etp act"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Etapas Origen</b>
+                            </font>
+                            <h:selectOneMenu id="etp" value="#{bgesAsignActs.CMapaRelacion.etapa}" converter="jsf.beans.BConvEtapaActs">
+                                <f:selectItems value="#{bgesAsignActs.CMapaRelacion.etapas}" var="eta"
+                                               itemLabel="#{eta.etapa.etpCodPk} #{eta.etapa.etpDescrip}" itemValue="#{eta}"/>
+                                <f:ajax render="act"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Actividad Origen</b>
+                            </font>
+                            <h:selectOneMenu id="act" value="#{bgesAsignActs.CMapaRelacion.actividad}" converter="jsf.beans.BConvActividades">
+                                <f:selectItems value="#{bgesAsignActs.CMapaRelacion.actividades}" var="act"
+                                               itemLabel="#{act.actCodPk} #{act.actDescrip}" itemValue="#{act}"/>
+                                <f:ajax/>
+                            </h:selectOneMenu>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Clases Destino</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesAsignActs.DMapaRelacion.clase}" converter="jsf.beans.BConvClaseEtps">
+                                <f:selectItems value="#{bgesAsignActs.DMapaRelacion.clases}" var="clas1"
+                                               itemLabel="#{clas1.clase.clsCodPk} #{clas1.clase.clsDescrip}" itemValue="#{clas1}"/>
+                                <f:ajax render="etp1 act1"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Etapas Destino</b>
+                            </font>
+                            <h:selectOneMenu id="etp1" value="#{bgesAsignActs.DMapaRelacion.etapa}" converter="jsf.beans.BConvEtapaActs">
+                                <f:selectItems value="#{bgesAsignActs.DMapaRelacion.etapas}" var="eta1"
+                                               itemLabel="#{eta1.etapa.etpCodPk} #{eta1.etapa.etpDescrip}" itemValue="#{eta1}"/>
+                                <f:ajax render="act1"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Actividades Destino</b>
+                            </font>
+                            <h:selectOneMenu id="act1" value="#{bgesAsignActs.DMapaRelacion.actividad}" converter="jsf.beans.BConvActividades">
+                                <f:selectItems value="#{bgesAsignActs.DMapaRelacion.actividades}" var="act1"
+                                               itemLabel=" #{act1.actCodPk} #{act1.actDescrip}" itemValue="#{act1}"/>
+                                <f:ajax/>
+                            </h:selectOneMenu>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tipo</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesAsignActs.CAsignAct.asignTipo}">
+                                <f:selectItem itemLabel="Responsables" itemValue="R"/>
+                                <f:selectItem itemLabel="Cronograma" itemValue="C"/>
+                                <f:selectItem itemLabel="Ambos" itemValue="A"/>
+                                
+                            </p:selectOneRadio>
+                            
+                         
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    
+                    
+                    
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesAsignActs.crear}" rendered="#{bgesAsignActs.opcion eq '2'}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesAsignActs.opcion eq '4'}"
+                                             onclick="del.show()"/>
+                    </div>
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesAsignActs.asignAct.asignActsPK.asignOrgActFk}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesAsignActs.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                
+                                
+                                
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Clase Origen</b>
+                                </font>
+                            <h:outputText value="#{bgesAsignActs.asignAct.clases.clsCodPk} #{bgesAsignActs.asignAct.clases.clsDescrip}"/>
+                                
+                                
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Etapa Origen</b>
+                                </font>
+                            <h:outputText value="#{bgesAsignActs.asignAct.etapas.etpCodPk} #{bgesAsignActs.asignAct.etapas.etpDescrip}"/>
+                                
+                                
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Actividad Origen</b>
+                                </font>
+                            <h:outputText value="#{bgesAsignActs.asignAct.actividades.actCodPk} #{bgesAsignActs.asignAct.actividades.actDescrip}"/>
+                            
+                              <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Clase Destino</b>
+                                </font>
+                            <h:outputText value="#{bgesAsignActs.asignAct.clases1.clsCodPk} #{bgesAsignActs.asignAct.clases1.clsDescrip}"/>
+                                
+                                
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Etapa Destino</b>
+                                </font>
+                            <h:outputText value="#{bgesAsignActs.asignAct.etapas1.etpCodPk} #{bgesAsignActs.asignAct.etapas1.etpDescrip}"/>
+                                
+                                
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Actividad Destino</b>
+                                </font>
+                            <h:outputText value="#{bgesAsignActs.asignAct.actividades1.actCodPk} #{bgesAsignActs.asignAct.actividades1.actDescrip}"/>
+                            
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo</b>
+                                </font>
+                            <h:outputText value="#{bgesAsignActs.asignAct.asignTipo}"/>
+                                                     
+                            </h:panelGrid>
+                    </p:dialog>
+                    
+                    
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesAsignActs.opcion.equals('3')}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Clase Origen</b>
+                                </font>
+                            <h:outputText value="#{bgesAsignActs.asignAct.clases.clsCodPk} #{bgesAsignActs.asignAct.clases.clsDescrip}"/>
+                                
+                                
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Etapa Origen</b>
+                                </font>
+                            <h:outputText value="#{bgesAsignActs.asignAct.etapas.etpCodPk} #{bgesAsignActs.asignAct.etapas.etpDescrip}"/>
+                                
+                                
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Actividad Origen</b>
+                                </font>
+                            <h:outputText value="#{bgesAsignActs.asignAct.actividades.actCodPk} #{bgesAsignActs.asignAct.actividades.actDescrip}"/>
+                            
+                              <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Clase Destino</b>
+                                </font>
+                            <h:outputText value="#{bgesAsignActs.asignAct.clases1.clsCodPk} #{bgesAsignActs.asignAct.clases1.clsDescrip}"/>
+                                
+                                
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Etapa Destino</b>
+                                </font>
+                            <h:outputText value="#{bgesAsignActs.asignAct.etapas1.etpCodPk} #{bgesAsignActs.asignAct.etapas1.etpDescrip}"/>
+                                
+                                
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Actividad Destino</b>
+                                </font>
+                            <h:outputText value="#{bgesAsignActs.asignAct.actividades1.actCodPk} #{bgesAsignActs.asignAct.actividades1.actDescrip}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tipo</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesAsignActs.asignAct.asignTipo}">
+                                <f:selectItem itemLabel="Responsables" itemValue="R"/>
+                                <f:selectItem itemLabel="Cronograma" itemValue="C"/>
+                                <f:selectItem itemLabel="Ambos" itemValue="A"/>
+                                
+                            </p:selectOneRadio>
+                            
+                                
+                                
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesAsignActs.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

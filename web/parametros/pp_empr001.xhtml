@@ -1,0 +1,247 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="emp">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                            <p:commandButton value="Consultar" action="#{bgesEmpresas.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                            <p:commandButton value="Crear" action="#{bgesEmpresas.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                            <p:commandButton value="Actualizar" action="#{bgesEmpresas.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                            <p:commandButton value="Eliminar" action="#{bgesEmpresas.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 360px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesEmpresas.columnas}"
+                                              rendered="#{not bgesEmpresas.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Codigo" itemValue="1"/>
+                                <f:selectItem itemLabel="Identificacion" itemValue="2"/>
+                                <f:selectItem itemLabel="Nombre" itemValue="3"/>
+                                <f:selectItem itemLabel="Politicas de grupo" itemValue="4"/>
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesEmpresas.opcion.equals('1') or bgesEmpresas.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesEmpresas.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px" value="#{bgesEmpresas.empresas}" var="emp"
+                                     scrollable="true" rowKey="#{emp.emprCodigoPk}" scrollHeight="220"
+                                     emptyMessage="#{bgenErrores.obtenerError(14)}"
+                                 scrollWidth="600" selection="#{bgesEmpresas.empresa}" selectionMode="single"
+                                 rendered="#{not bgesEmpresas.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            <p:column headerText="Codigo" filterBy="#{emp.emprCodigoPk}" filterMatchMode="contains"
+                                      rendered="#{bgesEmpresas.columnas.contains('1')}"
+                                      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{emp.emprCodigoPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Identidad" filterBy="#{emp.emprIdent}" filterMatchMode="contains"
+                                      rendered="#{bgesEmpresas.columnas.contains('2')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{emp.emprIdent}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Nombre" filterBy="#{emp.emprNombre}" filterMatchMode="contains"
+                                      rendered="#{bgesEmpresas.columnas.contains('3')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{emp.emprNombre}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Politicas de grupo" filterBy="#{emp.emprGrupPolFk.polDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesEmpresas.columnas.contains('4')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{emp.emprGrupPolFk.polDescrip}"/>
+                                </font>
+                            </p:column>
+                        </p:dataTable>
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesEmpresas.opcion.equals('2')}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesEmpresas.CEmpresa.emprCodigoPk}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(15)}"
+                                             converterMessage="#{bgenErrores.obtenerError(16)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod" value="#{bgenAyudas.obtenerAyuda(8)}"/>
+                                <p:tooltip for="msg_cod" value="#{bgenMessages.message('emp:cod')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Identidad</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesEmpresas.CEmpresa.emprIdent}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(18)}"
+                                             converterMessage="#{bgenErrores.obtenerError(19)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(22)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999999999999999"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt" value="#{bgenAyudas.obtenerAyuda(9)}"/>
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('emp:idt')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Nombre</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="nom" value="#{bgesEmpresas.CEmpresa.emprNombre}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(20)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(21)}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_nom" for="nom" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="nom" value="#{bgenAyudas.obtenerAyuda(10)}"/>
+                                <p:tooltip for="msg_nom" value="#{bgenMessages.message('emp:nom')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Politicas de grupo</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesEmpresas.CEmpresa.emprGrupPolFk}">
+                                <f:selectItems value="#{bgesEmpresas.politicaGrupos}" var="polG"
+                                        itemLabel="#{polG.polDescrip}" itemValue="#{polG}"/>
+                                <f:converter converterId="jsf.beans.BConvPoliticaGrupos"/>
+                            </h:selectOneMenu>
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesEmpresas.crear}" rendered="#{bgesEmpresas.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesEmpresas.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesEmpresas.empresa.emprNombre}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesEmpresas.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesEmpresas.empresa.emprCodigoPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Identificacion</b>
+                                </font>
+                                <h:outputText value="#{bgesEmpresas.empresa.emprIdent}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre</b>
+                                </font>
+                                <h:outputText value="#{bgesEmpresas.empresa.emprNombre}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Politicas de grupo</b>
+                                </font>
+                                <h:outputText value="#{bgesEmpresas.empresa.emprGrupPolFk.polDescrip}"/>
+                            </h:panelGrid>
+                    </p:dialog>
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesEmpresas.opcion.equals('3')}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesEmpresas.empresa.emprCodigoPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Identificacion</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="idt_1" value="#{bgesEmpresas.empresa.emprIdent}" required="true"
+                                                 requiredMessage="#{bgenErrores.obtenerError(18)}"
+                                             converterMessage="#{bgenErrores.obtenerError(19)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(22)}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:convertNumber/>
+                                        <f:validateLongRange minimum="0" maximum="99999999999999999"/>
+                                    </h:inputText>
+                                    <h:message id="msg_idt_1" for="idt_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="idt_1" value="#{bgenAyudas.obtenerAyuda(9)}"/>
+                                    <p:tooltip for="msg_idt_1" value="#{bgenMessages.message('emp:idt_1')}"/>
+                                </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="nom_1" value="#{bgesEmpresas.empresa.emprNombre}" required="true"
+                                                 requiredMessage="#{bgenErrores.obtenerError(20)}"
+                                                 validatorMessage="#{bgenErrores.obtenerError(21)}"
+                                                 style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                        <f:validateLength maximum="50"/>
+                                    </h:inputText>
+                                    <h:message id="msg_nom_1" for="nom_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="nom_1" value="#{bgenAyudas.obtenerAyuda(10)}"/>
+                                    <p:tooltip for="msg_nom_1" value="#{bgenMessages.message('emp:nom_1')}"/>
+                                </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Politicas de grupo</b>
+                                </font>
+                                <h:selectOneMenu value="#{bgesEmpresas.empresa.emprGrupPolFk}">
+                                    <f:selectItems value="#{bgesEmpresas.politicaGrupos}" var="polG"
+                                            itemLabel="#{polG.polDescrip}" itemValue="#{polG}"/>
+                                    <f:converter converterId="jsf.beans.BConvPoliticaGrupos"/>
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesEmpresas.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <div id="login">
+            <h2 align="center" style="#{cabecera.login_color_titulo}">
+                Cambio de contraseña
+            </h2> 
+            <h:form id="cambio">
+                <fieldset style="background-color:#{cabecera.login_borde_color};">
+                    <h:panelGrid>
+                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                            color="#{cabecera.login_color_label}">
+                            <b>Nueva contraseña</b>
+                        </font> 
+                        <h:panelGrid columns="2">
+                            <h:inputSecret id="pass1" binding="#{bgesLogin.inputPassword1}" requiredMessage="#{bgenErrores.obtenerError(6)}" 
+                                           validatorMessage="Longitud minima: #{bgesLogin.usuarios.usuPolGrupFk.polLogMin} Longitud maxima: #{bgesLogin.usuarios.usuPolGrupFk.polLogMax}"
+                                           required="true" value="#{bgesLogin.password1}"
+                                           style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                <f:validateLength minimum="#{bgesLogin.usuarios.usuPolGrupFk.polLogMin}"
+                                                  maximum="#{bgesLogin.usuarios.usuPolGrupFk.polLogMax}"/>
+                            </h:inputSecret>
+                            <h:message id="msg_pass1" for="pass1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                            <p:tooltip for="pass1" value="#{bgenAyudas.obtenerAyuda(6)}"/>
+                            <p:tooltip for="msg_pass1" value="#{bgenMessages.message('cambio:pass1')}"/>
+                        </h:panelGrid>
+                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                            color="#{cabecera.login_color_label}">
+                            <b>Confirmar contraseña</b>
+                        </font>
+                        <h:panelGrid columns="2">
+                            <h:inputSecret id="pass2" required="true" requiredMessage="#{bgenErrores.obtenerError(6)}"
+                                           value="#{bgesLogin.password2}"
+                                           style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};"
+                                           validator="#{bgesLogin.validatePassword}"
+                                           validatorMessage="Las contraseñas no son iguales"/>
+                            <h:message id="msg_pass2" for="pass2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                            <p:tooltip for="pass2" value="#{bgenAyudas.obtenerAyuda(7)}"/>
+                            <p:tooltip for="msg_pass2" value="#{bgenMessages.message('cambio:pass2')}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Cambiar" action="#{bgesLogin.cambiarContraseña}" update="@form"/>
+                    </div>
+                </fieldset>
+            </h:form>
+        </div>
+    </h:body>
+</html>
+

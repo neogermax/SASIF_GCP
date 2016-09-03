@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:body>
+        <h:panelGroup id="contenido" class="container" layout="block">
+            <h:panelGroup id="izq" style="width: 250px" layout="block">
+                <ui:include src="#{pag.menu}"/>
+            </h:panelGroup>
+            <h:panelGroup id="der" layout="block">
+                <h:form>
+                    <p:toolbar style="background-image: url(#{cabecera.fondo_toolbar}); border: none;">
+                        <p:toolbarGroup align="right">
+                            <p:commandButton value="Ayuda" icon="ui-button-help" update=":der"/>
+                            <p:commandButton value="Salir" icon="ui-button-exit" ajax="false" action="#{bgesLogin.accionLogout}"/>
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                </h:form>
+                <p:panel id="pl" header="#{bgesMenu.link.linkDescrip}" style="background-image: url(generales/images/fondo1.jpg); width: 1000px; height: 670px" 
+                         closable="true" closeSpeed="250" rendered="#{bgesMenu.link != null}">
+                    <p:ajax event="close" listener="#{bgesMenu.handleClose}" update=":izq"/>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_rel001.xhtml'}">
+                        <ui:include src="../parametros/pp_rel001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_empr001.xhtml'}">
+                        <ui:include src="../parametros/pp_empr001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_carg002.xhtml'}">
+                        <ui:include src="../parametros/pp_carg002.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_polg001.xhtml'}">
+                        <ui:include src="../parametros/pp_polg001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_link001.xhtml'}">
+                        <ui:include src="../parametros/pp_link001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_area001.xhtml'}">
+                        <ui:include src="../parametros/pp_area001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_cont001.xhtml'}">
+                        <ui:include src="../parametros/pp_cont001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_role001.xhtml'}">
+                        <ui:include src="../parametros/pp_role001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_opro001.xhtml'}">
+                        <ui:include src="../parametros/pp_opro001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_usua001.xhtml'}">
+                        <ui:include src="../parametros/pp_usua001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_empl001.xhtml'}">
+                        <ui:include src="../parametros/pp_empl001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_pais001.xhtml'}">
+                        <ui:include src="../parametros/pp_pais001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_ayud001.xhtml'}">
+                        <ui:include src="../parametros/pp_ayud001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_fest001.xhtml'}">
+                        <ui:include src="../parametros/pp_fest001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_erro001.xhtml'}">
+                        <ui:include src="../parametros/pp_erro001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_clas001.xhtml'}">
+                        <ui:include src="../parametros/pp_clas001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_conse001.xhtml'}">
+                        <ui:include src="../parametros/pp_conse001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_acti001.xhtml'}">
+                        <ui:include src="../parametros/pp_acti001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_etap001.xhtml'}">
+                        <ui:include src="../parametros/pp_etap001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_itm001.xhtml'}">
+                        <ui:include src="../parametros/pp_itm001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_nume001.xhtml'}">
+                        <ui:include src="../parametros/pp_nume001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_alfn001.xhtml'}">
+                        <ui:include src="../parametros/pp_alfn001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_prog001.xhtml'}">
+                        <ui:include src="../parametros/pp_prog001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_cons001.xhtml'}">
+                        <ui:include src="../parametros/pp_cons001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_for001.xhtml'}">
+                        <ui:include src="../parametros/pp_for001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_repo001.xhtml'}">
+                        <ui:include src="../parametros/pp_repo001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_para001.xhtml'}">
+                        <ui:include src="../parametros/pp_para001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_tipComp001.xhtml'}">
+                        <ui:include src="../parametros/pp_tipComp001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_perm001.xhtml'}">
+                        <ui:include src="../parametros/pp_perm001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_nav001.xhtml'}">
+                        <ui:include src="../parametros/pp_nav001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_nav002.xhtml'}">
+                        <ui:include src="../parametros/pp_nav002.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_nav003.xhtml'}">
+                        <ui:include src="../parametros/pp_nav003.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_nav004.xhtml'}">
+                        <ui:include src="../parametros/pp_nav004.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_actItm001.xhtml'}">
+                        <ui:include src="../parametros/pp_actItm001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_rut001.xhtml'}">
+                        <ui:include src="../parametros/pp_rut001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_gdoc001.xhtml'}">
+                        <ui:include src="../parametros/pp_gdoc001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_pdoc001.xhtml'}">
+                        <ui:include src="../parametros/pp_pdoc001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_asac001.xhtml'}">
+                        <ui:include src="../parametros/pp_asac001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_doac001.xhtml'}">
+                        <ui:include src="../parametros/pp_doac001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_grre001.xhtml'}">
+                        <ui:include src="../parametros/pp_grre001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_acreus001.xhtml'}">
+                        <ui:include src="../parametros/pp_acreus001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_valho001.xhtml'}">
+                        <ui:include src="../parametros/pp_valho001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_perdous001.xhtml'}">
+                        <ui:include src="../parametros/pp_perdous001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_indo001.xhtml'}">
+                        <ui:include src="../parametros/pp_indo001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_concom001.xhtml'}">
+                        <ui:include src="../parametros/pp_concom001.xhtml"/>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{bgesMenu.link.linkPagina == '../parametros/pp_consult_gerencia.xhtml'}">
+                        <ui:include src="../parametros/pp_consult_gerencia.xhtml"/>
+                    </ui:fragment>
+                </p:panel>
+            </h:panelGroup>
+        </h:panelGroup>
+    </h:body>
+</html>
+

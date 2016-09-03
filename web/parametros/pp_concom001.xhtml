@@ -1,0 +1,429 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="concom">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                            <p:commandButton value="Consultar" action="#{bgesCondicionComunicacion.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                            <p:commandButton value="Crear" action="#{bgesCondicionComunicacion.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                            <p:commandButton value="Actualizar" action="#{bgesCondicionComunicacion.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                            <p:commandButton value="Eliminar" action="#{bgesCondicionComunicacion.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 360px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesCondicionComunicacion.columnas}"
+                                              rendered="#{not bgesCondicionComunicacion.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Codigo" itemValue="1"/>
+                                <f:selectItem itemLabel="Descripcion" itemValue="2"/>
+                                <f:selectItem itemLabel="Correo o servidor origen" itemValue="3"/>
+                                <f:selectItem itemLabel="Tipo de envio" itemValue="4"/>
+                                <f:selectItem itemLabel="Plantilla" itemValue="5"/>
+                                <f:selectItem itemLabel="Tiempo" itemValue="6"/>
+                                <f:selectItem itemLabel="Dias" itemValue="7"/>
+                                <f:selectItem itemLabel="Enviar a" itemValue="8"/>
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesCondicionComunicacion.opcion.equals('1') or bgesCondicionComunicacion.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesCondicionComunicacion.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px" value="#{bgesCondicionComunicacion.condicionComunicacion}" var="concom"
+                                     scrollable="true" rowKey="#{concom.concomCodPk}" scrollHeight="220"
+                                     emptyMessage="#{bgenErrores.obtenerError(14)}"
+                                     scrollWidth="600" selection="#{bgesCondicionComunicacion.condicionComunica}" selectionMode="single"
+                                 rendered="#{not bgesCondicionComunicacion.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            <p:column headerText="Codigo" filterBy="#{concom.concomCodPk}" filterMatchMode="contains"
+                                      rendered="#{bgesCondicionComunicacion.columnas.contains('1')}"
+                                      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{concom.concomCodPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Descripcion" filterBy="#{concom.concomDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesCondicionComunicacion.columnas.contains('2')}"
+                                      width="120" filterStyle="min-width: 120px; max-width: 120px">
+                                <font size="1">
+                                    <h:outputText value="#{concom.concomDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Correo o servidor origen" filterBy="#{concom.concomCorrSerOr}" filterMatchMode="contains"
+                                      rendered="#{bgesCondicionComunicacion.columnas.contains('2')}"
+                                      width="120" filterStyle="min-width: 120px; max-width: 120px">
+                                <font size="1">
+                                    <h:outputText value="#{concom.concomCorrSerOr}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tipo de envio" filterBy="#{concom.concomTipoEnv}" filterMatchMode="contains"
+                                      rendered="#{bgesCondicionComunicacion.columnas.contains('2')}"
+                                      width="120" filterStyle="min-width: 120px; max-width: 120px">
+                                <font size="1">
+                                    <h:outputText value="#{concom.concomTipoEnv}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Plantilla" filterBy="#{concom.concomPlant}" filterMatchMode="contains"
+                                      rendered="#{bgesCondicionComunicacion.columnas.contains('2')}"
+                                      width="120" filterStyle="min-width: 120px; max-width: 120px">
+                                <font size="1">
+                                    <h:outputText value="#{concom.concomPlant}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Dias" filterBy="#{concom.concomDias}" filterMatchMode="contains"
+                                      rendered="#{bgesCondicionComunicacion.columnas.contains('2')}"
+                                      width="120" filterStyle="min-width: 120px; max-width: 120px">
+                                <font size="1">
+                                    <h:outputText value="#{concom.concomDias}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="enviar a" filterBy="#{concom.concomEnvA}" filterMatchMode="contains"
+                                      rendered="#{bgesCondicionComunicacion.columnas.contains('2')}"
+                                      width="120" filterStyle="min-width: 120px; max-width: 120px">
+                                <font size="1">
+                                    <h:outputText value="#{concom.concomEnvA}"/>
+                                </font>
+                            </p:column>
+                        </p:dataTable>
+                        
+                        
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesCondicionComunicacion.opcion.equals('2')}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesCondicionComunicacion.CCondicionComunica.concomCodPk}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(85)}"
+                                             converterMessage="#{bgenErrores.obtenerError(86)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(87)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod" value="#{bgenAyudas.obtenerAyuda(58)}"/>
+                                <p:tooltip for="msg_cod" value="#{bgenMessages.message('concom:cod')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Descripcion</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesCondicionComunicacion.CCondicionComunica.concomDescrip}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(28)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(29)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt" value="#{bgenAyudas.obtenerAyuda(13)}"/>
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('concom:idt')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Correo o servidor origen</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="corr" value="#{bgesCondicionComunicacion.CCondicionComunica.concomCorrSerOr}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(28)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(29)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="100"/>
+                                </h:inputText>
+                                <h:message id="msg_corr" for="corr" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="corr" value="#{bgenAyudas.obtenerAyuda(13)}"/>
+                                <p:tooltip for="msg_corr" value="#{bgenMessages.message('concom:corr')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tipo de envio</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesCondicionComunicacion.CCondicionComunica.concomTipoEnv}">
+                                <f:selectItem itemLabel="Correo" itemValue="C"/>
+                                <f:selectItem itemLabel="Msn" itemValue="M"/>
+                                <f:selectItem itemLabel="Whatsapp" itemValue="W"/>
+                                <f:selectItem itemLabel="Todos" itemValue="T"/>
+                                
+                            </h:selectOneMenu>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Plantilla</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="pla" value="#{bgesCondicionComunicacion.CCondicionComunica.concomPlant}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(28)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(29)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_pla" for="pla" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="pla" value="#{bgenAyudas.obtenerAyuda(13)}"/>
+                                <p:tooltip for="msg_pla" value="#{bgenMessages.message('concom:pla')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>tiempo</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesCondicionComunicacion.CCondicionComunica.concomTiemp}">
+                                <f:selectItem itemLabel="Antes del vencimiento del plazo de cumplimiento de la actividad" itemValue="A"/>
+                                <f:selectItem itemLabel="En el vencimiento del cumplimiento de la actividad" itemValue="E"/>
+                                <f:selectItem itemLabel="Después del vencimiento de la actividad" itemValue="D"/>
+                                
+                            </h:selectOneMenu>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>dias</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="dia" value="#{bgesCondicionComunicacion.CCondicionComunica.concomDias}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(85)}"
+                                             converterMessage="#{bgenErrores.obtenerError(86)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(87)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_dia" for="dia" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="dia" value="#{bgenAyudas.obtenerAyuda(58)}"/>
+                                <p:tooltip for="msg_dia" value="#{bgenMessages.message('concom:dia')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Enviar a</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesCondicionComunicacion.CCondicionComunica.concomTiemp}">
+                                <f:selectItem itemLabel="Area" itemValue="A"/>
+                                <f:selectItem itemLabel="Empresa" itemValue="E"/>
+                                <f:selectItem itemLabel="Jefe area" itemValue="J"/>
+                                <f:selectItem itemLabel="Jefe inmediato" itemValue="I"/>
+                                <f:selectItem itemLabel="Ambos jefes" itemValue="S"/>
+                                <f:selectItem itemLabel="Responsables" itemValue="R"/>
+                                <f:selectItem itemLabel="Personalizados" itemValue="P"/>
+                                
+                            </h:selectOneMenu>
+                            
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesCondicionComunicacion.crear}" rendered="#{bgesCondicionComunicacion.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesCondicionComunicacion.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesCondicionComunicacion.condicionComunica.concomDescrip}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesCondicionComunicacion.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                            <h:outputText value="#{bgesCondicionComunicacion.condicionComunica.concomCodPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Descripcion</b>
+                                </font>
+                            <h:outputText value="#{bgesCondicionComunicacion.condicionComunica.concomDescrip}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Correo o servidor origen</b>
+                                </font>
+                            <h:outputText value="#{bgesCondicionComunicacion.condicionComunica.concomCorrSerOr}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo de envio</b>
+                                </font>
+                            <h:outputText value="#{bgesCondicionComunicacion.condicionComunica.concomTipoEnv}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Plantilla</b>
+                                </font>
+                            <h:outputText value="#{bgesCondicionComunicacion.condicionComunica.concomPlant}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tiempo</b>
+                                </font>
+                            <h:outputText value="#{bgesCondicionComunicacion.condicionComunica.concomTiemp}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Dias</b>
+                                </font>
+                            <h:outputText value="#{bgesCondicionComunicacion.condicionComunica.concomDias}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Enviar a</b>
+                                </font>
+                            <h:outputText value="#{bgesCondicionComunicacion.condicionComunica.concomEnvA}"/>
+                            
+                        </h:panelGrid>
+                    </p:dialog>
+                    
+                    
+                    
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesCondicionComunicacion.opcion.equals('3')}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod1" value="#{bgesCondicionComunicacion.condicionComunica.concomCodPk}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(85)}"
+                                             converterMessage="#{bgenErrores.obtenerError(86)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(87)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_cod1" for="cod1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod1" value="#{bgenAyudas.obtenerAyuda(58)}"/>
+                                <p:tooltip for="msg_cod1" value="#{bgenMessages.message('concom:cod1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Descripcion</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt1" value="#{bgesCondicionComunicacion.condicionComunica.concomDescrip}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(28)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(29)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_idt1" for="idt1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt1" value="#{bgenAyudas.obtenerAyuda(13)}"/>
+                                <p:tooltip for="msg_idt1" value="#{bgenMessages.message('concom:idt1')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Correo o servidor origen</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="corr1" value="#{bgesCondicionComunicacion.condicionComunica.concomCorrSerOr}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(28)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(29)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="100"/>
+                                </h:inputText>
+                                <h:message id="msg_corr1" for="corr1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="corr1" value="#{bgenAyudas.obtenerAyuda(13)}"/>
+                                <p:tooltip for="msg_corr1" value="#{bgenMessages.message('concom:corr1')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Tipo de envio</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesCondicionComunicacion.condicionComunica.concomTipoEnv}">
+                                <f:selectItem itemLabel="Correo" itemValue="C"/>
+                                <f:selectItem itemLabel="Msn" itemValue="M"/>
+                                <f:selectItem itemLabel="Whatsapp" itemValue="W"/>
+                                <f:selectItem itemLabel="Todos" itemValue="T"/>
+                                
+                            </h:selectOneMenu>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Plantilla</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="pla1" value="#{bgesCondicionComunicacion.condicionComunica.concomPlant}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(28)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(29)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_pla1" for="pla1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="pla1" value="#{bgenAyudas.obtenerAyuda(13)}"/>
+                                <p:tooltip for="msg_pla1" value="#{bgenMessages.message('concom:pla1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>tiempo</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesCondicionComunicacion.condicionComunica.concomTiemp}">
+                                <f:selectItem itemLabel="Antes del vencimiento del plazo de cumplimiento de la actividad" itemValue="A"/>
+                                <f:selectItem itemLabel="En el vencimiento del cumplimiento de la actividad" itemValue="E"/>
+                                <f:selectItem itemLabel="Después del vencimiento de la actividad" itemValue="D"/>
+                                
+                            </h:selectOneMenu>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>dias</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="dia1" value="#{bgesCondicionComunicacion.condicionComunica.concomDias}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(85)}"
+                                             converterMessage="#{bgenErrores.obtenerError(86)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(87)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_dia1" for="dia1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="dia1" value="#{bgenAyudas.obtenerAyuda(58)}"/>
+                                <p:tooltip for="msg_dia1" value="#{bgenMessages.message('concom:dia1')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Enviar a</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesCondicionComunicacion.condicionComunica.concomTiemp}">
+                                <f:selectItem itemLabel="Area" itemValue="A"/>
+                                <f:selectItem itemLabel="Empresa" itemValue="E"/>
+                                <f:selectItem itemLabel="Jefe area" itemValue="J"/>
+                                <f:selectItem itemLabel="Jefe inmediato" itemValue="I"/>
+                                <f:selectItem itemLabel="Ambos jefes" itemValue="S"/>
+                                <f:selectItem itemLabel="Responsables" itemValue="R"/>
+                                <f:selectItem itemLabel="Personalizados" itemValue="P"/>
+                                
+                            </h:selectOneMenu>
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesCondicionComunicacion.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

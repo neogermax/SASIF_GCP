@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <p:commandLink id="crg" update="@form" style="width: 45px; height: 45px" oncomplete="presimg.show();" immediate="true"
+                       action="#{bgesSelectReporte.valores}">
+            <p:graphicImage style="width: 45px; height: 45px;" value="generales/images/cronograma.gif"/>
+            <f:param name="valor" value="C"/>
+        </p:commandLink>
+        &nbsp;
+        <p:commandLink id="pre" update="@form" style="width: 45px; height: 45px;" oncomplete="presimg.show();" immediate="true"
+                       action="#{bgesSelectReporte.valores}">
+            <p:graphicImage style="width: 45px; height: 45px;" value="generales/images/presupuesto.gif"/>
+            <f:param name="valor" value="P"/>
+        </p:commandLink>
+        &nbsp;
+        <p:commandLink id="doc" update="@form" style="width: 45px; height: 45px;"  immediate="true"
+                       action="#{bgesDoccormen.action()}">
+            <p:graphicImage style="width: 45px; height: 45px;" value="generales/images/Documentos.gif"/>
+            <f:param name="valor" value="D"/>
+            <f:param name="proyecto" value="#{bgesConsultGerencia.proyecto.proCodPk}"/>
+        </p:commandLink>
+        &nbsp;
+        <p:commandLink id="cor" update="@form" style="width: 45px; height: 45px;" immediate="true"
+                       action="#{bgesDoccormen.action()}">
+            <p:graphicImage style="width: 45px; height: 45px;" value="generales/images/correo.gif"/>
+            <f:param name="valor" value="C"/>
+            <f:param name="proyecto" value="#{bgesConsultGerencia.proyecto.proCodPk}"/>
+        </p:commandLink>
+        &nbsp;
+        <p:commandLink id="men" update="@form" style="width: 45px; height: 45px;" immediate="true"
+                       action="#{bgesDoccormen.action()}">
+            <p:graphicImage style="width: 45px; height: 45px;" value="generales/images/mensajes.gif"/>
+            <f:param name="valor" value="M"/>
+            <f:param name="proyecto" value="#{bgesConsultGerencia.proyecto.proCodPk}"/>
+        </p:commandLink>
+        <p:tooltip for="crg" value="Cronograma"/>
+        <p:tooltip for="pre" value="Presupuesto"/>
+        <p:tooltip for="doc" value="Documentos"/>
+        <p:tooltip for="cor" value="Correos"/>
+        <p:tooltip for="men" value="Mensajes"/>
+    </h:body>
+</html>
+

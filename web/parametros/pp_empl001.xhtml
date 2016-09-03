@@ -1,0 +1,484 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="empl">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                            <p:commandButton value="Consultar" action="#{bgesEmpleados.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                            <p:commandButton value="Crear" action="#{bgesEmpleados.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                            <p:commandButton value="Actualizar" action="#{bgesEmpleados.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                            <p:commandButton value="Eliminar" action="#{bgesEmpleados.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 360px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesEmpleados.columnas}"
+                                              rendered="#{not bgesEmpleados.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Codigo" itemValue="1"/>
+                                <f:selectItem itemLabel="Identificacion" itemValue="2"/>
+                                <f:selectItem itemLabel="Tipo Identificación" itemValue="3"/>
+                                <f:selectItem itemLabel="Primer Apellido" itemValue="4"/>
+                                <f:selectItem itemLabel="Segundo Apellido" itemValue="5"/>
+                                <f:selectItem itemLabel="Primer Nombre" itemValue="6"/>
+                                <f:selectItem itemLabel="Segundo nombre" itemValue="7"/>
+                                <f:selectItem itemLabel="Codigo Empresa" itemValue="8"/>
+                                <f:selectItem itemLabel="Codigo Area" itemValue="9"/>
+                                <f:selectItem itemLabel="Codigo Cargo" itemValue="10"/>
+                                <f:selectItem itemLabel="Jefe Inmediato" itemValue="11"/>
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesEmpleados.opcion.equals('1') or bgesEmpleados.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesEmpleados.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px" value="#{bgesEmpleados.empleados}" var="empl"
+                                     scrollable="true" rowKey="#{empl.empleadosPK}" scrollHeight="220"
+                                     emptyMessage="#{bgenErrores.obtenerError(14)}"
+                                     scrollWidth="600" selection="#{bgesEmpleados.empleado}" selectionMode="single"
+                                 rendered="#{not bgesEmpleados.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            
+                            <p:column headerText="Identificacion" filterBy="#{empl.empleadosPK.emplId}" filterMatchMode="contains"
+                                      rendered="#{bgesEmpleados.columnas.contains('2')}"
+                                      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{empl.empleadosPK.emplId}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tipo Identificación" filterBy="#{empl.empleadosPK.emplTipoId}" filterMatchMode="contains"
+                                      rendered="#{bgesEmpleados.columnas.contains('3')}"
+                                      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{empl.empleadosPK.emplTipoId}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Codigo" filterBy="#{empl.emplCodigo}" filterMatchMode="contains"
+                                      rendered="#{bgesEmpleados.columnas.contains('1')}"
+                                      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{empl.emplCodigo}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Primer Apellido" filterBy="#{empl.emplApellido1}" filterMatchMode="contains"
+                                      rendered="#{bgesEmpleados.columnas.contains('4')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{empl.emplApellido1}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Segundo Apellido" filterBy="#{empl.emplApellido2}" filterMatchMode="contains"
+                                      rendered="#{bgesEmpleados.columnas.contains('5')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{empl.emplApellido2}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Primer Nombre" filterBy="#{empl.emplNombre1}" filterMatchMode="contains"
+                                      rendered="#{bgesEmpleados.columnas.contains('6')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{empl.emplNombre1}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Segundo Nombre" filterBy="#{empl.emplNombre2}" filterMatchMode="contains"
+                                      rendered="#{bgesEmpleados.columnas.contains('7')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{empl.emplNombre2}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Empresa" filterBy="#{empl.areas.empresas.emprNombre}" filterMatchMode="contains"
+                                      rendered="#{bgesEmpleados.columnas.contains('8')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{empl.areas.empresas.emprNombre}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Area" filterBy="#{empl.areas.areNombre}" filterMatchMode="contains"
+                                      rendered="#{bgesEmpleados.columnas.contains('9')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{empl.areas.areNombre}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Cargo" filterBy="#{empl.emplCodCargoFk.carDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesEmpleados.columnas.contains('10')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{empl.emplCodCargoFk.carDescrip}"/>
+                                </font>
+                            </p:column>   
+                            <p:column headerText="Jefe Inmediato" filterBy="#{empl.empleados.emplNombre1} #{empl.empleados.emplNombre2} #{empl.empleados.emplApellido1} #{empl.empleados.emplApellido2}" filterMatchMode="contains"
+                                      rendered="#{bgesEmpleados.columnas.contains('11')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{empl.empleados.emplNombre1} #{empl.empleados.emplNombre2} #{empl.empleados.emplApellido1} #{empl.empleados.emplApellido2}"/>
+                                </font>
+                            </p:column>
+                           </p:dataTable>
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesEmpleados.opcion.equals('2')}">
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Identificación</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesEmpleados.CEmpleado.empleadosPK.emplId}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(18)}"
+                                             converterMessage="#{bgenErrores.obtenerError(19)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(22)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999999999999999"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt" value="#{bgenAyudas.obtenerAyuda(9)}"/>
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('empl:idt')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tipo Identificación</b>
+                            </font>
+                            
+                            <h:selectOneMenu id="tid" value="#{bgesEmpleados.CEmpleado.empleadosPK.emplTipoId}">
+                                <f:selectItem itemLabel="CEDULA DE CIUDADANIA" itemValue="CC"/>
+                                <f:selectItem itemLabel="NUIP" itemValue="NU"/>
+                                <f:selectItem itemLabel="CEDULA DE EXTRANJERIA" itemValue="CE"/>
+                                <f:selectItem itemLabel="NIT" itemValue="NI"/>
+                            </h:selectOneMenu>
+                      
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesEmpleados.CEmpleado.emplCodigo}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(15)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="10"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod" value="#{bgenAyudas.obtenerAyuda(8)}"/>
+                                <p:tooltip for="msg_cod" value="#{bgenMessages.message('empl:cod')}"/>
+                            </h:panelGrid>      
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Primer Apellido</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="ape1" value="#{bgesEmpleados.CEmpleado.emplApellido1}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(20)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(21)}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="20"/>
+                                </h:inputText>
+                                <h:message id="msg_ape1" for="ape1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="ape1" value="#{bgenAyudas.obtenerAyuda(10)}"/>
+                                <p:tooltip for="msg_ape1" value="#{bgenMessages.message('empl:ape1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Segundo Apellido</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="ape2" value="#{bgesEmpleados.CEmpleado.emplApellido2}" required="false"
+                                             validatorMessage="#{bgenErrores.obtenerError(21)}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="20"/>
+                                </h:inputText>
+                                <h:message id="msg_ape2" for="ape2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="ape2" value="#{bgenAyudas.obtenerAyuda(10)}"/>
+                                <p:tooltip for="msg_ape2" value="#{bgenMessages.message('empl:ape2')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Primer Nombre</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="pno1" value="#{bgesEmpleados.CEmpleado.emplNombre1}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(20)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(21)}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="20"/>
+                                </h:inputText>
+                                <h:message id="msg_pno1" for="pno1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="pno1" value="#{bgenAyudas.obtenerAyuda(10)}"/>
+                                <p:tooltip for="msg_pno1" value="#{bgenMessages.message('empl:pno1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Segundo Nombre</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="pno2" value="#{bgesEmpleados.CEmpleado.emplNombre2}" required="false"
+                                             validatorMessage="#{bgenErrores.obtenerError(21)}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="20"/>
+                                </h:inputText>
+                                <h:message id="msg_pno2" for="pno2" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="pno2" value="#{bgenAyudas.obtenerAyuda(10)}"/>
+                                <p:tooltip for="msg_pno2" value="#{bgenMessages.message('empl:pno2')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Empresa - Area</b>
+                            </font>
+                            <h:selectOneMenu id="are" value="#{bgesEmpleados.CEmpleado.areas}" converter="jsf.beans.BConvAreas">
+                                <f:selectItems value="#{bgesEmpleados.areas}" var="area"
+                                               itemLabel="#{area.empresas.emprNombre} - #{area.areNombre}" itemValue="#{area}"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Cargo</b>
+                            </font>
+                            <h:selectOneMenu id="carg" value="#{bgesEmpleados.CEmpleado.emplCodCargoFk}" converter="jsf.beans.BConvCargos">
+                                <f:selectItems value="#{bgesCargos.cargos}" var="carg"
+                                               itemLabel="#{carg.carDescrip}" itemValue="#{carg}"/>
+                            </h:selectOneMenu>
+                            
+                              <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Jefe Inmediato</b>
+                            </font>
+                            <h:selectOneMenu id="jef" value="#{bgesEmpleados.CEmpleado.empleados}"
+                                             converter="jsf.beans.BConvEmpleados">
+                                <f:selectItems value="#{bgesEmpleados.empleadosList}" var="empl"
+                                               itemLabel="#{empl.emplNombre1} #{empl.emplNombre2} #{empl.emplApellido1} #{empl.emplApellido2}" itemValue="#{empl}"/>
+                               </h:selectOneMenu>
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesEmpleados.crear()}" rendered="#{bgesEmpleados.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesEmpleados.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesEmpleados.empleado.emplNombre1} #{bgesEmpleados.empleado.emplNombre2} #{bgesEmpleados.empleado.emplApellido1} #{bgesEmpleados.empleado.emplApellido2}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesEmpleados.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Identificacion</b>
+                                </font>
+                            <h:outputText value="#{bgesEmpleados.empleado.empleadosPK.emplId}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo Identificación</b>
+                                </font>
+                            <h:outputText value="#{bgesEmpleados.empleado.empleadosPK.emplTipoId}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                            <h:outputText value="#{bgesEmpleados.empleado.emplCodigo}"/>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Primer Apellido</b>
+                                </font>
+                            <h:outputText value="#{bgesEmpleados.empleado.emplApellido1}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Segundo Apellido</b>
+                                </font>
+                            <h:outputText value="#{bgesEmpleados.empleado.emplApellido2}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Primer Nombre</b>
+                                </font>
+                            <h:outputText value="#{bgesEmpleados.empleado.emplNombre1}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Segundo Nombre</b>
+                                </font>
+                            <h:outputText value="#{bgesEmpleados.empleado.emplNombre2}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Empresa</b>
+                                </font>
+                            <h:outputText value="#{bgesEmpleados.empleado.areas.empresas.emprNombre}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Area</b>
+                                </font>
+                            <h:outputText value="#{bgesEmpleados.empleado.areas.areNombre}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Cargo</b>
+                                </font>
+                            <h:outputText value="#{bgesEmpleados.empleado.emplCodCargoFk.carDescrip}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Jefe Inmediato</b>
+                                </font>
+                            <h:outputText value="#{bgesEmpleados.empleado.empleados.emplNombre1} #{bgesEmpleados.empleado.empleados.emplNombre2} #{bgesEmpleados.empleado.empleados.emplApellido1} #{bgesEmpleados.empleado.empleados.emplApellido2}"/>
+                          </h:panelGrid>
+                    </p:dialog>
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesEmpleados.opcion.equals('3')}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Identificación</b>
+                            </font>
+                                <h:outputText value="#{bgesEmpleados.empleado.empleadosPK.emplId}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tipo Identificación</b>
+                            </font>
+                                <h:outputText value="#{bgesEmpleados.empleado.empleadosPK.emplTipoId}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                                                                
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt_1" value="#{bgesEmpleados.empleado.emplCodigo}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(88)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(89)}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                             <f:validateLength maximum="10"/>
+                                </h:inputText>
+                                <h:message id="msg_idt_1" for="idt_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt_1" value="#{bgenAyudas.obtenerAyuda(9)}"/>
+                                <p:tooltip for="msg_idt_1" value="#{bgenMessages.message('empl:idt_1')}"/>
+                            </h:panelGrid>
+                                
+                                
+                            
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Primer Apellido</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="ape1_1" value="#{bgesEmpleados.empleado.emplApellido1}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(20)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(21)}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_ape1_1" for="ape1_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="ape1_1" value="#{bgenAyudas.obtenerAyuda(10)}"/>
+                                <p:tooltip for="msg_ape1_1" value="#{bgenMessages.message('empl:ape1_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Segundo Apellido</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="ape2_1" value="#{bgesEmpleados.empleado.emplApellido2}" required="false"
+                                             validatorMessage="#{bgenErrores.obtenerError(21)}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_ape2_1" for="ape2_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="ape2_1" value="#{bgenAyudas.obtenerAyuda(10)}"/>
+                                <p:tooltip for="msg_ape2_1" value="#{bgenMessages.message('empl:ape2_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Primer Nombre</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="pno1_1" value="#{bgesEmpleados.empleado.emplNombre1}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(20)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(21)}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_pno1_1" for="pno1_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="pno1_1" value="#{bgenAyudas.obtenerAyuda(10)}"/>
+                                <p:tooltip for="msg_pno1_1" value="#{bgenMessages.message('empl:pno1_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Segundo Nombre</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="pno2_1" value="#{bgesEmpleados.empleado.emplNombre2}" required="false"
+                                             validatorMessage="#{bgenErrores.obtenerError(21)}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_pno2_1" for="pno2_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="pno2_1" value="#{bgenAyudas.obtenerAyuda(10)}"/>
+                                <p:tooltip for="msg_pno2_1" value="#{bgenMessages.message('empl:pno2_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Empresa - Area</b>
+                            </font>
+                                <h:selectOneMenu id="are1" value="#{bgesEmpleados.empleado.areas}"
+                                             converter="jsf.beans.BConvAreas">
+                                <f:selectItems value="#{bgesEmpleados.areas}" var="area"
+                                               itemLabel="#{area.empresas.emprNombre} - #{area.areNombre}" itemValue="#{area}"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Cargo</b>
+                            </font>
+                            <h:selectOneMenu id="carg1" value="#{bgesEmpleados.empleado.emplCodCargoFk}" converter="jsf.beans.BConvCargos">
+                                <f:selectItems value="#{bgesCargos.cargos}" var="carg"
+                                               itemLabel="#{carg.carDescrip}" itemValue="#{carg}"/>
+                            </h:selectOneMenu>                 
+                              <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Jefe Inmediato</b>
+                            </font>
+                                <h:selectOneMenu id="jef1" value="#{bgesEmpleados.empleado.empleados}">
+                                    <f:converter converterId="jsf.beans.BConvEmpleados"/>
+                                    <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{bgesEmpleados.empleados}" var="empl"
+                                                   itemLabel="#{empl.emplNombre1} #{empl.emplNombre2} #{empl.emplApellido1} #{empl.emplApellido2}" itemValue="#{empl}"/>
+                               </h:selectOneMenu>
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesEmpleados.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

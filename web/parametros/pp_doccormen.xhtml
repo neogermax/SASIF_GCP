@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+            <fieldset  style="background-color: #{cabecera.form_inter_border_color}">
+                <table style="width: 760px" >
+                    <tr>
+                        <td align="center" >
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <center><b><h:outputText  value="DOCUMENTOS" rendered="#{bgesDoccormen.opcionCarac eq 'D'}"/> </b></center>
+                                <center><b><h:outputText  value="CORREOS"    rendered="#{bgesDoccormen.opcionCarac eq 'C'}"/> </b></center>
+                                <center><b><h:outputText  value="MENSAJES"   rendered="#{bgesDoccormen.opcionCarac eq 'M'}"/> </b></center>
+                            </font>
+                        </td>
+                        <td align="right" style="width: 30px;">
+                            <h:panelGroup  rendered="#{bgesDoccormen.opcion eq '2'}">
+                                <p:commandButton style=" background-color: lightgrey; font:bold 12px 'Arial'; " value="X" action="#{bgesDoccormen.actionOpcion}"
+                                                 immediate="true" update="@form" rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:param name="opcion" value="1"/>
+                                </p:commandButton>    
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+
+            </fieldset>
+            <!-- INICIO - SECCION DE MOSTRAR TABLA -->                           
+            <fieldset style="width: 760px; height: 380px; background-color: #{cabecera.form_inter_border_color}; overflow: auto;">
+             
+                <p:dataTable id="tabla1" style="width: 600px" value="#{bgesDoccormen.vectorDocExi}" var="docm"
+                             scrollable="true" rowKey="#{docm.docExistentesPK.doexCodAplOr}" scrollHeight="220"
+                                     emptyMessage="#{bgenErrores.obtenerError(14)}"
+                                     scrollWidth="600"
+                                 rendered="#{bgesAreas.opcion ne '2'}">
+                            <!--p:ajax event="rowSelect"  oncomplete="" update="@form"/-->
+                                             
+                            <p:column headerText="Nombre Documento" filterBy="#{docm.docExistentesPK.doexNomDoc}" filterMatchMode="contains"
+                                      rendered="#{bgesDoccormen.columnas.contains('1')}"
+                                      width="120" filterStyle="min-width: 120px; max-width: 120px">
+                                
+                                <p:commandLink id="car" value="#{docm.docExistentesPK.doexCodAplOr}#{docm.docExistentesPK.doexNomDoc}#{docm.docExistentesPK.doexIdeApli}#{docm.docExistentesPK.doexSecDpc}.#{docm.docExistentesPK.doexTipoDoc}"
+                                                   oncomplete="presimg.show();" style="width: 45px; height: 45px;" action="#{bgesDoccormen.obtenerURL}" update="@form"
+                                                   rendered="#{bgesDoccormen.digitalizados.contains(docm.docExistentesPK.doexTipoDoc)}">
+                                    <f:param name="ruta" value="#{docm.doexRutaAlma}#{docm.docExistentesPK.doexCodAplOr}#{docm.docExistentesPK.doexNomDoc}#{docm.docExistentesPK.doexIdeApli}#{docm.docExistentesPK.doexSecDpc}.#{docm.docExistentesPK.doexTipoDoc}"/>
+                                    <f:param name="doc" value="#{docm.docExistentesPK.doexNomDoc}.#{docm.docExistentesPK.doexTipoDoc}"/>
+                                </p:commandLink>
+                                
+                                <p:commandLink id="car1" value="#{docm.docExistentesPK.doexCodAplOr}#{docm.docExistentesPK.doexNomDoc}#{docm.docExistentesPK.doexIdeApli}#{docm.docExistentesPK.doexSecDpc}.#{docm.docExistentesPK.doexTipoDoc}"
+                                               style="width: 45px; height: 45px;" action="#{bgesDoccormen.descarga}"
+                                               rendered="#{bgesDoccormen.docs.contains(docm.docExistentesPK.doexTipoDoc)}" update="@form">
+                                    <f:param name="ruta" value="#{docm.doexRutaAlma}#{docm.docExistentesPK.doexCodAplOr}#{docm.docExistentesPK.doexNomDoc}#{docm.docExistentesPK.doexIdeApli}#{docm.docExistentesPK.doexSecDpc}.#{docm.docExistentesPK.doexTipoDoc}"/>
+                                    <f:param name="doc" value="#{docm.docExistentesPK.doexNomDoc}.#{docm.docExistentesPK.doexTipoDoc}"/>
+                                </p:commandLink>
+                                  
+                            </p:column>
+                            <p:column headerText="Usuario" filterBy="#{docm.doexCodUsuOri}" filterMatchMode="contains"
+                                      rendered="#{bgesDoccormen.columnas.contains('2')}"
+                                      width="120" filterStyle="min-width: 120px; max-width: 120px">
+                                <font size="1">
+                                    <h:outputText value="#{docm.doexCodUsuOri}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Fecha" filterBy="#{docm.doexFechaCreo}" filterMatchMode="contains"
+                                      rendered="#{bgesDoccormen.columnas.contains('3')}"
+                                      width="120" filterStyle="min-width: 120px; max-width: 120px">
+                                <font size="1">
+                                    <h:outputText value="#{docm.doexFechaCreo}">
+                                    <f:convertDateTime type="date" pattern="yyyy/MM/dd " timeZone="America/Bogota" />
+                                    </h:outputText>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Hora" filterBy="#{docm.doexFechaCreo}" filterMatchMode="contains"
+                                      rendered="#{bgesDoccormen.columnas.contains('4')}"
+                                      width="120" filterStyle="min-width: 120px; max-width: 120px">
+                                <font size="1">
+                                    <h:outputText value="#{docm.doexFechaCreo}">
+                                    <f:convertDateTime type="date" pattern=" HH:mm" timeZone="America/Bogota" />
+                                    </h:outputText>
+                                </font>
+                            </p:column>
+                            
+                            
+                        </p:dataTable>
+                
+                
+            </fieldset>
+            <!-- FIN - SECCION DE MOSTRAR TABLA -->
+            <p:dialog id="pressione" widgetVar="presimg">
+                <h:panelGroup rendered="#{bgesDoccormen.pdf}">
+                    <iframe src="#{bgesDoccormen.URL}" width="600" height="780"/>
+                </h:panelGroup>
+                <h:graphicImage url="#{bgesDoccormen.URL}" width="600" height="780" rendered="#{bgesDoccormen.img}"/>
+            </p:dialog>
+            
+            <h:panelGroup rendered="#{bgesDoccormen.doc}">
+                <script type="text/javascript">
+                    window.open('#{bgesDoccormen.URL}','_self');
+                </script>
+            </h:panelGroup>
+        </fieldset>
+    </h:body>
+</html>

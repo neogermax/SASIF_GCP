@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:body>
+        <br/>
+        <div id="formulario" layout="block">
+            <fieldset style="margin-left: -80px; height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="act2">
+                    <h:panelGroup  rendered="#{bgesTodoReporte.opcion eq '1' and bgesDoccormen.opcion eq '1'}">
+
+                        <h:panelGroup rendered="#{bgesNavegacion.inicio}">
+                            <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                      color="#{cabecera.login_color_label}">
+                                    <center><b>Proyectos</b></center>
+                                </font>
+                            </fieldset>
+                            <br/>
+                            <fieldset style="height: 300px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                                <h:panelGrid columns="3" cellspacing="10">
+                                    <p:selectBooleanCheckbox value="#{bgesProyConsulta.ident}">
+                                        <p:ajax update="c"/>
+                                    </p:selectBooleanCheckbox>
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                          color="#{cabecera.login_color_label}">
+                                        <b>Identificacion</b>
+                                    </font>
+                                    <h:panelGrid id="c" columns="2">
+                                        <h:inputText id="cod" value="#{bgesProyConsulta.proCodPk}"
+                                                     required="true" requiredMessage="#{bgenErrores.obtenerError(80)}"
+                                                     converterMessage="#{bgenErrores.obtenerError(82)}"
+                                                     rendered="#{bgesProyConsulta.ident}">
+                                            <f:convertNumber/>
+                                        </h:inputText>
+                                        <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="cod" value="#{bgenAyudas.obtenerAyuda(1)}"/>
+                                        <p:tooltip for="msg_cod" value="#{bgenMessages.message('act2:cod')}"/>
+                                    </h:panelGrid>
+                                    <p:selectBooleanCheckbox value="#{bgesProyConsulta.descrip}">
+                                        <p:ajax update="d"/>
+                                    </p:selectBooleanCheckbox>
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                          color="#{cabecera.login_color_label}">
+                                        <b>Descripcion</b>
+                                    </font>
+                                    <h:panelGrid id="d" columns="2">
+                                        <h:inputText id="des" value="#{bgesProyConsulta.proDescrip}"
+                                                     required="true" requiredMessage="#{bgenErrores.obtenerError(81)}"
+                                                     rendered="#{bgesProyConsulta.descrip}"/>
+                                        <h:message id="msg_des" for="des" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                        <p:tooltip for="des" value="#{bgenAyudas.obtenerAyuda(2)}"/>
+                                        <p:tooltip for="msg_des" value="#{bgenMessages.message('act2:des')}"/>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                            </fieldset>
+                            <br/>
+                            <div align="center">
+                                <p:commandButton value="Aceptar" action="#{bgesProyConsulta.action}" update="@form"/>
+                            </div>
+                        </h:panelGroup>
+                        <h:panelGroup  rendered="#{not bgesNavegacion.inicio}">
+                            <ui:include src="../parametros/pp_navAct001.xhtml"/>
+                        </h:panelGroup>
+                    </h:panelGroup>   
+                    <h:panelGroup rendered="#{bgesTodoReporte.opcion eq '2'}">
+                        <ui:include src="pp_repo002.xhtml"/>
+                    </h:panelGroup> 
+                    
+                    <h:panelGroup rendered="#{bgesTodoReporte.opcion eq '3'}">
+                        <ui:include src="pp_repo003.xhtml"/>
+                    </h:panelGroup>
+                   
+                    <h:panelGroup rendered="#{bgesDoccormen.opcion eq '2'}">
+                        <ui:include src="pp_doccormen.xhtml"/>
+                    </h:panelGroup>
+                    
+                    <p:growl id="msg" globalOnly="true"/>
+                </h:form>
+            </fieldset>
+        </div>
+    </h:body>
+</html>

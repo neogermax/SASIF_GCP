@@ -1,0 +1,627 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="polg">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesPoliticaGrupos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                                <p:commandButton value="Crear" action="#{bgesPoliticaGrupos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                                <p:commandButton value="Actualizar" action="#{bgesPoliticaGrupos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                                <p:commandButton value="Eliminar" action="#{bgesPoliticaGrupos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 325px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesPoliticaGrupos.columnas}"
+                                              rendered="#{not bgesPoliticaGrupos.opcion.equals('2')}">
+                                 <f:selectItem itemLabel="Codigo" itemValue="1"/>
+                                <f:selectItem itemLabel="Descripcion" itemValue="2"/>
+                                <f:selectItem itemLabel="Dias de Vigencia" itemValue="3"/>
+                                <f:selectItem itemLabel="Catidad Numeros" itemValue="4"/>
+                                <f:selectItem itemLabel="Catidad Letras" itemValue="5"/>
+                                <f:selectItem itemLabel="Ultima Clave" itemValue="6"/>
+                                <f:selectItem itemLabel="Intentos" itemValue="7"/>
+                                <f:selectItem itemLabel="Tipo Encriptacion" itemValue="8"/>
+                                <f:selectItem itemLabel="Repeticion de Caracteres" itemValue="9"/>
+                                <f:selectItem itemLabel="Log Maximo" itemValue="10"/>
+                                <f:selectItem itemLabel="Log Minimo" itemValue="11"/>
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesPoliticaGrupos.opcion.equals('1') or bgesPoliticaGrupos.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesPoliticaGrupos.opcion.equals('3')}"/>
+                            
+                        </h:panelGrid>
+                        <br/>
+
+
+                        <p:dataTable id="tabla" style="width: 600px; table-layout: fixed;" value="#{bgesPoliticaGrupos.politicaGrupos}" var="polg"
+                            
+                                     scrollable="true" rowKey="#{polg.polCodPk}" scrollHeight="190"
+                                     emptyMessage="#{bgenErrores.obtenerError(14)}"
+                                     scrollWidth="600" selection="#{bgesPoliticaGrupos.politicaGrupo}" selectionMode="single"
+                                 rendered="#{not bgesPoliticaGrupos.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            <p:column headerText="Codigo" filterBy="#{polg.polCodPk}" filterMatchMode="contains"
+                                      rendered="#{bgesPoliticaGrupos.columnas.contains('1')}"
+                                      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{polg.polCodPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Descripción" filterBy="#{polg.polDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesPoliticaGrupos.columnas.contains('2')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{polg.polDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Dias de Vigencia" filterBy="#{polg.polDiasVig}" filterMatchMode="contains"
+                                      rendered="#{bgesPoliticaGrupos.columnas.contains('3')}" 
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{polg.polDiasVig}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Cantidad Numeros" filterBy="#{polg.polCanNum}" filterMatchMode="contains"
+                                      rendered="#{bgesPoliticaGrupos.columnas.contains('4')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{polg.polCanNum}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Cantidad Letras" filterBy="#{polg.polCanLet}" filterMatchMode="contains"
+                                      rendered="#{bgesPoliticaGrupos.columnas.contains('5')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{polg.polCanLet}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Ultima Clave" filterBy="#{polg.polUltCla}" filterMatchMode="contains"
+                                      rendered="#{bgesPoliticaGrupos.columnas.contains('6')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{polg.polUltCla}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Intentos" filterBy="#{polg.polIntentos}" filterMatchMode="contains"
+                                      rendered="#{bgesPoliticaGrupos.columnas.contains('7')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{polg.polIntentos}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tipo de Encriptacion" filterBy="#{polg.polTipoCryp}" filterMatchMode="contains"
+                                      rendered="#{bgesPoliticaGrupos.columnas.contains('8')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{polg.polTipoCryp}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Repeticion de Caracteres" filterBy="#{polg.polRepCar}" filterMatchMode="contains"
+                                      rendered="#{bgesPoliticaGrupos.columnas.contains('9')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{polg.polRepCar}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Longitud Maxima" filterBy="#{polg.polLogMax}" filterMatchMode="contains"
+                                      rendered="#{bgesPoliticaGrupos.columnas.contains('10')}"
+                                      width="120" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{polg.polLogMax}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Longitud Minima" filterBy="#{polg.polLogMin}" filterMatchMode="contains"
+                                      rendered="#{bgesPoliticaGrupos.columnas.contains('11')}"
+                                      width="120" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{polg.polLogMin}"/>
+                                </font>
+                            </p:column>
+                            
+                            
+                            
+                            
+                        </p:dataTable>
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesPoliticaGrupos.opcion.equals('2')}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesPoliticaGrupos.CPoliticaGrupo.polCodPk}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(107)}"
+                                             converterMessage="#{bgenErrores.obtenerError(110)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(111)}"
+                                             
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod">
+                                    #{bgenAyudas.obtenerAyuda(83)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_cod" value="#{bgenMessages.message('polg:cod')}"/>
+                            </h:panelGrid>
+                            
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Descripción</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesPoliticaGrupos.CPoliticaGrupo.polDescrip}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(108)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(56)}"
+                                     style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt">
+                                    #{bgenAyudas.obtenerAyuda(84)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('polg:idt')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Dias de Vigencia</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="nom" value="#{bgesPoliticaGrupos.CPoliticaGrupo.polDiasVig}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(91)}"
+                                             converterMessage="#{bgenErrores.obtenerError(58)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(59)}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_nom" for="nom" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="nom">
+                                    #{bgenAyudas.obtenerAyuda(85)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_nom" value="#{bgenMessages.message('polg:nom')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Cantidad Numeros</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="can" value="#{bgesPoliticaGrupos.CPoliticaGrupo.polCanNum}" required="true"
+                                             
+                                             requiredMessage="#{bgenErrores.obtenerError(60)}"
+                                             converterMessage="#{bgenErrores.obtenerError(61)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(62)}"
+                                          style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_can" for="can" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="can">
+                                    #{bgenAyudas.obtenerAyuda(86)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_can" value="#{bgenMessages.message('polg:can')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Cantidad Letras</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cal" value="#{bgesPoliticaGrupos.CPoliticaGrupo.polCanLet}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(63)}"
+                                             converterMessage="#{bgenErrores.obtenerError(64)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(65)}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_cal" for="cal" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cal">
+                                     #{bgenAyudas.obtenerAyuda(87)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_cal" value="#{bgenMessages.message('polg:cal')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Ultima Clave</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="ulc" value="#{bgesPoliticaGrupos.CPoliticaGrupo.polUltCla}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(91)}"
+                                             converterMessage="#{bgenErrores.obtenerError(58)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(59)}"
+                                     style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_ulc" for="ulc" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="ulc">
+                                     #{bgenAyudas.obtenerAyuda(88)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_ulc" value="#{bgenMessages.message('polg:ulc')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Intentos</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="inte" value="#{bgesPoliticaGrupos.CPoliticaGrupo.polIntentos}" required="true"
+                                             requiredMessage="#{cabecera.emp_req_nombre}"
+                                             converterMessage="#{cabecera.emp_conver_codigo}"
+                                             validatorMessage="#{cabecera.emp_val_nombre}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_inte" for="inte" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="inte">
+                                    #{bgenAyudas.obtenerAyuda(89)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_inte" value="#{bgenMessages.message('emp:inte')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Tipo Encriptación</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="ten" value="#{bgesPoliticaGrupos.CPoliticaGrupo.polTipoCryp}" required="true"
+                                             requiredMessage="#{cabecera.emp_req_id}"
+                                             validatorMessage="#{cabecera.emp_val_id}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="30"/>
+                                </h:inputText>
+                                <h:message id="msg_ten" for="ulc" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="ten">
+                                    #{bgenAyudas.obtenerAyuda(90)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_ten" value="#{bgenMessages.message('emp:ten')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Repeticion de Caracteres</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesPoliticaGrupos.CPoliticaGrupo.polRepCar}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="0"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Longitud Maxima</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="loma" value="#{bgesPoliticaGrupos.CPoliticaGrupo.polLogMax}" required="true"
+                                             requiredMessage="#{cabecera.emp_req_nombre}"
+                                             converterMessage="#{cabecera.emp_conver_codigo}"
+                                             validatorMessage="#{cabecera.emp_val_nombre}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_loma" for="loma" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="loma">
+                                     #{bgenAyudas.obtenerAyuda(91)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_loma" value="#{bgenMessages.message('emp:loma')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Longitud minima</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="lomi" value="#{bgesPoliticaGrupos.CPoliticaGrupo.polLogMin}" required="true"
+                                             requiredMessage="#{cabecera.emp_req_nombre}"
+                                             converterMessage="#{cabecera.emp_conver_codigo}"
+                                             validatorMessage="#{cabecera.emp_val_nombre}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_lomi" for="lomi" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="lomi">
+                                   #{bgenAyudas.obtenerAyuda(92)} 
+                                 </p:tooltip>
+                                <p:tooltip for="msg_lomi" value="#{bgenMessages.message('emp:lomi')}"/>
+                            </h:panelGrid>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesPoliticaGrupos.crear}" rendered="#{bgesPoliticaGrupos.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesPoliticaGrupos.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesPoliticaGrupos.politicaGrupo.polDescrip}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesPoliticaGrupos.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                            <h:outputText value="#{bgesPoliticaGrupos.politicaGrupo.polCodPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Descripcion</b>
+                                </font>
+                            <h:outputText value="#{bgesPoliticaGrupos.politicaGrupo.polDescrip}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Dias de Vigencia</b>
+                                </font>
+                            <h:outputText value="#{bgesPoliticaGrupos.politicaGrupo.polDiasVig}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Cantidad Numeros</b>
+                                </font>
+                            <h:outputText value="#{bgesPoliticaGrupos.politicaGrupo.polCanNum}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Cantidad Letras</b>
+                                </font>
+                            <h:outputText value="#{bgesPoliticaGrupos.politicaGrupo.polCanLet}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Ultima Clave</b>
+                                </font>
+                            <h:outputText value="#{bgesPoliticaGrupos.politicaGrupo.polUltCla}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Intentos</b>
+                                </font>
+                            <h:outputText value="#{bgesPoliticaGrupos.politicaGrupo.polIntentos}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo Encriptación</b>
+                                </font>
+                            <h:outputText value="#{bgesPoliticaGrupos.politicaGrupo.polTipoCryp}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Repeticion de Caracteres</b>
+                                </font>
+                            <h:outputText value="#{bgesPoliticaGrupos.politicaGrupo.polRepCar}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Longitud Maxima</b>
+                                </font>
+                            <h:outputText value="#{bgesPoliticaGrupos.politicaGrupo.polLogMax}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Longitud Minima</b>
+                                </font>
+                            <h:outputText value="#{bgesPoliticaGrupos.politicaGrupo.polLogMin}"/>
+                            
+                                    
+                            </h:panelGrid>
+                    </p:dialog>
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesPoliticaGrupos.opcion.equals('3')}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesPoliticaGrupos.politicaGrupo.polCodPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Descripción</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt_1" value="#{bgesPoliticaGrupos.politicaGrupo.polDescrip}" required="true"
+                                             requiredMessage="#{cabecera.emp_req_id}"
+                                             validatorMessage="#{cabecera.emp_val_id}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_idt_1" for="idt_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt_1"> 
+                                     #{bgenAyudas.obtenerAyuda(84)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_idt_1" value="#{bgenMessages.message('emp:idt_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Dias de Vigencia</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="nom_1" value="#{bgesPoliticaGrupos.politicaGrupo.polDiasVig}" required="true"
+                                             requiredMessage="#{cabecera.emp_req_nombre}"
+                                             converterMessage="#{cabecera.emp_conver_codigo}"
+                                             validatorMessage="#{cabecera.emp_val_nombre}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_nom_1" for="nom_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="nom_1">
+                                    #{bgenAyudas.obtenerAyuda(85)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_nom_1" value="#{bgenMessages.message('emp:nom_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Cantidad Numeros</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="can_1" value="#{bgesPoliticaGrupos.politicaGrupo.polCanNum}" required="true"
+                                             requiredMessage="#{cabecera.emp_req_nombre}"
+                                             converterMessage="#{cabecera.emp_conver_codigo}"
+                                             validatorMessage="#{cabecera.emp_val_nombre}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_can_1" for="can" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="can_1">
+                                    #{bgenAyudas.obtenerAyuda(86)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_can_1" value="#{bgenMessages.message('emp:can_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Cantidad Letras</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cal_1" value="#{bgesPoliticaGrupos.politicaGrupo.polCanLet}" required="true"
+                                             requiredMessage="#{cabecera.emp_req_nombre}"
+                                             converterMessage="#{cabecera.emp_conver_codigo}"
+                                             validatorMessage="#{cabecera.emp_val_nombre}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_cal_1" for="cal_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cal_1">
+                                    #{bgenAyudas.obtenerAyuda(87)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_cal_1" value="#{bgenMessages.message('emp:cal_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Ultima Clave</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="ulc_1" value="#{bgesPoliticaGrupos.politicaGrupo.polUltCla}" required="true"
+                                             requiredMessage="#{cabecera.emp_req_id}"
+                                             converterMessage="#{cabecera.emp_conver_codigo}"
+                                             validatorMessage="#{cabecera.emp_val_id}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_ulc_1" for="ulc_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="ulc_1">
+                                    #{bgenAyudas.obtenerAyuda(88)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_ulc_1" value="#{bgenMessages.message('emp:ulc_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Intentos</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="inte_1" value="#{bgesPoliticaGrupos.politicaGrupo.polIntentos}" required="true"
+                                             requiredMessage="#{cabecera.emp_req_nombre}"
+                                             converterMessage="#{cabecera.emp_conver_codigo}"
+                                             validatorMessage="#{cabecera.emp_val_nombre}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_inte_1" for="inte_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="inte_1" >
+                                    #{bgenAyudas.obtenerAyuda(89)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_inte_1" value="#{bgenMessages.message('emp:inte_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Tipo Encriptación</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="ten_1" value="#{bgesPoliticaGrupos.politicaGrupo.polTipoCryp}" required="true"
+                                             requiredMessage="#{cabecera.emp_req_id}"
+                                             validatorMessage="#{cabecera.emp_val_id}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_ten_1" for="ten_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="ten_1">
+                                    #{bgenAyudas.obtenerAyuda(90)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_ten_1" value="#{bgenMessages.message('emp:ten_1')}"/>
+                            </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Repeticion de Caracteres</b>
+                            </font>
+                                <p:selectOneRadio value="#{bgesPoliticaGrupos.politicaGrupo.polRepCar}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="0"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Longitud Maxima</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="loma_1" value="#{bgesPoliticaGrupos.politicaGrupo.polLogMax}" required="true"
+                                             requiredMessage="#{cabecera.emp_req_nombre}"
+                                             converterMessage="#{cabecera.emp_conver_codigo}"
+                                             validatorMessage="#{cabecera.emp_val_nombre}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_loma_1" for="loma_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="loma_1">
+                                    #{bgenAyudas.obtenerAyuda(91)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_loma_1" value="#{bgenMessages.message('emp:loma_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Longitud minima</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="lomi_1" value="#{bgesPoliticaGrupos.politicaGrupo.polLogMin}" required="true"
+                                             requiredMessage="#{cabecera.emp_req_nombre}"
+                                             converterMessage="#{cabecera.emp_conver_codigo}"
+                                             validatorMessage="#{cabecera.emp_val_nombre}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_lomi_1" for="lomi_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="lomi_1">
+                                    #{bgenAyudas.obtenerAyuda(92)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_lomi_1" value="#{bgenMessages.message('emp:lomi_1')}"/>
+                            </h:panelGrid>
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesPoliticaGrupos.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>

@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:body>
+        #{bgesReportes.actionParametro(bgesMenu.link.linkParametro1.intValue(),bgesMenu.link.linkParametro2.intValue())}
+        <br/>
+        <div id="formulario" layout="block">
+
+            <fieldset style="margin-left: -90px; width: 820px; height: 530px; background-color: #{cabecera.form_borde_color}; overflow-y: auto">
+                <h:form id="repo">
+                    <h:panelGroup rendered="#{bgesReportes.opcion eq '1'}">
+                        <fieldset  style="background-color: #{cabecera.form_inter_border_color}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <center><b>Creacion de reportes</b></center>
+                            </font>
+                        </fieldset>
+                        <br/>
+                        <fieldset style="height: 300px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                            <br/>
+                            <h:panelGrid columns="2" cellspacing="10">
+
+                                <h:panelGroup rendered="#{bgesReportes.flag}">
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                          color="#{cabecera.login_color_label}">
+                                        <b><h:outputText value="Reporte" rendered="#{bgesReportes.flag}" style="font-weight: 900; "/></b>
+                                    </font>
+                                </h:panelGroup>
+
+                                <h:selectOneMenu value="#{bgesReportes.parametria}"  rendered="#{bgesReportes.flag}"
+                                                 converter="jsf.beans.BConvParametrias">
+                                    <f:selectItems value="#{bgesReportes.parametrias}" var="par"
+                                                   itemLabel="#{par.parCodRepPk}" itemValue="#{par}"/>
+                                    <f:ajax render="nom fh ff ff2 fc ft ct fc fc2"/>
+                                </h:selectOneMenu>
+
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                      color="#{cabecera.login_color_label}">
+                                    <b>Nombre</b>
+                                </font>
+                                <h:outputText id="nom" value="#{bgesReportes.parametria.parNombreRep}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                      color="#{cabecera.login_color_label}">
+                                    <b>       </b>
+                                </font>
+                                <h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fecha &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Hora &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Usuario"/>
+
+
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                      color="#{cabecera.login_color_label}">
+                                    <b>       </b>
+                                </font>
+
+
+                                <h:panelGroup columns="3" id="fh">
+                                    <h:selectOneMenu value="#{bgesReportes.caracteristica}" >
+                                        <f:selectItems value="#{bgesReportes.caracterisiticas}" var="car"
+                                                       itemLabel="#{bgesReportes.obtenerFecha(car.carFecHor)} #{car.carUsuGen}" itemValue="#{car}"/>
+                                        <!--f:convertDateTime pattern="yyyy-MM-dd &nbsp;&nbsp;&nbsp; hh:mm:ss a"/-->
+                                        <f:converter converterId="jsf.beans.BConvCaracteristicas"/>
+                                        <f:ajax render="ft ct"/>
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+
+
+
+
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                      color="#{cabecera.login_color_label}">
+                                    <b>Filas</b>
+                                </font>
+                                <h:panelGroup id="ft">
+                                    <p:selectOneRadio value="#{bgesReportes.fila}" rendered="#{bgesReportes.filas.size() gt 1}">
+                                        <f:selectItem itemLabel="Total" itemValue="T"/>
+                                        <f:selectItem itemLabel="Rango" itemValue="R"/>
+                                        <f:selectItem itemLabel="Seleccion" itemValue="S"/>
+                                        <f:ajax render="ff2"/>
+                                        <f:ajax render="ff"/>
+                                    </p:selectOneRadio>
+
+                                    <p:selectOneRadio value="#{bgesReportes.fila}" rendered="#{bgesReportes.filas.size() lt 2}">
+                                        <f:selectItem itemLabel="Total" itemValue="T"/>
+                                        <f:ajax render="ff2"/>
+                                        <f:ajax render="ff"/>
+                                    </p:selectOneRadio>
+                                </h:panelGroup>
+
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                      color="#{cabecera.login_color_label}">
+                                    <b>        </b>
+                                </font>
+
+                                <h:panelGroup id="ff2">
+                                    <h:selectOneMenu value="#{bgesReportes.fil1}"
+                                                     rendered="#{bgesReportes.fila eq 'R'}">
+                                        <f:selectItems value="#{bgesReportes.fils1}" var="fill"
+                                                       itemLabel="#{fill}" itemValue="#{fill}"/>
+                                        <f:ajax render="fil2"/>
+                                    </h:selectOneMenu>
+
+                                    <h:selectOneMenu id="fil2" value="#{bgesReportes.fil2}"
+                                                     rendered="#{bgesReportes.fila eq 'R'}">
+                                        <f:selectItems value="#{bgesReportes.fils2}" var="filll"
+                                                       itemLabel="#{filll}" itemValue="#{filll}"/>
+                                        <f:ajax/>
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+
+
+
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                      color="#{cabecera.login_color_label}">
+                                    <b>        </b>
+                                </font>
+                                <h:panelGroup id="ff">
+                                    <p:selectCheckboxMenu id="fil" style="height: 28px" label="Filas" value="#{bgesReportes.filas}"
+                                                          rendered="#{bgesReportes.fila eq 'S'}">
+                                        <f:selectItems value="#{bgesReportes.filas}" var="fil"
+                                                       itemLabel="#{fil}" itemValue="#{fil}"/>
+                                        <f:ajax/>
+                                    </p:selectCheckboxMenu>
+                                </h:panelGroup>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                      color="#{cabecera.login_color_label}">
+                                    <b>Columnas</b>
+                                </font>
+                                <h:panelGroup id="ct">
+                                    <p:selectOneRadio value="#{bgesReportes.columna}" rendered="#{bgesReportes.columnas.size() gt 1}">
+                                        <f:selectItem itemLabel="Total" itemValue="T"/>
+                                        <f:selectItem itemLabel="Rango" itemValue="R"/>
+                                        <f:selectItem itemLabel="Seleccion" itemValue="S"/>
+                                        <f:ajax render="fc2"/>
+                                        <f:ajax render="fc"/>
+                                    </p:selectOneRadio>
+
+                                    <p:selectOneRadio value="#{bgesReportes.columna}" rendered="#{bgesReportes.columnas.size() lt 2}">
+                                        <f:selectItem itemLabel="Total" itemValue="T"/>
+                                        <f:ajax render="fc2"/>
+                                        <f:ajax render="fc"/>
+                                    </p:selectOneRadio>
+                                </h:panelGroup>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                      color="#{cabecera.login_color_label}">
+                                    <b>        </b>
+                                </font>
+
+                                <h:panelGroup id="fc2">
+
+                                    <h:selectOneMenu value="#{bgesReportes.column1}"
+                                                     rendered="#{bgesReportes.columna eq 'R'}">
+                                        <f:selectItems value="#{bgesReportes.columns1}" var="coll"
+                                                       itemLabel="#{coll}" itemValue="#{coll}"/>
+                                        <f:ajax render="col2"/>
+                                    </h:selectOneMenu>
+
+                                    <h:selectOneMenu id="col2" value="#{bgesReportes.column2}"
+                                                     rendered="#{bgesReportes.columna eq 'R'}">
+                                        <f:selectItems value="#{bgesReportes.columns2}" var="colll"
+                                                       itemLabel="#{colll}" itemValue="#{colll}"/>
+                                        <f:ajax/>
+                                    </h:selectOneMenu>
+
+                                </h:panelGroup>
+
+
+
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                      color="#{cabecera.login_color_label}">
+                                    <b>        </b>
+                                </font>
+                                <h:panelGroup id="fc">
+                                    <p:selectCheckboxMenu id="col" style="height: 28px" label="Columnas" value="#{bgesReportes.columnas}"
+                                                          rendered="#{bgesReportes.columna eq 'S'}">
+                                        <f:selectItems value="#{bgesReportes.columnas}" var="col"
+                                                       itemLabel="#{col}" itemValue="#{col}"/>
+                                        <f:ajax/>
+                                    </p:selectCheckboxMenu>
+                                </h:panelGroup>
+                            </h:panelGrid>
+
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Aceptar" action="#{bgesReportes.action}" immediate="true" update="@form"/>
+                        </div>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup rendered="#{bgesReportes.opcion eq '2'}">
+                            <ui:include src="pp_repo002.xhtml"/>
+                    </h:panelGroup>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+               
+            </fieldset>
+        </div>
+        
+    </h:body>
+</html>
+

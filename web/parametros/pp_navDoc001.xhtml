@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+      <h:body>
+        <font face="#{cabecera.login_tipo_letra_label}" size="5"
+                color="#{cabecera.login_color_label}">
+            <b><center>Documentos</center></b>
+        </font>
+        <br/><br/>
+        #{bgesDocumentos.init()}
+        <h:panelGroup>
+            <p:fileUpload fileUploadListener="#{bgesDocumentos.handleFileUpload}" update="visor"
+                          mode="advanced" auto="true"
+                          rendered="#{bgesDocumentos.arbol}"/>
+            <h:panelGroup id="visor" rendered="#{bgesDocumentos.visor}">
+                <h:panelGroup rendered="#{bgesDocumentos.ext eq 'pdf'}">
+                    <iframe src="#{bgesDocumentos.URL}" width="650" height="780"/>
+                </h:panelGroup>
+                <h:graphicImage url="#{bgesDocumentos.URL}" width="650" height="780" rendered="#{bgesDocumentos.ext ne 'pdf'}"/>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{bgesDocumentos.file}">
+                <script type="text/javascript">
+                    window.open('#{bgesDocumentos.URL}','_self');
+                </script>
+            </h:panelGroup>
+            <p:fileUpload fileUploadListener="#{bgesDocumentos.handleFileUpload}" rendered="#{bgesDocumentos.upload}"
+                              mode="advanced" auto="true"/>
+        </h:panelGroup>
+    </h:body>
+</html>

@@ -1,0 +1,839 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="acti">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesActividades.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                                <p:commandButton value="Crear" action="#{bgesActividades.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab eq 'T'}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                                <p:commandButton value="Actualizar" action="#{bgesActividades.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab eq 'T'}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                                <p:commandButton value="Eliminar" action="#{bgesActividades.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab eq 'T'}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesActividades.columnas}"
+                                              rendered="#{bgesActividades.opcion ne '2'}">
+                                <f:selectItem itemLabel="Codigo" itemValue="1"/>
+                                <f:selectItem itemLabel="Descripción" itemValue="2"/>
+                                <f:selectItem itemLabel="Sigla" itemValue="3"/>
+                                <f:selectItem itemLabel="Enlace" itemValue="4"/>
+                                <f:selectItem itemLabel="Enlace automatico" itemValue="5"/>
+                                <f:selectItem itemLabel="componentes" itemValue="6"/>
+                                <f:selectItem itemLabel="Asignacion" itemValue="7"/>
+                                <f:selectItem itemLabel="Actividades a Asignar" itemValue="8"/>
+                                <f:selectItem itemLabel="Cronograma" itemValue="9"/>
+                                <f:selectItem itemLabel="Actividades a Planear" itemValue="10"/>
+                                <f:selectItem itemLabel="Autorizacion" itemValue="11"/>
+                                <f:selectItem itemLabel="Pais" itemValue="12"/>
+                                <f:selectItem itemLabel="Festivo" itemValue="13"/>
+                                <f:selectItem itemLabel="Icono Cronograma" itemValue="14"/>
+                                <f:selectItem itemLabel="Icono Componentes" itemValue="15"/>
+                                <f:selectItem itemLabel="Icono Presupuesto" itemValue="16"/>
+                                <f:selectItem itemLabel="Icono Carga de Trabajo" itemValue="17"/>
+                                <f:selectItem itemLabel="Icono Documentos" itemValue="18"/>
+                                <f:selectItem itemLabel="Icono Correo" itemValue="19"/>
+                                <f:selectItem itemLabel="Icono Mensajes" itemValue="20"/>
+                                <f:selectItem itemLabel="Alerta porcentaje" itemValue="21"/>
+                                <f:selectItem itemLabel="Estado" itemValue="22"/>
+                                
+                                
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesActividades.opcion eq '1' or bgesActividades.opcion eq '4'}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesActividades.opcion eq '3'}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px" value="#{bgesActividades.actividades}" var="acti"
+                                     scrollable="true" rowKey="#{acti.actCodPk}" scrollHeight="170"
+                                     emptyMessage="#{cabecera.rol_tabla_vacia}"
+                                     scrollWidth="600" selection="#{bgesActividades.actividad}" selectionMode="single"
+                                 rendered="#{bgesActividades.opcion ne '2'}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            <p:column headerText="Codigo" filterBy="#{acti.actCodPk}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('1')}"
+                                      width="50" filterStyle="min-width: 40px; max-width: 40px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actCodPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Descripción" filterBy="#{acti.actDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('2')}"
+                                      width="150" filterStyle="min-width: 140px; max-width: 140px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Sigla" filterBy="#{acti.actSigla}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('3')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actSigla}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Enlace" filterBy="#{acti.actEnlace}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('4')}"
+                                      width="50" filterStyle="min-width: 40px; max-width: 40px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actEnlace}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Enlace Autmatico" filterBy="#{acti.actEnlaceAuto}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('5')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actEnlaceAuto}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Componentes" filterBy="#{acti.actComp}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('6')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actComp}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Asignacion" filterBy="#{acti.actAsign2}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('18')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actAsign}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Actividades a Asignar" filterBy="#{acti.actAsign}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('7')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actAsign}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Cronograma" filterBy="#{acti.actCrono2}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('19')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actCrono}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Actividades a Planear" filterBy="#{acti.actCrono}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('8')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actCrono}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Autorizacion" filterBy="#{acti.actAutorizar}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('9')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actAutorizar}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Pais" filterBy="#{acti.actCodPaiFk}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('10')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actCodPaiFk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Festivo" filterBy="#{acti.actFes}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('11')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actFes}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Icono Cronograma" filterBy="#{acti.actIcoCrono}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('12')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actIcoCrono}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Icono Componentes" filterBy="#{acti.actIco2}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('13')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actIco2}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Icono Presupuesto" filterBy="#{acti.actIco3}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('14')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actIco3}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Icono Carga de Trabajo" filterBy="#{acti.actIco4}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('15')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actIco4}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Icono Documentos" filterBy="#{acti.actIco5}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('16')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actIco5}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Icono Correo" filterBy="#{acti.actIco6}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('17')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actIco6}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Icono Mensajes" filterBy="#{acti.actIco7}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('18')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actIco7}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Alerta porcentaje" filterBy="#{acti.actPorAlert}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('19')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actPorAlert}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Alerta porcentaje" filterBy="#{acti.actEstado}" filterMatchMode="contains"
+                                      rendered="#{bgesActividades.columnas.contains('20')}"
+                                      width="80" filterStyle="min-width: 70px; max-width: 70px">
+                                <font size="1">
+                                    <h:outputText value="#{acti.actEstado}"/>
+                                </font>
+                            </p:column>
+                            
+                            
+                        </p:dataTable>
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesActividades.opcion eq '2'}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesActividades.CActividad.actCodPk}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(15)}"
+                                             converterMessage="#{bgenErrores.obtenerError(16)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod" value="#{bgenAyudas.obtenerAyuda(123)}"/>
+                                <p:tooltip for="msg_cod" value="#{bgenMessages.message('acti:cod')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Descripción</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesActividades.CActividad.actDescrip}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(15)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(15)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt" value="#{bgenAyudas.obtenerAyuda(124)}"/>
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('ayud:idt')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Sigla</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="nom" value="#{bgesActividades.CActividad.actSigla}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(15)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(15)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_nom" for="nom" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="nom" value="#{bgenAyudas.obtenerAyuda(125)}"/>
+                                <p:tooltip for="msg_nom" value="#{bgenMessages.message('acti:nom')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Enlace</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.CActividad.actEnlace}">
+                                <f:selectItem itemLabel="Siguente" itemValue="S"/>
+                                <f:selectItem itemLabel="Continuo" itemValue="C"/>
+                                <f:selectItem itemLabel="Automatico" itemValue="A"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Enlace Automatico</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="ini" value="#{bgesActividades.CActividad.actEnlaceAuto}"
+                                             validatorMessage="#{bgenErrores.obtenerError(15)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_ini" for="ini" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="ini" value="#{bgenAyudas.obtenerAyuda(126)}"/>
+                                <p:tooltip for="msg_ini" value="#{bgenMessages.message('acti:ini')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Componentes</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.CActividad.actComp}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Asignacion</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.CActividad.actAsign2}">
+                                
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                            </p:selectOneRadio>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Actividades a Asignar</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.CActividad.actAsign}">
+                                <f:selectItem itemLabel="Todas" itemValue="T"/>
+                                <f:selectItem itemLabel="Siguiente" itemValue="S"/>
+                                <f:selectItem itemLabel="Parametros" itemValue="P"/>
+                                <f:selectItem itemLabel="No aplica" itemValue="N"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Cronograma</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.CActividad.actCrono2}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Actividades a Planear</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.CActividad.actCrono}">
+                                <f:selectItem itemLabel="Todas" itemValue="T"/>
+                                <f:selectItem itemLabel="Siguiente" itemValue="S"/>
+                                <f:selectItem itemLabel="Parametros" itemValue="P"/>
+                                <f:selectItem itemLabel="No aplica" itemValue="N"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>No. Autorizaciones</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="auth" value="#{bgesActividades.CActividad.actAutorizar}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(15)}"
+                                             converterMessage="#{bgenErrores.obtenerError(16)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:converter converterId="javax.faces.Short"/>
+                                    <f:validateLongRange minimum="0" maximum="99"/>
+                                </h:inputText>
+                                <h:message id="msg_auth" for="auth" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="auth" value="#{bgenAyudas.obtenerAyuda(127)}"/>
+                                <p:tooltip for="msg_auth" value="#{bgenMessages.message('acti:auth')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Pais</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesActividades.CActividad.actCodPaiFk}">
+                                <f:selectItems value="#{bgesPaises.paises}" var="pai"
+                                               itemLabel="#{pai.paiCodPk} #{pai.paiNom}" itemValue="#{pai.paiCodPk}"/>
+                                    <f:converter converterId="javax.faces.Integer"/>
+                                </h:selectOneMenu>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Festivo</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.CActividad.actFes}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Cronograma</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.CActividad.actIcoCrono}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Componentes</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.CActividad.actIco2}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Presupuesto</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.CActividad.actIco3}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Carga de Trabajo</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.CActividad.actIco4}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Documentos</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.CActividad.actIco5}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Correo</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.CActividad.actIco6}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Mensajes</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.CActividad.actIco7}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Alerta porcentaje</b>
+                            </font>
+                            <h:panelGrid columns="1" style="margin-bottom: 10px">
+                                <h:outputText id="output" value="Porcentaje %#{bgesActividades.CActividad.actPorAlert}"/>
+                                <h:inputHidden id="txt" value="#{bgesActividades.CActividad.actPorAlert}" />
+                                <p:slider for="txt" display="output" style="width: 200px" displayTemplate="Porcentaje %{value}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Estado</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.CActividad.actEstado}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                            
+                            
+                            
+                        </h:panelGrid>
+                        
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesActividades.crear}" rendered="#{bgesActividades.opcion eq '2'}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesActividades.opcion eq '4'}"
+                                             onclick="del.show()"/>
+                    </div>
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesActividades.actividad.actDescrip}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesActividades.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                            <h:outputText value="#{bgesActividades.actividad.actCodPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Descripción</b>
+                                </font>
+                            <h:outputText value="#{bgesActividades.actividad.actDescrip}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Sigla</b>
+                                </font>
+                            <h:outputText value="#{bgesActividades.actividad.actSigla}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Enlace</b>
+                                </font>
+                            <h:outputText value="#{bgesActividades.actividad.actEnlace}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Enlace Automatico</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actEnlaceAuto}"/> 
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Componentes</b>
+                                </font>
+                            <h:outputText value="#{bgesActividades.actividad.actComp}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Asignacion</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actAsign2}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Actividades a Asignar</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actAsign}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Cronograma</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actCrono2}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Actividades a Planear</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actCrono}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>No. Autorizaciones</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actAutorizar}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Pais</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actCodPaiFk}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Festivo</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actFes}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Cronograma</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actIcoCrono}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Componentes</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actIco2}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Presupuesto</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actIco3}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Carga de Trabajo</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actIco4}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Documentos</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actIco5}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Correo</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actIco6}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Mensajes</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actIco7}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Alerta porcentaje</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actPorAlert}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Estado</b>
+                            </font>
+                            <h:outputText value="#{bgesActividades.actividad.actEstado}"/>
+                            
+                            </h:panelGrid>
+                    </p:dialog>
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesActividades.opcion eq '3'}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf_1" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesActividades.actividad.actCodPk}"/>
+                                
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Descripción</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt_1" value="#{bgesActividades.actividad.actDescrip}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_idt_1" for="idt_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt_1" value="#{bgenAyudas.obtenerAyuda(124)}"/>
+                                <p:tooltip for="msg_idt_1" value="#{bgenMessages.message('ayud:idt_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Sigla</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="nom_1" value="#{bgesActividades.actividad.actSigla}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_nom_1" for="nom_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="nom_1" value="#{bgenAyudas.obtenerAyuda(125)}"/>
+                                <p:tooltip for="msg_nom_1" value="#{bgenMessages.message('acti:nom_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Enlace</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.actividad.actEnlace}">
+                                <f:selectItem itemLabel="Siguente" itemValue="S"/>
+                                <f:selectItem itemLabel="Continuo" itemValue="C"/>
+                                <f:selectItem itemLabel="Automatico" itemValue="A"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Enlace Automatico</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="ini1" value="#{bgesActividades.actividad.actEnlaceAuto}"
+                                             validatorMessage="#{bgenErrores.obtenerError(15)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_ini1" for="ini1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="ini1" value="#{bgenAyudas.obtenerAyuda(126)}"/>
+                                <p:tooltip for="msg_ini1" value="#{bgenMessages.message('acti:ini1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Componentes</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.actividad.actComp}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Asignacion</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.actividad.actAsign2}">
+                               <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                            </p:selectOneRadio>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Actividades a Asignar</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.actividad.actAsign}">
+                                <f:selectItem itemLabel="Todas" itemValue="T"/>
+                                <f:selectItem itemLabel="Siguiente" itemValue="S"/>
+                                <f:selectItem itemLabel="Parametros" itemValue="P"/>
+                                <f:selectItem itemLabel="No aplica" itemValue="N"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Cronograma</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.actividad.actCrono2}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Actividades a Planear</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.actividad.actCrono}">
+                                <f:selectItem itemLabel="Todas" itemValue="T"/>
+                                <f:selectItem itemLabel="Siguiente" itemValue="S"/>
+                                <f:selectItem itemLabel="Parametros" itemValue="P"/>
+                                <f:selectItem itemLabel="No aplica" itemValue="N"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>No. Autorizaciones</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="auth1" value="#{bgesActividades.actividad.actAutorizar}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(15)}"
+                                             converterMessage="#{bgenErrores.obtenerError(16)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:converter converterId="javax.faces.Short"/>
+                                    <f:validateLongRange minimum="0" maximum="99"/>
+                                </h:inputText>
+                                <h:message id="msg_auth1" for="auth1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="auth1" value="#{bgenAyudas.obtenerAyuda(127)}"/>
+                                <p:tooltip for="msg_auth1" value="#{bgenMessages.message('acti:auth1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Calendario</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesActividades.actividad.actCodPaiFk}">
+                                <f:selectItems value="#{bgesPaises.paises}" var="pai"
+                                               itemLabel="#{pai.paiCodPk} #{pai.paiNom}" itemValue="#{pai.paiCodPk}"/>
+                                    <f:converter converterId="javax.faces.Integer"/>
+                                </h:selectOneMenu>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Festivo</b>
+                            </font>
+                                <p:selectOneRadio value="#{bgesActividades.actividad.actFes}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                                
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Cronograma</b>
+                            </font>
+                                <p:selectOneRadio value="#{bgesActividades.actividad.actIcoCrono}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                                
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Componentes</b>
+                            </font>
+                                <p:selectOneRadio value="#{bgesActividades.actividad.actIco2}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Presupuesto</b>
+                            </font>
+                                <p:selectOneRadio value="#{bgesActividades.actividad.actIco3}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                                
+                                
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Carga de Trabajo</b>
+                            </font>
+                                <p:selectOneRadio value="#{bgesActividades.actividad.actIco4}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                                
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Documentos</b>
+                            </font>
+                                <p:selectOneRadio value="#{bgesActividades.actividad.actIco5}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Correo</b>
+                            </font>
+                                <p:selectOneRadio value="#{bgesActividades.actividad.actIco6}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Icono Mensajes</b>
+                            </font>
+                                <p:selectOneRadio value="#{bgesActividades.actividad.actIco7}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                                
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Alerta porcentaje</b>
+                            </font>
+                            <h:panelGrid columns="1" style="margin-bottom: 10px">
+                                <h:outputText id="output1" value="Porcentaje %#{bgesActividades.actividad.actPorAlert}"/>
+                                <h:inputHidden id="txt1" value="#{bgesActividades.actividad.actPorAlert}" />
+                                <p:slider for="txt1" display="output1" style="width: 200px" displayTemplate="Porcentaje %{value}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Estado</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesActividades.actividad.actEstado}">
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                            </p:selectOneRadio>
+                            
+                                
+                            
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesActividades.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

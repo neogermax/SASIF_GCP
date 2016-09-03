@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}">
+                <h:form id="actitm">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>Actividad - Items</b></center>
+                    </fieldset>
+                    <br/>
+                    <br/>
+                    <fieldset style="height: 360px; width: 650px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                        <b>Actividades&nbsp;</b>
+                        <h:selectOneMenu value="#{bgesActItems.actividad}" converter="jsf.beans.BConvActividades">
+                            <f:selectItems value="#{bgesActItems.actividades}" var="act"
+                                           itemLabel="#{act.actCodPk} #{act.actDescrip}" itemValue="#{act}"/>
+                            <f:ajax render="tab"/>
+                        </h:selectOneMenu>
+                        <br/>
+                        <b>Items&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                        <h:selectOneMenu value="#{bgesActItems.item}" converter="jsf.beans.BConvItems">
+                            <f:selectItems value="#{bgesActItems.items}" var="itm"
+                                           itemLabel="#{itm.itmCodPk} #{itm.itmDescrip}" itemValue="#{itm}"/>
+                        </h:selectOneMenu>
+                        <p:commandButton id="add" action="#{bgesActItems.addItem}" update="@form" icon="ui-button-add"/>
+                        <p:commandButton id="del" action="#{bgesActItems.removeItem}" update="@form" icon="ui-button-del"/>
+                        <p:tooltip for="add" value="Adicionar item"/>
+                        <p:tooltip for="del" value="Retirar item"/>
+                        <br/><br/>
+                        <p:dataTable id="tab" style="width: 600px" value="#{bgesActItems.actividad.actItemsList}" var="actitm"
+                                     scrollable="true" rowKey="#{actitm.actItemsPK}" scrollHeight="160"
+                                     emptyMessage="#{bgenErrores.obtenerError(14)}" editable="true" editMode="cell"
+                                     scrollWidth="600" selection="#{bgesActItems.actItem}" selectionMode="single">
+                            <p:ajax event="cellEdit"/>
+                            <p:column headerText="Codigo" width="50">
+                                <font size="1">
+                                    <h:outputText value="#{actitm.acitmItmCodFk.itmCodPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Descripcion" width="425">
+                                <font size="1">
+                                    <h:outputText value="#{actitm.acitmItmCodFk.itmDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Protegido" width="65">
+                                <p:cellEditor>
+                                    <f:facet name="output">
+                                        #{actitm.acitmProteg}
+                                    </f:facet>
+                                    <f:facet name="input">
+                                        <h:selectOneMenu value="#{actitm.acitmProteg}">
+                                            <f:selectItem itemLabel="No" itemValue="N"/>
+                                            <f:selectItem itemLabel="Si" itemValue="S"/>
+                                            <f:ajax/>
+                                        </h:selectOneMenu>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                        </p:dataTable>
+                        <p:growl id="msg" globalOnly="true"/>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Aceptar" action="#{bgesActItems.crear}" update="@form"/>
+                        <p:commandButton value="Cancelar" action="#{bgesActItems.cancelar}" update="@form"/>
+                    </div>
+                </h:form>
+            </fieldset>
+        </div>
+    </h:body>
+</html>
+

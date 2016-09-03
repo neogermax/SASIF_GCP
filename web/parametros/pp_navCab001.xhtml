@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+            <table>
+                <tr>
+                    <td align="center" width="200">
+                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                color="#{cabecera.login_color_label}">
+                            <b>#{bgesNavegacion.proyecto.proCodPk}</b>
+                        </font>
+                    </td>
+                    <td align="center" width="200">
+                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                color="#{cabecera.login_color_label}">
+                            <b>#{bgesNavegacion.proyecto.proDescrip}</b>
+                        </font>
+                    </td>
+                    <td align="center" width="200">
+                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                color="#{cabecera.login_color_label}">
+                            <b>#{bgesNavegacion.clase.clsDescrip}</b>
+                        </font>
+                    </td>
+                    <td align="center" width="200">
+                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                color="#{cabecera.login_color_label}">
+                            <b>#{bgesNavegacion.etapa.etpDescrip}</b>
+                        </font>
+                    </td>
+                    <td align="center" width="200">
+                        <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                color="#{cabecera.login_color_label}">
+                            <b>#{bgesNavegacion.actividad.actDescrip}</b>
+                        </font>
+                    </td>
+                    <td align="center" width="200">
+                        <h:panelGroup id="pry">
+                            <h:graphicImage width="37" height="45" url="generales/images/semro.gif" rendered="#{bgesNavegacion.proRojo}"/>
+                            <h:graphicImage width="37" height="45" url="generales/images/semam.gif" rendered="#{bgesNavegacion.proAmarillo}"/>
+                            <h:graphicImage width="37" height="45" url="generales/images/semve.gif" rendered="#{bgesNavegacion.proVerde}"/>
+                        </h:panelGroup>
+                        <h:panelGroup id="actv">
+                            <h:graphicImage width="18" height="22" url="generales/images/semro.gif" rendered="#{bgesNavegacion.actRojo}"/>
+                            <h:graphicImage width="18" height="22" url="generales/images/semam.gif" rendered="#{bgesNavegacion.actAmarillo}"/>
+                            <h:graphicImage width="18" height="22" url="generales/images/semve.gif" rendered="#{bgesNavegacion.actVerde}"/>
+                        </h:panelGroup>
+                        <h:panelGroup id="tip">
+                            <p:tooltip for="pry" value="#{bgesNavegacion.proyFormato}"/>
+                            <p:tooltip for="actv" value="#{bgesNavegacion.actFormato}"/>
+                        </h:panelGroup>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </h:body>
+</html>
+

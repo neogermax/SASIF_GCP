@@ -1,0 +1,759 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="usu">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesUsuarios.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                                <p:commandButton value="Crear" action="#{bgesUsuarios.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                                <p:commandButton value="Actualizar" action="#{bgesUsuarios.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                                <p:commandButton value="Eliminar" action="#{bgesUsuarios.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesUsuarios.columnas}"
+                                              rendered="#{not bgesUsuarios.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Codigo" itemValue="1"/>
+                                <f:selectItem itemLabel="Empleado" itemValue="2"/>
+                                <f:selectItem itemLabel="Identificación" itemValue="3"/>
+                                <f:selectItem itemLabel="Tipo" itemValue="4"/>
+                                <f:selectItem itemLabel="Fecha vigencia clave" itemValue="5"/>
+                                <f:selectItem itemLabel="Nro intentos fallidos" itemValue="6"/>
+                                <f:selectItem itemLabel="Rol" itemValue="7"/>
+                                <f:selectItem itemLabel="Estado" itemValue="8"/>
+                                <f:selectItem itemLabel="Politicas de grupo" itemValue="9"/>
+                                <f:selectItem itemLabel="Acceso Documentos" itemValue="10"/>
+                                <f:selectItem itemLabel="Acceso Información Documentos" itemValue="11"/>
+                                <f:selectItem itemLabel="Tipo Acceso Consulta" itemValue="12"/>
+                                <f:selectItem itemLabel="Tipo Acceso Actualización" itemValue="13"/>
+                                <f:selectItem itemLabel="Acceso Actividades" itemValue="14"/>
+                                <f:selectItem itemLabel="Acceso Proyectos Informacion Actividades" itemValue="15"/>
+                                <f:selectItem itemLabel="Acceso Reportes" itemValue="16"/>
+                                <f:selectItem itemLabel="Grupo Reporte" itemValue="17"/>
+                                <f:selectItem itemLabel="indicativo Gestion" itemValue="18"/>
+                                <f:selectItem itemLabel="Indicativo Autorizacion" itemValue="19"/>
+                                <f:selectItem itemLabel="Indicativo Consulta" itemValue="20"/>
+                                
+                                
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesUsuarios.opcion.equals('1') or bgesUsuarios.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesUsuarios.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px" value="#{bgesUsuarios.usuarios}" var="usu"
+                                     scrollable="true" rowKey="#{usu.usuCodPk}" scrollHeight="190"
+                                     emptyMessage="#{cabecera.usu_tabla_vacia}"
+                                 scrollWidth="600" selection="#{bgesUsuarios.usuario}" selectionMode="single"
+                                 rendered="#{not bgesUsuarios.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            
+                            <p:column headerText="Codigo" filterBy="#{usu.usuCodPk}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('1')}"
+                                      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuCodPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Empleado" filterBy="#{usu.empleados.emplNombre1} #{usu.empleados.emplNombre2} #{usu.empleados.emplApellido1} #{usu.empleados.emplApellido2}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('2')}"
+                                      style="min-width: 120px; max-width: 120px" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.empleados.emplNombre1} #{usu.empleados.emplNombre2} #{usu.empleados.emplApellido1} #{usu.empleados.emplApellido2}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Identificación" filterBy="#{usu.empleados.empleadosPK.emplId}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('3')}"
+                                      style="min-width: 120px; max-width: 120px" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.empleados.empleadosPK.emplId}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Tipo" filterBy="#{usu.empleados.empleadosPK.emplTipoId}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('4')}"
+                                      style="min-width: 120px; max-width: 120px" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.empleados.empleadosPK.emplTipoId}"/>
+                                </font>
+                            </p:column>
+                            
+                                              
+                            <p:column headerText="Fecha vigencia clave" filterBy="#{usu.usuFechaClave}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('5')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuFechaClave}">
+                                        
+                                        <f:convertDateTime pattern="yyyy/MM/dd"/>
+                                    </h:outputText>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Nro Intentos fallidos" filterBy="#{usu.usuNumIntent}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('6')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuNumIntent}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Rol" filterBy="#{usu.usuRolFk.rolRolPk}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('7')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuRolFk.rolRolPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Estado" filterBy="#{usu.usuEstado}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('8')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuEstado}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Politicas de grupo" filterBy="#{usu.usuPolGrupFk.polDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('9')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuPolGrupFk.polDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Acceso Documentos" filterBy="#{usu.usuAccDoc}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('10')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuAccDoc}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Acceso Información Documentos" filterBy="#{usu.usuAccIdo}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('11')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuAccIdo}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tipo Acceso Consulta" filterBy="#{usu.usuTipAccCon}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('12')}"
+                                      width="100" filterStyle="min-width: 90px; max-width: 90px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuTipAccCon}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tipo Acceso Actualizacion" filterBy="#{usu.usuTipAccAct}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('13')}"
+                                      width="100" filterStyle="min-width: 90px; max-width: 90px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuTipAccAct}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Acceso Actividades" filterBy="#{usu.usuAccAct}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('14')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuAccAct}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Acceso Proyectos Informacion Actividades" filterBy="#{usu.usuAccAct}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('15')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuAccAct}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Acceso Reportes" filterBy="#{usu.usuAccRep}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('16')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuAccRep}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Grupo Reporte" filterBy="#{usu.usuGrupRep}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('17')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuGrupRep}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Indicativo Gestion" filterBy="#{usu.usuIndGes}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('18')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuIndGes}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Indicativo Autorizacion" filterBy="#{usu.usuIndAut}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('19')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuIndAut}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Indicativo Consulta" filterBy="#{usu.usuIndCons}" filterMatchMode="contains"
+                                      rendered="#{bgesUsuarios.columnas.contains('20')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{usu.usuIndCons}"/>
+                                </font>
+                            </p:column>
+                            
+                            
+                        </p:dataTable>
+                        
+                        
+                        
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesUsuarios.opcion.equals('2')}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesUsuarios.CUsuario.usuCodPk}" required="true"
+                                             requiredMessage="#{cabecera.usu_req_codigo}"
+                                             validatorMessage="#{cabecera.usu_val_codigo}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="10"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod">
+                                    #{bgenAyudas.obtenerAyuda(93)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_cod" value="#{bgenMessages.message('usu:cod')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Empleado</b>
+                            </font>
+                            
+                            <h:selectOneMenu value="#{bgesUsuarios.CUsuario.empleados}">
+                                    <f:selectItems value="#{bgesUsuarios.empleados}" var="empl"
+                                                   itemLabel="#{empl.emplNombre1} #{empl.emplNombre2} #{empl.emplApellido1} #{empl.emplApellido2}"
+                                                   itemValue="#{empl}"/>
+                                    <f:converter converterId="jsf.beans.BConvEmpleados"/>
+                                </h:selectOneMenu>
+                            
+                                                        
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>rol</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesUsuarios.CUsuario.usuRolFk}">
+                                <f:selectItems value="#{bgesRoles.roles}" var="rolg"
+                                               itemLabel="#{rolg.rolRolPk}" itemValue="#{rolg}"/>
+                                <f:converter converterId="jsf.beans.BConvRoles"/>
+                            </h:selectOneMenu>
+                            
+                                                       
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Politicas de grupo</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesUsuarios. CUsuario.usuPolGrupFk}">
+                                <f:selectItems value="#{bgesUsuarios.politicaGrupos}" var="polG"
+                                        itemLabel="#{polG.polDescrip}" itemValue="#{polG}"/>
+                                <f:converter converterId="jsf.beans.BConvPoliticaGrupos"/>
+                            </h:selectOneMenu>
+                            
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Acceso Documentos</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesUsuarios.CUsuario.usuAccDoc}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                
+                                <f:selectItem itemLabel="Todos, prioriza permisos por documento" itemValue="1"/>
+                                <f:selectItem itemLabel="Ninguno, definicion en permisos por documento" itemValue="2"/>
+                                
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Acceso informacion Documentos</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesUsuarios.CUsuario.usuAccIdo}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:selectItem itemLabel="Todos los Proyectos" itemValue="1"/>
+                                <f:selectItem itemLabel="Proyectos Propios" itemValue="2"/>
+                                <f:selectItem itemLabel="Proyectos del Area" itemValue="3"/>
+                                <f:selectItem itemLabel="Proyectos de Empresa" itemValue="4"/>
+                                
+                            </h:selectOneMenu>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo Acceso Consulta</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesUsuarios.CUsuario.usuTipAccCon}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>
+                                    
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo Acceso Actualización</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesUsuarios.CUsuario.usuTipAccAct}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>
+                                    
+                            </p:selectOneRadio>
+                            
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Acceso Actividades</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesUsuarios.CUsuario.usuAccAct}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                
+                                <f:selectItem itemLabel="Todos, prioriza permisos por actividad" itemValue="1"/>
+                                <f:selectItem itemLabel="Ninguno, definicion en permisos por actividad" itemValue="2"/>
+                                
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Acceso Proyectos informacion Actividades</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesUsuarios.CUsuario.usuAccIac}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:selectItem itemLabel="Todos los Proyectos" itemValue="1"/>
+                                <f:selectItem itemLabel="Proyectos Propios" itemValue="2"/>
+                                <f:selectItem itemLabel="Proyectos del Area" itemValue="3"/>
+                                <f:selectItem itemLabel="Proyectos de Empresa" itemValue="4"/>
+                                
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Acceso Reportes</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesUsuarios.CUsuario.usuAccRep}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Todos" itemValue="T"/>
+                                    <f:selectItem itemLabel="Grupo de Reportes" itemValue="G"/>
+                                    <f:selectItem itemLabel="Ninguno, definido x acceso a reportes x usuario" itemValue="N"/>
+                                    <p:ajax update="fc22 fc33"/>
+                                    
+                            </p:selectOneRadio>
+                                
+                            
+                                <h:panelGroup id="fc22" >    
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Grupo Reportes" rendered="#{bgesUsuarios.CUsuario.usuAccRep eq 'G'}" /></b>
+                                </font>
+                                </h:panelGroup>
+                               <h:panelGroup id="fc33" >     
+                                   <h:selectOneMenu value="#{bgesUsuarios.CUsuario.usuGrupRep}" rendered="#{bgesUsuarios.CUsuario.usuAccRep eq 'G'}" >
+                                        <f:selectItem itemLabel="Sin Grupo" itemValue="0"/>
+                                        <f:selectItems value="#{bgesGrupoReportes.grupoReportes}" var="grep"
+                                               itemLabel="#{grep.grpCodPk} #{grep.grpDescrip}" itemValue="#{grep.grpCodPk}"/>
+                                <f:converter converterId="javax.faces.Integer"/>
+                            </h:selectOneMenu>
+                                
+                            </h:panelGroup>
+                            
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Indicativo Gestion</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesUsuarios.CUsuario.usuIndGes}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>
+                                    
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Indicativo Autorizacion</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesUsuarios.CUsuario.usuIndAut}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>
+                                    
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Indicativo Consulta</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesUsuarios.CUsuario.usuIndCons}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>
+                                    
+                            </p:selectOneRadio>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesUsuarios.crear}" rendered="#{bgesUsuarios.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesUsuarios.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesUsuarios.usuario.usuCodPk}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesUsuarios.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuCodPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Empleado</b>
+                                </font>
+                            <h:outputText value="#{bgesUsuarios.usuario.empleados.emplNombre1} #{bgesUsuarios.usuario.empleados.emplNombre2} #{bgesUsuarios.usuario.empleados.emplApellido1} #{bgesUsuarios.usuario.empleados.emplApellido2}"/>
+                           
+                            
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Fecha Clave</b>
+                                </font>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuFechaClave}">
+                                <f:convertDateTime pattern="yyyy/MM/dd"/>
+                            </h:outputText>
+                                                  
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Numero Intentos</b>
+                                </font>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuNumIntent}"/>
+                                            
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Rol</b>
+                                </font>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuRolFk.rolRolPk}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Estado</b>
+                                </font>
+                            
+                            
+                            <h:outputText value="#{bgesUsuarios.usuario.usuEstado} Activo" rendered="#{bgesUsuarios.usuario.usuEstado eq 'A'}"/>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuEstado} Inactivo" rendered="#{bgesUsuarios.usuario.usuEstado eq 'I'}"/>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuEstado} Bloqueado" rendered="#{bgesUsuarios.usuario.usuEstado eq 'B'}"/>
+                            
+                            
+                            
+                            
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Politicas de grupo</b>
+                                </font>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuPolGrupFk.polDescrip}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Acceso Documentos</b>
+                                </font>
+                            
+                            <h:outputText value="#{bgesUsuarios.usuario.usuAccDoc} Todos, prioriza permisos por documento" rendered="#{bgesUsuarios.usuario.usuAccDoc eq 1}"/>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuAccDoc} Ninguno, definicion en permisos por documento" rendered="#{bgesUsuarios.usuario.usuAccDoc eq 2}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Acceso Informacion Documentos</b>
+                            </font>
+                            
+                            <h:outputText value="#{bgesUsuarios.usuario.usuAccIdo} Todos los Proyectos" rendered="#{bgesUsuarios.usuario.usuAccIdo eq 1}"/>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuAccIdo} Ninguno, definicion en permisos por documento" rendered="#{bgesUsuarios.usuario.usuAccIdo eq 2}"/>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuAccIdo} Todos los Proyectos" rendered="#{bgesUsuarios.usuario.usuAccIdo eq 3}"/>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuAccIdo} Todos los Proyectos" rendered="#{bgesUsuarios.usuario.usuAccIdo eq 4}"/>
+                             
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo Acceso Consulta</b>
+                                </font>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuTipAccCon}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo Acceso Actualización</b>
+                                </font>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuTipAccAct}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Acceso Actividades</b>
+                            </font>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuAccAct} Todos, prioriza permisos por actividad" rendered="#{bgesUsuarios.usuario.usuAccAct eq 1}"/>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuAccAct} Ninguno, definicion en permisos por actividad" rendered="#{bgesUsuarios.usuario.usuAccAct eq 2}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Acceso proyectos Informacion Actividades</b>
+                            </font>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuAccIac} Todos los Proyectos" rendered="#{bgesUsuarios.usuario.usuAccIac eq 1}"/>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuAccIac} Ninguno, definicion en permisos por documento" rendered="#{bgesUsuarios.usuario.usuAccIdo eq 2}"/>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuAccIac} Todos los Proyectos" rendered="#{bgesUsuarios.usuario.usuAccIac eq 3}"/>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuAccIac} Todos los Proyectos" rendered="#{bgesUsuarios.usuario.usuAccIac eq 4}"/>
+                            
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Acceso Reportes</b>
+                            </font>
+                            
+                            <h:outputText value="#{bgesUsuarios.usuario.usuAccRep} Todos" rendered="#{bgesUsuarios.usuario.usuAccRep eq T}"/>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuAccRep} Grupo Reportes" rendered="#{bgesUsuarios.usuario.usuAccRep eq G}"/>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuAccRep} Ninguno, definido x acceso a reportes x usuario" rendered="#{bgesUsuarios.usuario.usuAccRep eq N}"/>
+                           
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Grupo Reporte</b>
+                            </font>                           
+                            
+                            <h:outputText value="#{bgesUsuarios.usuario.usuGrupRep}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Indicativo Gestion</b>
+                                </font>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuIndGes}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Indicativo Autorizacion</b>
+                                </font>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuIndAut}"/>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Indicativo Consulta</b>
+                                </font>
+                            <h:outputText value="#{bgesUsuarios.usuario.usuIndCons}"/>
+                            
+                            
+                            
+                            
+                            
+                            </h:panelGrid>
+                    </p:dialog>
+                    
+                    
+                    
+                    
+                    
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesUsuarios.opcion.equals('3')}">
+                              #{bgesUsuarios.mostrar()}
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesUsuarios.UUsuario.usuCodPk}"/>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Rol</b>
+                                </font>
+                                <h:selectOneMenu value="#{bgesUsuarios.UUsuario.usuRolFk}">
+                                    <f:selectItems value="#{bgesRoles.roles}" var="rol"
+                                                   itemLabel="#{rol.rolRolPk}" itemValue="#{rol}"/>
+                                    <f:converter converterId="jsf.beans.BConvRoles"/>
+                                </h:selectOneMenu>
+                                
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Estado</b>
+                                </font>
+                                <p:selectOneRadio value="#{bgesUsuarios.UUsuario.usuEstado}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Activo" itemValue="A"/>
+                                    <f:selectItem itemLabel="Inactivo" itemValue="I"/>
+                                    <f:selectItem itemLabel="Bloqueado" itemValue="B"/>
+                                </p:selectOneRadio>
+                                
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Politicas de grupo</b>
+                                </font>
+                                <h:selectOneMenu value="#{bgesUsuarios.UUsuario.usuPolGrupFk}">
+                                    <f:selectItems value="#{bgesUsuarios.politicaGrupos}" var="polG"
+                                            itemLabel="#{polG.polDescrip}" itemValue="#{polG}"/>
+                                    <f:converter converterId="jsf.beans.BConvPoliticaGrupos"/>
+                                </h:selectOneMenu>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Acceso Documentos</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesUsuarios.UUsuario.usuAccDoc}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                
+                                <f:selectItem itemLabel="Todos, prioriza permisos por documento" itemValue="1"/>
+                                <f:selectItem itemLabel="Ninguno, definicion en permisos por documento" itemValue="2"/>
+                                
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Acceso informacion Documentos</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesUsuarios.UUsuario.usuAccIdo}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:selectItem itemLabel="Todos los Proyectos" itemValue="1"/>
+                                <f:selectItem itemLabel="Proyectos Propios" itemValue="2"/>
+                                <f:selectItem itemLabel="Proyectos del Area" itemValue="3"/>
+                                <f:selectItem itemLabel="Proyectos de Empresa" itemValue="4"/>
+                                
+                            </h:selectOneMenu>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo acceso Consulta</b>
+                            </font>
+                                <p:selectOneRadio value="#{bgesUsuarios.UUsuario.usuTipAccCon}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>
+                                    
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo acceso Actualización</b>
+                            </font>
+                                <p:selectOneRadio value="#{bgesUsuarios.UUsuario.usuTipAccAct}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>
+                                    
+                            </p:selectOneRadio>
+                            
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Acceso Actividades</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesUsuarios.UUsuario.usuAccAct}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                               
+                                <f:selectItem itemLabel="Todos, prioriza permisos por actividad" itemValue="1"/>
+                                <f:selectItem itemLabel="Ninguno, definicion en permisos por actividad" itemValue="2"/>
+                                
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Acceso Proyectos informacion Actividades</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesUsuarios.UUsuario.usuAccIac}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:selectItem itemLabel="Todos los Proyectos" itemValue="1"/>
+                                <f:selectItem itemLabel="Proyectos Propios" itemValue="2"/>
+                                <f:selectItem itemLabel="Proyectos del Area" itemValue="3"/>
+                                <f:selectItem itemLabel="Proyectos de Empresa" itemValue="4"/>
+                                
+                            </h:selectOneMenu>
+                            
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Acceso Reportes</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesUsuarios.UUsuario.usuAccRep}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Todos" itemValue="T"/>
+                                    <f:selectItem itemLabel="Grupo de Reportes" itemValue="G"/>
+                                    <f:selectItem itemLabel="Ninguno, definido x acceso a reportes x usuario" itemValue="N"/>
+                                    <p:ajax update="fc2 fc3"/>
+                                    
+                            </p:selectOneRadio>
+                                
+                            
+                                <h:panelGroup id="fc2" >    
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Grupo Reportes" rendered="#{bgesUsuarios.UUsuario.usuAccRep eq 'G'}" /></b>
+                                </font>
+                                </h:panelGroup>
+                               <h:panelGroup id="fc3" >     
+                            <h:selectOneMenu value="#{bgesUsuarios.UUsuario.usuGrupRep}" rendered="#{bgesUsuarios.UUsuario.usuAccRep eq 'G'}" >
+                                <f:selectItem itemLabel="Sin Grupo" itemValue="0"/>
+                                <f:selectItems value="#{bgesGrupoReportes.grupoReportes}" var="grep"
+                                               itemLabel="#{grep.grpCodPk} #{grep.grpDescrip}" itemValue="#{grep.grpCodPk}"/>
+                                    <f:converter converterId="javax.faces.Integer"/>
+                                    <f:ajax render="fc3"/>
+                            </h:selectOneMenu>
+                                
+                            </h:panelGroup>
+                                
+                                
+                            
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Indicativo Gestion</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesUsuarios.UUsuario.usuIndGes}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>
+                                    
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Indicativo Autorizacion</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesUsuarios.UUsuario.usuIndAut}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>
+                                    
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Indicativo Consulta</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesUsuarios.UUsuario.usuIndCons}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                    <f:selectItem itemLabel="Si" itemValue="S"/>
+                                    <f:selectItem itemLabel="No" itemValue="N"/>
+                                    
+                            </p:selectOneRadio>
+                            
+                                
+         
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesUsuarios.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

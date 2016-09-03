@@ -1,0 +1,248 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="prog">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesProgramas.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                                <p:commandButton value="Crear" action="#{bgesProgramas.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                                <p:commandButton value="Actualizar" action="#{bgesProgramas.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                                <p:commandButton value="Eliminar" action="#{bgesProgramas.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesProgramas.columnas}"
+                                              rendered="#{not bgesProgramas.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Codigo" itemValue="1"/>
+                                <f:selectItem itemLabel="Parametro" itemValue="2"/>
+                                <f:selectItem itemLabel="Valor" itemValue="3"/>
+                                
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesProgramas.opcion.equals('1') or bgesProgramas.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesProgramas.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+
+
+
+
+                        <p:dataTable id="tabla" style="width: 600px; table-layout: fixed;" value="#{bgesProgramas.programas}" var="prog"
+                                     scrollable="true" rowKey="#{prog.progNomPk}" scrollHeight="190"
+                                     emptyMessage="#{cabecera.rol_tabla_vacia}"
+                                     scrollWidth="600" selection="#{bgesProgramas.programa}" selectionMode="single"
+                                 rendered="#{not bgesProgramas.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            <p:column headerText="Codigo" filterBy="#{prog.progNomPk}" filterMatchMode="contains"
+                                      rendered="#{bgesProgramas.columnas.contains('1')}"
+				      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{prog.progNomPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Parametro" filterBy="#{prog.progParm}" filterMatchMode="contains"
+                                      rendered="#{bgesProgramas.columnas.contains('2')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{prog.progParm}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Valor" filterBy="#{prog.progValor}" filterMatchMode="contains"
+                                      rendered="#{bgesProgramas.columnas.contains('3')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{prog.progValor}"/>
+                                </font>
+                            </p:column>
+                            
+                            
+                            
+                        </p:dataTable>
+
+
+
+
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesProgramas.opcion.equals('2')}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesProgramas.CPrograma.progNomPk}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(15)}"
+                                             
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod">
+                                      #{bgenAyudas.obtenerAyuda(76)} 
+                                </p:tooltip> 
+                                <p:tooltip for="msg_cod" value="#{bgenMessages.message('prog:cod')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Parametro</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesProgramas.CPrograma.progParm}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="1"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt">
+                                     #{bgenAyudas.obtenerAyuda(77)} 
+                                </p:tooltip> 
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('prog:idt')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Valor</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="val" value="#{bgesProgramas.CPrograma.progValor}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_val" for="val" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="val">
+                                    #{bgenAyudas.obtenerAyuda(78)} 
+                                </p:tooltip> 
+                               <p:tooltip for="msg_val" value="#{bgenMessages.message('prog:val')}"/>
+                            </h:panelGrid>
+                            
+                            
+                            
+                            
+                            
+                            
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesProgramas.crear}" rendered="#{bgesProgramas.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesProgramas.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesProgramas.programa.progNomPk}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesProgramas.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                            <h:outputText value="#{bgesProgramas.programa.progNomPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Parametro</b>
+                                </font>
+                            <h:outputText value="#{bgesProgramas.programa.progParm}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Valor</b>
+                                </font>
+                            <h:outputText value="#{bgesProgramas.programa.progValor}"/>
+                                
+                                
+                                
+                            </h:panelGrid>
+                    </p:dialog>
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesProgramas.opcion.equals('3')}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesProgramas.programa.progNomPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Parametro</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="idt_1" value="#{bgesProgramas.programa.progParm}" required="true"
+                                                 requiredMessage="#{cabecera.rol_req_id}"
+                                                 
+                                                 validatorMessage="#{cabecera.rol_val_id}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                            <f:validateLength maximum="50"/>
+                                    </h:inputText>
+                                    <h:message id="msg_idt_1" for="idt_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="idt_1">
+                                        #{bgenAyudas.obtenerAyuda(77)} 
+                                    </p:tooltip> 
+                                    <p:tooltip for="msg_idt_1" value="#{bgenMessages.message('prog:idt_1')}"/>
+                                </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Valor</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="val_1" value="#{bgesProgramas.programa.progValor}" required="true"
+                                                 requiredMessage="#{cabecera.rol_req_id}"
+                                                 
+                                                 validatorMessage="#{cabecera.rol_val_id}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                            <f:validateLength maximum="50"/>
+                                    </h:inputText>
+                                    <h:message id="msg_val_1" for="val_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="val_1">
+                                        #{bgenAyudas.obtenerAyuda(78)} 
+                                        </p:tooltip> 
+                                    <p:tooltip for="msg_val_1" value="#{bgenMessages.message('prog:val_1')}"/>
+                                </h:panelGrid>
+                                
+                                
+                                
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesProgramas.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

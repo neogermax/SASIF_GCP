@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>SASIF</title>
+        <link href="generales/css/css_fach001.css" rel="stylesheet" type="text/css"/> 
+        <link href="generales/css/css_login002.css" rel="stylesheet" type="text/css"/>
+        <link href="generales/css/css_form003.css" rel="stylesheet" type="text/css"/>
+        <link href="generales/css/css_msgs004.css" rel="stylesheet" type="text/css"/>
+    </h:head>
+    <h:body>
+        <div id ="cabecera" class="contenedor" style="background-image: url(#{cabecera.fondo_cabecera})" >
+            <ui:include src="#{pag.cabecera}"/>
+        </div>
+        <div id="page" style="background-image: url(#{cabecera.fondo_cuerpo})">
+            <h:panelGroup id="logout" rendered="#{bgesLogin.autenticado}">
+                <h:form>
+                    <h:commandButton value="#{cabecera.logout_text}" action="#{bgesLogin.accionLogout}"
+                                     style="background-color: #{cabecera.logout_fondo}; color: #{cabecera.logout_color}"/>
+                </h:form>
+            </h:panelGroup>
+            <ui:include src="#{bgesLogin.pagina}"/>
+        </div>
+        <div id ="pie_pagina" class="contenedor" style="background-image: url(#{cabecera.fondo_cabecera})" >
+            <ui:include src="#{pag.pie}"/>        
+        </div>
+      
+    </h:body>
+</html>
+

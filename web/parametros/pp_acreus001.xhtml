@@ -1,0 +1,256 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <div id="formulario">
+            <br/>
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="acreus">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesAccesoRepUsu.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                            <p:commandButton value="Crear" action="#{bgesAccesoRepUsu.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                            <p:commandButton value="Actualizar" action="#{bgesAccesoRepUsu.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                            <p:commandButton value="Eliminar" action="#{bgesAccesoRepUsu.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 360px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesAccesoRepUsu.columnas}"
+                                              rendered="#{not bgesAccesoRepUsu.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Codigo Usuario" itemValue="1"/>
+                                <f:selectItem itemLabel="Codigo Reporte" itemValue="2"/>
+                                <f:selectItem itemLabel="Codigo Grupo" itemValue="3"/>
+                                <f:selectItem itemLabel="Tipo Acceso" itemValue="4"/>
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesAccesoRepUsu.opcion.equals('1') or bgesAccesoRepUsu.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesAccesoRepUsu.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px" value="#{bgesAccesoRepUsu.accesoRepUsu}" var="acreus"
+                                     scrollable="true" rowKey="#{acreus.accesoRepUsuPK}" scrollHeight="220"
+                                     emptyMessage="#{bgenErrores.obtenerError(14)}"
+                                     scrollWidth="600" selection="#{bgesAccesoRepUsu.accesoRepUs}" selectionMode="single"
+                                 rendered="#{not bgesAccesoRepUsu.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            <p:column headerText="Codigo Usuario" filterBy="#{acreus.accesoRepUsuPK.aruUsuCodFk}" filterMatchMode="contains"
+                                      rendered="#{bgesAccesoRepUsu.columnas.contains('1')}"
+                                      width="110" filterStyle="min-width: 120px; max-width: 120px">
+                                <font size="1">
+                                    <h:outputText value="#{acreus.accesoRepUsuPK.aruUsuCodFk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Codigo Reporte" filterBy="#{acreus.accesoRepUsuPK.aruCodRepFk}" filterMatchMode="contains"
+                                      rendered="#{bgesAccesoRepUsu.columnas.contains('2')}"
+                                      width="110" filterStyle="min-width: 120px; max-width: 120px">
+                                <font size="1">
+                                    <h:outputText value="#{acreus.accesoRepUsuPK.aruCodRepFk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Codigo Grupo" filterBy="#{acreus.accesoRepUsuPK.aruGrpCodFk}" filterMatchMode="contains"
+                                      rendered="#{bgesAccesoRepUsu.columnas.contains('3')}"
+                                      width="110" filterStyle="min-width: 120px; max-width: 120px">
+                                <font size="1">
+                                    <h:outputText value="#{acreus.accesoRepUsuPK.aruGrpCodFk}"/>
+                                </font>
+                            </p:column>
+                            
+                            <p:column headerText="Tipo Acceso" filterBy="#{acreus.aruTipoAcc}" filterMatchMode="contains"
+                                      rendered="#{bgesAccesoRepUsu.columnas.contains('4')}"
+                                      width="110" filterStyle="min-width: 120px; max-width: 120px">
+                                <font size="1">
+                                    <h:outputText value="#{acreus.aruTipoAcc}"/>
+                                </font>
+                            </p:column>
+                        </p:dataTable>
+                        
+                        
+                        
+                        
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesAccesoRepUsu.opcion.equals('2')}">
+                            
+                            
+                            <h:panelGroup >    
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                        <b>Codigo Usuario</b>
+                                    </font>
+                                </h:panelGroup>
+                               <h:panelGroup >     
+                                   <h:selectOneMenu value="#{bgesAccesoRepUsu.CAccesoRepUs.accesoRepUsuPK.aruUsuCodFk}">
+                                       
+                                       <f:selectItems value="#{bgesUsuarios.usuarios}" var="usuac"
+                                                      itemLabel="#{usuac.usuCodPk}" itemValue="#{usuac.usuCodPk}"/>
+                                
+                            </h:selectOneMenu>
+                                
+                            </h:panelGroup>
+                            
+                            
+                            <h:panelGroup id="fc2" >    
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Codigo Reporte" rendered="#{bgesAccesoRepUsu.CAccesoRepUs.accesoRepUsuPK.aruGrpCodFk eq 0 or bgesAccesoRepUsu.CAccesoRepUs.accesoRepUsuPK.aruGrpCodFk eq null}"  /> </b>
+                                </font>
+                                </h:panelGroup>
+                               <h:panelGroup id="fc3" >     
+                                   <h:selectOneMenu value="#{bgesAccesoRepUsu.CAccesoRepUs.accesoRepUsuPK.aruCodRepFk}" rendered="#{bgesAccesoRepUsu.CAccesoRepUs.accesoRepUsuPK.aruGrpCodFk eq 0 or bgesAccesoRepUsu.CAccesoRepUs.accesoRepUsuPK.aruGrpCodFk eq null}" >
+                                       <f:selectItem itemLabel="Sin Reporte" itemValue="0"/>
+                                       <f:selectItems value="#{bgesParametrias.parametrias}" var="parac"
+                                                      itemLabel="#{parac.parCodRepPk} #{parac.parNombreRep}"  itemValue="#{parac.parCodRepPk}"/>
+                                <f:converter converterId="javax.faces.Integer"/>
+                                <f:ajax render="fc22 fc33"/>
+                            </h:selectOneMenu>
+                                
+                            </h:panelGroup>
+                            
+                            
+                            <h:panelGroup id="fc22" >    
+                                    <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b><h:outputText value="Codigo Grupo" rendered="#{bgesAccesoRepUsu.CAccesoRepUs.accesoRepUsuPK.aruCodRepFk eq 0 or bgesAccesoRepUsu.CAccesoRepUs.accesoRepUsuPK.aruCodRepFk eq null}" /></b>
+                                </font>
+                                </h:panelGroup>
+                               <h:panelGroup id="fc33" >     
+                                   <h:selectOneMenu value="#{bgesAccesoRepUsu.CAccesoRepUs.accesoRepUsuPK.aruGrpCodFk}" rendered="#{bgesAccesoRepUsu.CAccesoRepUs.accesoRepUsuPK.aruCodRepFk eq 0 or bgesAccesoRepUsu.CAccesoRepUs.accesoRepUsuPK.aruCodRepFk eq null}"  >
+                                       <f:selectItem itemLabel="Sin Grupo" itemValue="0"/>
+                                       <f:selectItems value="#{bgesGrupoReportes.grupoReportes}" var="grrac"
+                                                      itemLabel="#{grrac.grpCodPk} #{grrac.grpDescrip}" itemValue="#{grrac.grpCodPk}"/>
+                                <f:converter converterId="javax.faces.Integer"/>
+                                <f:ajax render="fc2 fc3"/>
+                            </h:selectOneMenu>
+                                
+                            </h:panelGroup>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tipo Acceso</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesAccesoRepUsu.CAccesoRepUs.aruTipoAcc}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:selectItem itemLabel="Todos" itemValue="T"/>
+                                <f:selectItem itemLabel="Propios" itemValue="P"/>
+                                <f:selectItem itemLabel="Area" itemValue="A"/>
+                                <f:selectItem itemLabel="Empresa" itemValue="E"/>
+                                
+                            </h:selectOneMenu>
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesAccesoRepUsu.crear}" rendered="#{bgesAccesoRepUsu.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesAccesoRepUsu.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesAccesoRepUsu.accesoRepUs.accesoRepUsuPK.aruUsuCodFk}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesAccesoRepUsu.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo Usuario</b>
+                                </font>
+                            <h:outputText value="#{bgesAccesoRepUsu.accesoRepUs.accesoRepUsuPK.aruUsuCodFk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo Reporte</b>
+                                </font>
+                            <h:outputText value="#{bgesAccesoRepUsu.accesoRepUs.accesoRepUsuPK.aruCodRepFk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo Grupo</b>
+                                </font>
+                            <h:outputText value="#{bgesAccesoRepUsu.accesoRepUs.accesoRepUsuPK.aruGrpCodFk}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo Acceso</b>
+                                </font>
+                            <h:outputText value="#{bgesAccesoRepUsu.accesoRepUs.aruTipoAcc}"/>
+                        </h:panelGrid>
+                    </p:dialog>
+                    
+                    
+                    
+                    
+                    
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesAccesoRepUsu.opcion.equals('3')}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo Usuario</b>
+                                </font>
+                            <h:outputText value="#{bgesAccesoRepUsu.accesoRepUs.accesoRepUsuPK.aruUsuCodFk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo Reporte</b>
+                                </font>
+                            <h:outputText value="#{bgesAccesoRepUsu.accesoRepUs.accesoRepUsuPK.aruCodRepFk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo Grupo</b>
+                                </font>
+                            <h:outputText value="#{bgesAccesoRepUsu.accesoRepUs.accesoRepUsuPK.aruGrpCodFk}"/>
+                            
+                            
+                            
+                            
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tipo Acceso</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesAccesoRepUsu.accesoRepUs.aruTipoAcc}"  rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:selectItem itemLabel="Todos" itemValue="T"/>
+                                <f:selectItem itemLabel="Propios" itemValue="P"/>
+                                <f:selectItem itemLabel="Area" itemValue="A"/>
+                                <f:selectItem itemLabel="Empresa" itemValue="E"/>
+                                
+                            </h:selectOneMenu>
+                            
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesAccesoRepUsu.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

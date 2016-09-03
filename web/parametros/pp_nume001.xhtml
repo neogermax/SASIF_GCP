@@ -1,0 +1,531 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="nume">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                            <p:commandButton value="Consultar" action="#{bgesNumericas.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                            <p:commandButton value="Crear" action="#{bgesNumericas.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab eq 'T'}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                            <p:commandButton value="Actualizar" action="#{bgesNumericas.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab eq 'T'}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                            <p:commandButton value="Eliminar" action="#{bgesNumericas.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab eq 'T'}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 360px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesNumericas.columnas}"
+                                              rendered="#{bgesNumericas.opcion ne '2'}">
+                                <f:selectItem itemLabel="Codigo" itemValue="1"/>
+                                <f:selectItem itemLabel="Valor" itemValue="2"/>
+                                <f:selectItem itemLabel="Descripción" itemValue="3"/>
+                                <f:selectItem itemLabel="Clase" itemValue="4"/>
+                                <f:selectItem itemLabel="Etapa" itemValue="5"/>
+                                <f:selectItem itemLabel="Actividad" itemValue="6"/>
+                                <f:selectItem itemLabel="Contenido" itemValue="7"/>
+                                <f:selectItem itemLabel="Grupo Documento" itemValue="8"/>
+                                <f:selectItem itemLabel="Documento" itemValue="9"/>
+                                <f:selectItem itemLabel="Correo" itemValue="10"/>
+                                <f:selectItem itemLabel="Mensajes" itemValue="11"/>
+                                <f:selectItem itemLabel="Dudas" itemValue="12"/>
+                                <f:selectItem itemLabel="Autorización" itemValue="13"/>
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesNumericas.opcion eq '1' or bgesNumericas.opcion eq '4'}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesNumericas.opcion eq '3'}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px" value="#{bgesNumericas.numericas}" var="num"
+                                     scrollable="true" rowKey="#{num.numericasPK}" scrollHeight="220"
+                                     emptyMessage="#{bgenErrores.obtenerError(14)}"
+                                 scrollWidth="600" selection="#{bgesNumericas.numerica}" selectionMode="single"
+                                 rendered="#{bgesNumericas.opcion ne '2'}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            <p:column headerText="Codigo" filterBy="#{num.numericasPK.numCodPk}" filterMatchMode="contains"
+                                      rendered="#{bgesNumericas.columnas.contains('1')}"
+                                      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{num.numericasPK.numCodPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Valor" filterBy="#{num.numericasPK.numValor}" filterMatchMode="contains"
+                                      rendered="#{bgesNumericas.columnas.contains('2')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{num.numericasPK.numValor}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Descripción" filterBy="#{num.numDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesNumericas.columnas.contains('3')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{num.numDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Clase" filterBy="#{num.numClsCodFk.clsDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesNumericas.columnas.contains('4')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{num.numClsCodFk.clsDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Etapa" filterBy="#{num.numEtpCodFk.etpDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesNumericas.columnas.contains('5')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{num.numEtpCodFk.etpDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Actividad" filterBy="#{num.numActCodFk.actDescrip}" filterMatchMode="contains"
+                                      rendered="#{bgesNumericas.columnas.contains('6')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{num.numActCodFk.actDescrip}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tipo de contenido" filterBy="#{num.numConten}" filterMatchMode="contains"
+                                      rendered="#{bgesNumericas.columnas.contains('7')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{num.numConten}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Grupo documento" filterBy="#{num.numGrupoDocFk}" filterMatchMode="contains"
+                                      rendered="#{bgesNumericas.columnas.contains('8')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{num.numGrupoDocFk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Nombre documento" filterBy="#{num.numDocumentoFk}" filterMatchMode="contains"
+                                      rendered="#{bgesNumericas.columnas.contains('9')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{num.numDocumentoFk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Correo" filterBy="#{num.numCorreo}" filterMatchMode="contains"
+                                      rendered="#{bgesNumericas.columnas.contains('10')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{num.numCorreo}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Mensajes" filterBy="#{num.numMensajes}" filterMatchMode="contains"
+                                      rendered="#{bgesNumericas.columnas.contains('11')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{num.numMensajes}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Dudas" filterBy="#{num.numIndDudas}" filterMatchMode="contains"
+                                      rendered="#{bgesNumericas.columnas.contains('12')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{num.numIndDudas}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Autorizacion" filterBy="#{num.numAutoriza}" filterMatchMode="contains"
+                                      rendered="#{bgesNumericas.columnas.contains('13')}"
+                                      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{num.numAutoriza}"/>
+                                </font>
+                            </p:column>
+                        </p:dataTable>
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesNumericas.opcion eq '2'}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesNumericas.CNumerica.numericasPK.numCodPk}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(15)}"
+                                             converterMessage="#{bgenErrores.obtenerError(16)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod" value="#{bgenAyudas.obtenerAyuda(106)}"/>
+                                <p:tooltip for="msg_cod" value="#{bgenMessages.message('nume:cod')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Valor</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesNumericas.CNumerica.numericasPK.numValor}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(18)}"
+                                             converterMessage="#{bgenErrores.obtenerError(16)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(22)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt" value="#{bgenAyudas.obtenerAyuda(108)}"/>
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('nume:idt')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Descripción</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="nom" value="#{bgesNumericas.CNumerica.numDescrip}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(20)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(21)}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_nom" for="nom" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="nom" value="#{bgenAyudas.obtenerAyuda(109)}"/>
+                                <p:tooltip for="msg_nom" value="#{bgenMessages.message('nume:nom')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Clases</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesNumericas.CMapaRelacion.clase}" converter="jsf.beans.BConvClases">
+                                <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                <f:selectItems value="#{bgesNumericas.CMapaRelacion.clases}" var="clas"
+                                               itemLabel="#{clas.clsDescrip}" itemValue="#{clas}"/>
+                                <f:ajax render="etp act"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Etapas</b>
+                            </font>
+                            <h:selectOneMenu id="etp" value="#{bgesNumericas.CMapaRelacion.etapa}" converter="jsf.beans.BConvEtapas">
+                                <f:selectItems value="#{bgesNumericas.CMapaRelacion.etapas}" var="eta"
+                                               itemLabel="#{eta.etpDescrip}" itemValue="#{eta}"/>
+                                <f:ajax render="act"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Actividades</b>
+                            </font>
+                            <h:selectOneMenu id="act" value="#{bgesNumericas.CMapaRelacion.actividad}" converter="jsf.beans.BConvActividades">
+                                <f:selectItems value="#{bgesNumericas.CMapaRelacion.actividades}" var="act"
+                                               itemLabel="#{act.actDescrip}" itemValue="#{act}"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tipo de contenido</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesNumericas.CNumerica.numConten}">
+                                <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                <f:selectItem itemLabel="Administracion de componentes" itemValue="C"/>
+                                <f:selectItem itemLabel="Actualizacion de componentes" itemValue="A"/>
+                                <f:selectItem itemLabel="Asignacion de responsabilidades" itemValue="R"/>
+                                <f:selectItem itemLabel="Cronograma" itemValue="G"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Grupo Documento</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesNumericas.CNumerica.numGrupoDocFk}" converter="javax.faces.Integer">
+                                <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                <f:selectItems value="#{bgesGdocumentos.gdocumentos}" var="gd"
+                                        itemLabel="#{gd.gdoDescripcion}" itemValue="#{gd.gdoGrupoPk}"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Nombre documento</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesNumericas.CNumerica.numDocumentoFk}">
+                                <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                <f:selectItems value="#{bgesPdocumentos.pdocumentos}" var="pd"
+                                               itemLabel="#{pd.pdoDescripcion}" itemValue="#{pd.pdoDocumentoPk}"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Correo</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesNumericas.CNumerica.numCorreo}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                            </p:selectOneRadio>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Mensajes</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesNumericas.CNumerica.numMensajes}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                            </p:selectOneRadio>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Dudas</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesNumericas.CNumerica.numIndDudas}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Autorización</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesNumericas.CNumerica.numAutoriza}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="No aplica" itemValue=" "/>
+                            </p:selectOneRadio>
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesNumericas.crear}" rendered="#{bgesNumericas.opcion eq '2'}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesNumericas.opcion eq '4'}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesNumericas.numerica.numericasPK.numCodPk} - #{bgesNumericas.numerica.numericasPK.numValor}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesNumericas.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesNumericas.numerica.numericasPK.numCodPk} #{bgesNumericas.numerica.numericasPK.numValor}"/><font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Valor</b>
+                                </font>
+                                <h:outputText value="#{bgesNumericas.numerica.numericasPK.numValor}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Descripción</b>
+                                </font>
+                                <h:outputText value="#{bgesNumericas.numerica.numDescrip}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Clase</b>
+                                </font>
+                                <h:outputText value="#{bgesNumericas.numerica.numClsCodFk.clsDescrip}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Etapa</b>
+                                </font>
+                                <h:outputText value="#{bgesNumericas.numerica.numEtpCodFk.etpDescrip}"/>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Actividad</b>
+                                </font>
+                                <h:outputText value="#{bgesNumericas.numerica.numActCodFk.actDescrip}"/>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo de contenido</b>
+                                </font>
+                                <h:outputText value="#{bgesNumericas.numerica.numConten}"/>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Grupo Documento</b>
+                                </font>
+                                <h:outputText value="#{bgesNumericas.numerica.numGrupoDocFk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Documento</b>
+                                </font>
+                                <h:outputText value="#{bgesNumericas.numerica.numDocumentoFk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Correo</b>
+                                </font>
+                                <h:outputText value="#{bgesNumericas.numerica.numCorreo}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Mensajes</b>
+                                </font>
+                                <h:outputText value="#{bgesNumericas.numerica.numMensajes}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Dudas</b>
+                                </font>
+                                <h:outputText value="#{bgesNumericas.numerica.numIndDudas}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Autorización</b>
+                                </font>
+                                <h:outputText value="#{bgesNumericas.numerica.numAutoriza}"/>
+                            </h:panelGrid>
+                    </p:dialog>
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesNumericas.opcion eq '3'}">
+                        #{bgesNumericas.mostrar()}
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesNumericas.UNumerica.numericasPK.numCodPk} #{bgesNumericas.UNumerica.numericasPK.numValor}"/>
+                                
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Descripción</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="nom_1" value="#{bgesNumericas.UNumerica.numDescrip}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(20)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(21)}"
+                                             style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_nom_1" for="nom_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="nom_1" value="#{bgenAyudas.obtenerAyuda(109)}"/>
+                                <p:tooltip for="msg_nom_1" value="#{bgenMessages.message('alfa:nom_1')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Clases</b>
+                            </font>
+                                <h:selectOneMenu value="#{bgesNumericas.mapaRelacion.clase}" converter="jsf.beans.BConvClases">
+                                    <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{bgesNumericas.mapaRelacion.clases}" var="clas"
+                                               itemLabel="#{clas.clsDescrip}" itemValue="#{clas}"/>
+                                <f:ajax render="etp1 act1"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Etapas</b>
+                            </font>
+                            <h:selectOneMenu id="etp1" value="#{bgesNumericas.mapaRelacion.etapa}" converter="jsf.beans.BConvEtapas">
+                                <f:selectItems value="#{bgesNumericas.mapaRelacion.etapas}" var="eta"
+                                               itemLabel="#{eta.etpDescrip}" itemValue="#{eta}"/>
+                                <f:ajax render="act1"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Actividades</b>
+                            </font>
+                            <h:selectOneMenu id="act1" value="#{bgesNumericas.mapaRelacion.actividad}" converter="jsf.beans.BConvActividades">
+                                <f:selectItems value="#{bgesNumericas.mapaRelacion.actividades}" var="act"
+                                               itemLabel="#{act.actDescrip}" itemValue="#{act}"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Tipo de contenido</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesNumericas.UNumerica.numConten}">
+                                <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                <f:selectItem itemLabel="Administracion de componentes" itemValue="C"/>
+                                <f:selectItem itemLabel="Actualizacion de componentes" itemValue="A"/>
+                                <f:selectItem itemLabel="Asignacion de responsabilidades" itemValue="R"/>
+                                <f:selectItem itemLabel="Cronograma" itemValue="G"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Grupo Documento</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesNumericas.UNumerica.numGrupoDocFk}" converter="javax.faces.Integer">
+                                <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                <f:selectItems value="#{bgesGdocumentos.gdocumentos}" var="gd"
+                                        itemLabel="#{gd.gdoDescripcion}" itemValue="#{gd.gdoGrupoPk}"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Nombre documento</b>
+                            </font>
+                            <h:selectOneMenu value="#{bgesNumericas.UNumerica.numDocumentoFk}">
+                                <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                <f:selectItems value="#{bgesPdocumentos.pdocumentos}" var="pd"
+                                               itemLabel="#{pd.pdoDescripcion}" itemValue="#{pd.pdoDocumentoPk}"/>
+                            </h:selectOneMenu>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Correo</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesNumericas.UNumerica.numCorreo}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                            </p:selectOneRadio>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Mensajes</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesNumericas.UNumerica.numMensajes}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                            </p:selectOneRadio>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Dudas</b>
+                            </font>
+                            <p:selectOneRadio value="#{bgesNumericas.UNumerica.numIndDudas}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                            </p:selectOneRadio>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Autorización</b>
+                            </font>
+                                <p:selectOneRadio value="#{bgesNumericas.UNumerica.numAutoriza}">
+                                <f:selectItem itemLabel="Si" itemValue="S"/>
+                                <f:selectItem itemLabel="No" itemValue="N"/>
+                                <f:selectItem itemLabel="No aplica" itemValue=" "/>
+                            </p:selectOneRadio>
+                        </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesNumericas.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

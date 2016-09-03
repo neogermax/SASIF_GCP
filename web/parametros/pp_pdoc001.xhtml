@@ -1,0 +1,591 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="pdoc">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesPdocumentos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                                <p:commandButton value="Crear" action="#{bgesPdocumentos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                                <p:commandButton value="Actualizar" action="#{bgesPdocumentos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                                <p:commandButton value="Eliminar" action="#{bgesPdocumentos.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesPdocumentos.columnas}"
+                                              rendered="#{not bgesPdocumentos.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Documento" itemValue="1"/>
+                                <f:selectItem itemLabel="Descripcion" itemValue="2"/>
+                                <f:selectItem itemLabel="Tipo Contenido" itemValue="3"/>
+                                <f:selectItem itemLabel="Tipo Documento" itemValue="4"/>
+                                <f:selectItem itemLabel="Asunto" itemValue="5"/>
+                                <f:selectItem itemLabel="Version" itemValue="6"/>
+                                <f:selectItem itemLabel="Ruta" itemValue="7"/>
+                                <f:selectItem itemLabel="Ruta Plantilla" itemValue="8"/>
+                                <f:selectItem itemLabel="Nombre Plantilla" itemValue="9"/>
+                                <f:selectItem itemLabel="Grupo" itemValue="10"/>
+                                
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesPdocumentos.opcion.equals('1') or bgesPdocumentos.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesPdocumentos.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px; table-layout: fixed;" value="#{bgesPdocumentos.pdocumentos}" var="pdoc"
+                                     scrollable="true" rowKey="#{pdoc.pdoDocumentoPk}" scrollHeight="190"
+                                     emptyMessage="#{cabecera.rol_tabla_vacia}"
+                                     scrollWidth="600" selection="#{bgesPdocumentos.pdocumento}" selectionMode="single"
+                                 rendered="#{not bgesPdocumentos.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            <p:column headerText="Documento" filterBy="#{pdoc.pdoDocumentoPk}" filterMatchMode="contains"
+                                      rendered="#{bgesPdocumentos.columnas.contains('1')}"
+				      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{pdoc.pdoDocumentoPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Descripcion" filterBy="#{pdoc.pdoDescripcion}" filterMatchMode="contains"
+                                      rendered="#{bgesPdocumentos.columnas.contains('2')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{pdoc.pdoDescripcion}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tipo Contenido" filterBy="#{pdoc.pdoTipoc}" filterMatchMode="contains"
+                                      rendered="#{bgesPdocumentos.columnas.contains('3')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{pdoc.pdoTipoc}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Tipo Documento" filterBy="#{pdoc.pdoTipod}" filterMatchMode="contains"
+                                      rendered="#{bgesPdocumentos.columnas.contains('4')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{pdoc.pdoTipod}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Asunto" filterBy="#{pdoc.pdoAsunto}" filterMatchMode="contains"
+                                      rendered="#{bgesPdocumentos.columnas.contains('5')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{pdoc.pdoAsunto}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Version" filterBy="#{pdoc.pdoVersion}" filterMatchMode="contains"
+                                      rendered="#{bgesPdocumentos.columnas.contains('6')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{pdoc.pdoVersion}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Ruta" filterBy="#{pdoc.pdoCodRutaFk.rutRuta}" filterMatchMode="contains"
+                                      rendered="#{bgesPdocumentos.columnas.contains('7')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{pdoc.pdoCodRutaFk.rutRuta}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Ruta plantilla" filterBy="#{pdoc.pdoRutaPla}" filterMatchMode="contains"
+                                      rendered="#{bgesPdocumentos.columnas.contains('8')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{pdoc.pdoRutaPla}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Nombre plantilla" filterBy="#{pdoc.pdoNomPla}" filterMatchMode="contains"
+                                      rendered="#{bgesPdocumentos.columnas.contains('9')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{pdoc.pdoNomPla}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Grupo" filterBy="#{pdoc.pdoGrupoFk.gdoDescripcion}" filterMatchMode="contains"
+                                      rendered="#{bgesPdocumentos.columnas.contains('10')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{pdoc.pdoGrupoFk.gdoDescripcion}"/>
+                                </font>
+                            </p:column>
+                            
+                            
+                                   
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                        </p:dataTable>
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesPdocumentos.opcion.equals('2')}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Documento</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesPdocumentos.CPdocumento.pdoDocumentoPk}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="20"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod">
+                                    #{bgenAyudas.obtenerAyuda(131)} 
+                                </p:tooltip> 
+                                <p:tooltip for="msg_cod" value="#{bgenMessages.message('pdoc:cod')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Descripción</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesPdocumentos.CPdocumento.pdoDescripcion}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt">
+                                    #{bgenAyudas.obtenerAyuda(132)} 
+                                </p:tooltip> 
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('pdoc:idt')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Tipo Contenido</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:selectOneMenu id="tic" value="#{bgesPdocumentos.CPdocumento.pdoTipoc}">
+                                    <f:ajax render="tid"/>
+                                    <f:selectItem itemLabel="Digitalizado (Anexar un documento al aplicativo)" itemValue="D"/>
+                                    <f:selectItem itemLabel="Merche sin modificación" itemValue="N"/>
+                                    <f:selectItem itemLabel="Merche con modificación" itemValue="M"/>
+                                </h:selectOneMenu>
+                                <p:tooltip for="tic">
+                                    #{bgenAyudas.obtenerAyuda(133)} 
+                                </p:tooltip> 
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Tipo Documento</b>
+                            </font>
+                            <h:panelGrid id="tid" columns="2">
+                                <h:selectOneMenu value="#{bgesPdocumentos.CPdocumento.pdoTipod}"
+                                                 rendered="#{bgesPdocumentos.CPdocumento.pdoTipoc eq 'D'}">
+                                    <f:selectItem itemLabel="Formato de documento portátil (pdf)" itemValue="pdf"/>
+                                    <f:selectItem itemLabel="Formato de Intercambio de Gráficos (gif)" itemValue="gif"/>
+                                    <f:selectItem itemLabel="Formato de imagenes (jpg)" itemValue="jpg"/>
+                                    <f:selectItem itemLabel="Mapa de bits (bmp)" itemValue="bmp"/>
+                                    <f:selectItem itemLabel="Gráficos de Red Portátiles (png)" itemValue="png"/>
+                                </h:selectOneMenu>
+                                <h:selectOneMenu value="#{bgesPdocumentos.CPdocumento.pdoTipod}"
+                                                 rendered="#{bgesPdocumentos.CPdocumento.pdoTipoc ne 'D'}">
+                                    <f:selectItem itemLabel="Formato de texto (doc)" itemValue="doc"/>
+                                    <f:selectItem itemLabel="Formato de texto (docx)" itemValue="docx"/>
+                                    <f:selectItem itemLabel="Hojas de cálculo (xls)" itemValue="xls"/>
+                                    <f:selectItem itemLabel="Hojas de cálculo (xlsx)" itemValue="xlsx"/>
+                                    <f:selectItem itemLabel="Archivo de presentacion (ppt)" itemValue="ppt"/>
+                                </h:selectOneMenu>
+                                
+                                <p:tooltip for="tid">
+                                    #{bgenAyudas.obtenerAyuda(134)} 
+                                </p:tooltip> 
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Asunto</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="asu" value="#{bgesPdocumentos.CPdocumento.pdoAsunto}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="5"/>
+                                </h:inputText>
+                                <h:message id="msg_asu" for="asu" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="asu">
+                                    #{bgenAyudas.obtenerAyuda(147)} 
+                                </p:tooltip> 
+                                <p:tooltip for="msg_asu" value="#{bgenMessages.message('pdoc:asu')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Tipo Version</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <p:selectOneRadio id="ver" value="#{bgesPdocumentos.CPdocumento.pdoVersion}">
+                                    <f:selectItem itemLabel="Único documento" itemValue="U"/>
+                                    <f:selectItem itemLabel="Histórico" itemValue="H"/>
+                                </p:selectOneRadio>
+                                <p:tooltip for="ver">
+                                    #{bgenAyudas.obtenerAyuda(135)} 
+                                </p:tooltip> 
+                            </h:panelGrid>
+                            
+                           <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Ruta</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:selectOneMenu value="#{bgesPdocumentos.CPdocumento.pdoCodRutaFk}" converter="jsf.beans.BConvRutas">
+                                    <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{bgesRutas.rutas}" var="rut"
+                                                   itemLabel="#{rut.rutRuta}" itemValue="#{rut}"/>
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Ruta Plantilla</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="verp" value="#{bgesPdocumentos.CPdocumento.pdoRutaPla}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_verp" for="verp" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="verp">
+                                    #{bgenAyudas.obtenerAyuda(135)} 
+                                </p:tooltip> 
+                                <p:tooltip for="msg_verp" value="#{bgenMessages.message('pdoc:verp')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Nombre Plantilla</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="nomp" value="#{bgesPdocumentos.CPdocumento.pdoNomPla}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_nomp" for="nomp" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="nomp">
+                                    #{bgenAyudas.obtenerAyuda(135)} 
+                                </p:tooltip> 
+                                <p:tooltip for="msg_nomp" value="#{bgenMessages.message('pdoc:nomp')}"/>
+                            </h:panelGrid>
+                            
+                            
+                           
+                            
+                            
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Grupo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:selectOneMenu value="#{bgesPdocumentos.CPdocumento.pdoGrupoFk}" converter="jsf.beans.BConvGdocumentos">
+                                    <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{bgesGdocumentos.gdocumentos}" var="doc"
+                                                   itemLabel="#{doc.gdoDescripcion}" itemValue="#{doc}"/>
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+ 
+                        </h:panelGrid>
+                        
+                        
+                   
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form"  action="#{bgesPdocumentos.crear}" rendered="#{bgesPdocumentos.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesPdocumentos.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesPdocumentos.pdocumento.pdoDescripcion}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesPdocumentos.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Documento</b>
+                                </font>
+                            <h:outputText value="#{bgesPdocumentos.pdocumento.pdoDocumentoPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Descripcion</b>
+                                </font>
+                            <h:outputText value="#{bgesPdocumentos.pdocumento.pdoDescripcion}"/> 
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo Contenido</b>
+                                </font>
+                            <h:outputText value="#{bgesPdocumentos.pdocumento.pdoTipoc}"/> 
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Tipo Documento</b>
+                                </font>
+                            <h:outputText value="#{bgesPdocumentos.pdocumento.pdoTipod}"/> 
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Asunto</b>
+                                </font>
+                            <h:outputText value="#{bgesPdocumentos.pdocumento.pdoAsunto}"/> 
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Version</b>
+                                </font>
+                            <h:outputText value="#{bgesPdocumentos.pdocumento.pdoVersion}"/> 
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Ruta</b>
+                                </font>
+                            <h:outputText value="#{bgesPdocumentos.pdocumento.pdoCodRutaFk.rutRuta}"/> 
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Ruta Plantilla</b>
+                                </font>
+                            <h:outputText value="#{bgesPdocumentos.pdocumento.pdoRutaPla}"/> 
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Nombre Plantilla</b>
+                                </font>
+                            <h:outputText value="#{bgesPdocumentos.pdocumento.pdoNomPla}"/> 
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Grupo</b>
+                                </font>
+                            <h:outputText value="#{bgesPdocumentos.pdocumento.pdoGrupoFk.gdoDescripcion}"/> 
+                            
+                            
+                            
+                            
+                            
+                            
+                            </h:panelGrid>
+                    </p:dialog>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesPdocumentos.opcion.equals('3')}">
+                        #{bgesPdocumentos.mostrar()}
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesPdocumentos.APdocumento.pdoDocumentoPk}"/>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Descripción</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt1" value="#{bgesPdocumentos.APdocumento.pdoDescripcion}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_idt1" for="idt1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt1">
+                                    #{bgenAyudas.obtenerAyuda(132)} 
+                                </p:tooltip> 
+                                <p:tooltip for="msg_idt1" value="#{bgenMessages.message('pdoc:idt1')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Tipo Contenido</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:selectOneMenu id="tic1" value="#{bgesPdocumentos.APdocumento.pdoTipoc}">
+                                    <f:ajax render="tid1"/>
+                                    <f:selectItem itemLabel="Digitalizado (Anexar un documento al aplicativo)" itemValue="D"/>
+                                    <f:selectItem itemLabel="Merche sin modificación" itemValue="N"/>
+                                    <f:selectItem itemLabel="Merche con modificación" itemValue="M"/>
+                                </h:selectOneMenu>
+                                <p:tooltip for="tic1">
+                                    #{bgenAyudas.obtenerAyuda(133)} 
+                                </p:tooltip>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Tipo Documento</b>
+                            </font>
+                            <h:panelGrid id="tid1" columns="2">
+                                <h:selectOneMenu value="#{bgesPdocumentos.APdocumento.pdoTipod}"
+                                                 rendered="#{bgesPdocumentos.APdocumento.pdoTipoc eq 'D'}">
+                                    <f:selectItem itemLabel="Formato de documento portátil (pdf)" itemValue="pdf"/>
+                                    <f:selectItem itemLabel="Formato de Intercambio de Gráficos (gif)" itemValue="gif"/>
+                                    <f:selectItem itemLabel="Formato de imagenes (jpg)" itemValue="jpg"/>
+                                    <f:selectItem itemLabel="Mapa de bits (bmp)" itemValue="bmp"/>
+                                    <f:selectItem itemLabel="Gráficos de Red Portátiles (png)" itemValue="png"/>
+                                </h:selectOneMenu>
+                                <h:selectOneMenu value="#{bgesPdocumentos.APdocumento.pdoTipod}"
+                                                 rendered="#{bgesPdocumentos.APdocumento.pdoTipoc ne 'D'}">
+                                    <f:selectItem itemLabel="Formato de texto (doc)" itemValue="doc"/>
+                                    <f:selectItem itemLabel="Formato de texto (docx)" itemValue="docx"/>
+                                    <f:selectItem itemLabel="Hojas de cálculo (xls)" itemValue="xls"/>
+                                    <f:selectItem itemLabel="Hojas de cálculo (xlsx)" itemValue="xlsx"/>
+                                    <f:selectItem itemLabel="Archivo de presentacion (ppt)" itemValue="ppt"/>
+                                </h:selectOneMenu>
+                                
+                                <p:tooltip for="tid1">
+                                    #{bgenAyudas.obtenerAyuda(134)} 
+                                </p:tooltip>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Asunto</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="asu1" value="#{bgesPdocumentos.APdocumento.pdoAsunto}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="5"/>
+                                </h:inputText>
+                                <h:message id="msg_asu1" for="asu1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="asu1">
+                                    #{bgenAyudas.obtenerAyuda(147)} 
+                                </p:tooltip> 
+                                <p:tooltip for="msg_asu1" value="#{bgenMessages.message('pdoc:asu1')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Tipo Version</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <p:selectOneRadio id="ver1" value="#{bgesPdocumentos.APdocumento.pdoVersion}">
+                                    <f:selectItem itemLabel="Único documento" itemValue="U"/>
+                                    <f:selectItem itemLabel="Histórico" itemValue="H"/>
+                                </p:selectOneRadio>
+                                <p:tooltip for="ver1">
+                                    #{bgenAyudas.obtenerAyuda(135)} 
+                                </p:tooltip>
+                            </h:panelGrid>
+                            
+                           <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Ruta</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:selectOneMenu value="#{bgesPdocumentos.APdocumento.pdoCodRutaFk}" converter="jsf.beans.BConvRutas">
+                                    <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{bgesRutas.rutas}" var="rut"
+                                                   itemLabel="#{rut.rutRuta}" itemValue="#{rut}"/>
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+                                
+                                
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Ruta Pantilla</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="ver1p" value="#{bgesPdocumentos.APdocumento.pdoRutaPla}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_ver1p" for="ver1p" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="ver1p">
+                                    #{bgenAyudas.obtenerAyuda(135)} 
+                                </p:tooltip> 
+                                <p:tooltip for="msg_ver1p" value="#{bgenMessages.message('pdoc:ver1p')}"/>
+                            </h:panelGrid>
+                                
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Nombre Pantilla</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="nom1p" value="#{bgesPdocumentos.APdocumento.pdoNomPla}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_nom1p" for="nom1p" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="nom1p">
+                                    #{bgenAyudas.obtenerAyuda(135)} 
+                                </p:tooltip> 
+                                <p:tooltip for="msg_nom1p" value="#{bgenMessages.message('pdoc:nom1p')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Grupo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:selectOneMenu value="#{bgesPdocumentos.APdocumento.pdoGrupoFk}" converter="jsf.beans.BConvGdocumentos">
+                                    <f:selectItem itemLabel="" noSelectionOption="true"/>
+                                    <f:selectItems value="#{bgesGdocumentos.gdocumentos}" var="doc"
+                                                   itemLabel="#{doc.gdoDescripcion}" itemValue="#{doc}"/>
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesPdocumentos.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>

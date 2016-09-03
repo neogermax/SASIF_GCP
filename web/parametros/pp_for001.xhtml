@@ -1,0 +1,414 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="for">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesFormulas.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                                <p:commandButton value="Crear" action="#{bgesFormulas.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                                <p:commandButton value="Actualizar" action="#{bgesFormulas.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                                <p:commandButton value="Eliminar" action="#{bgesFormulas.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 330px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesFormulas.columnas}"
+                                              rendered="#{not bgesFormulas.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Codigo" itemValue="1"/>
+                                <f:selectItem itemLabel="Descripcion" itemValue="2"/>
+                                <f:selectItem itemLabel="Codigo" itemValue="3"/>
+                                <f:selectItem itemLabel="Descripcion" itemValue="4"/>
+                                 <f:selectItem itemLabel="Codigo" itemValue="5"/>
+                                <f:selectItem itemLabel="Descripcion" itemValue="6"/>
+                                <f:selectItem itemLabel="Codigo" itemValue="7"/>
+                                
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesFormulas.opcion.equals('1') or bgesFormulas.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesFormulas.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+
+
+
+                        <p:dataTable id="tabla" style="width: 600px; table-layout: fixed;" value="#{bgesFormulas.formulas}" var="for"
+                                     scrollable="true" rowKey="#{for.forCodPk}" scrollHeight="190"
+                                     emptyMessage="#{cabecera.rol_tabla_vacia}"
+                                     scrollWidth="600" selection="#{bgesFormulas.formula}" selectionMode="single"
+                                 rendered="#{not bgesFormulas.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            <p:column headerText="Codigo" filterBy="#{for.forCodPk}" filterMatchMode="contains"
+                                      rendered="#{bgesFormulas.columnas.contains('1')}"
+				      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{for.forCodPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Secuencia" filterBy="#{for.forSecuencia}" filterMatchMode="contains"
+                                      rendered="#{bgesFormulas.columnas.contains('2')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{for.forSecuencia}"/>
+                                </font>
+                            </p:column>
+                            
+                            
+                            <p:column headerText="Componente Valor" filterBy="#{for.forCompVal}" filterMatchMode="contains"
+                                      rendered="#{bgesFormulas.columnas.contains('3')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{for.forCompVal}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Valor" filterBy="#{for.forValor}" filterMatchMode="contains"
+                                      rendered="#{bgesFormulas.columnas.contains('4')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{for.forValor}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Operador" filterBy="#{for.forOper}" filterMatchMode="contains"
+                                      rendered="#{bgesFormulas.columnas.contains('5')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{for.forOper}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Componente Operador" filterBy="#{for.forCompOper}" filterMatchMode="contains"
+                                      rendered="#{bgesFormulas.columnas.contains('6')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{for.forCompOper}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Valor Operador" filterBy="#{for.forValorOper}" filterMatchMode="contains"
+                                      rendered="#{bgesFormulas.columnas.contains('7')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{for.forValorOper}"/>
+                                </font>
+                            </p:column>
+                            
+                            
+                            
+                            
+                            
+                            
+                        </p:dataTable>
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesFormulas.opcion.equals('2')}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesFormulas.CFormula.forCodPk}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(15)}"
+                                             converterMessage="#{bgenErrores.obtenerError(16)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod" value="#{cabecera.rol_msg_codigo}"/>
+                                <p:tooltip for="msg_cod" value="#{bgenMessages.message('for:cod')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Secuencia</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="sec" value="#{bgesFormulas.CFormula.forSecuencia}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(15)}"
+                                             converterMessage="#{bgenErrores.obtenerError(16)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99"/>
+                                </h:inputText>
+                                <h:message id="msg_sec" for="sec" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="sec" value="#{cabecera.rol_msg_codigo}"/>
+                                <p:tooltip for="msg_sec" value="#{bgenMessages.message('sec:cod')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Componente Valor</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesFormulas.CFormula.forCompVal}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt" value="#{cabecera.rol_msg_descripcion}"/>
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('for:idt')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Valor</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="val" value="#{bgesFormulas.CFormula.forValor}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_val" for="val" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="val" value="#{cabecera.rol_msg_descripcion}"/>
+                                <p:tooltip for="msg_val" value="#{bgenMessages.message('for:val')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Operador</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="ope" value="#{bgesFormulas.CFormula.forOper}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_ope" for="ope" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="ope" value="#{cabecera.rol_msg_descripcion}"/>
+                                <p:tooltip for="msg_ope" value="#{bgenMessages.message('for:ope')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Componente Operador</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cop" value="#{bgesFormulas.CFormula.forCompOper}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_cop" for="cop" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cop" value="#{cabecera.rol_msg_descripcion}"/>
+                                <p:tooltip for="msg_cop" value="#{bgenMessages.message('for:cop')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Valor Operador</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="vao" value="#{bgesFormulas.CFormula.forValorOper}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_vao" for="vao" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="vao" value="#{cabecera.rol_msg_descripcion}"/>
+                                <p:tooltip for="msg_vao" value="#{bgenMessages.message('for:vao')}"/>
+                            </h:panelGrid>
+                            
+                            
+                            
+                            
+                            
+                            
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesFormulas.crear}" rendered="#{bgesFormulas.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesFormulas.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesFormulas.formula.forCodPk}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesFormulas.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                            <h:outputText value="#{bgesFormulas.formula.forCodPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Secuencia</b>
+                                </font>
+                            <h:outputText value="#{bgesFormulas.formula.forSecuencia}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Componente Valor</b>
+                                </font>
+                            <h:outputText value="#{bgesFormulas.formula.forCompVal}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Valor</b>
+                                </font>
+                            <h:outputText value="#{bgesFormulas.formula.forValor}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Operador</b>
+                                </font>
+                            <h:outputText value="#{bgesFormulas.formula.forOper}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Componente Operador</b>
+                                </font>
+                            <h:outputText value="#{bgesFormulas.formula.forCompOper}"/>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Valor Operador</b>
+                                </font>
+                            <h:outputText value="#{bgesFormulas.formula.forValorOper}"/>
+                            
+                            
+                            
+                                
+                                
+                            </h:panelGrid>
+                    </p:dialog>
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesFormulas.opcion.equals('3')}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesFormulas.formula.forCodPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Secuencia</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="sec_1" value="#{bgesFormulas.formula.forSecuencia}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(15)}"
+                                             converterMessage="#{bgenErrores.obtenerError(16)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_sec_1" for="sec_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="sec_1" value="#{cabecera.rol_msg_codigo}"/>
+                                <p:tooltip for="msg_sec_1" value="#{bgenMessages.message('sec:cod_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Componente Valor</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt_1" value="#{bgesFormulas.formula.forCompVal}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_idt_1" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt_1" value="#{cabecera.rol_msg_descripcion}"/>
+                                <p:tooltip for="msg_idt_1" value="#{bgenMessages.message('for:idt_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Valor</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="val_1" value="#{bgesFormulas.formula.forValor}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_val_1" for="val_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="val_1" value="#{cabecera.rol_msg_descripcion}"/>
+                                <p:tooltip for="msg_val_1" value="#{bgenMessages.message('for:val_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Operador</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="ope_1" value="#{bgesFormulas.formula.forOper}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_ope_1" for="ope_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="ope_1" value="#{cabecera.rol_msg_descripcion}"/>
+                                <p:tooltip for="msg_ope_1" value="#{bgenMessages.message('for:ope_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Componente Operador</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cop_1" value="#{bgesFormulas.formula.forCompOper}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_cop_1" for="cop_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cop_1" value="#{cabecera.rol_msg_descripcion}"/>
+                                <p:tooltip for="msg_cop_1" value="#{bgenMessages.message('for:cop_1')}"/>
+                            </h:panelGrid>
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Valor Operador</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="vao_1" value="#{bgesFormulas.formula.forValorOper}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_vao_1" for="vao_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="vao_1" value="#{cabecera.rol_msg_descripcion}"/>
+                                <p:tooltip for="msg_vao_1" value="#{bgenMessages.message('for:vao_1')}"/>
+                            </h:panelGrid>
+                                
+                                
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesFormulas.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+

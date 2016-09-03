@@ -1,0 +1,281 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:body>
+        <br/>
+        <div id="formulario">
+            
+            <fieldset style="height: 530px; background-color: #{cabecera.form_borde_color}; overflow: auto">
+                <h:form id="cons">
+                    <fieldset style="background-color: #{cabecera.form_inter_border_color}">
+                        <center><b>
+                                <p:commandButton value="Consultar" action="#{bgesConstantes.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-consulta">
+                                <f:param name="opcion" value="1"/>
+                            </p:commandButton>
+                                <p:commandButton value="Crear" action="#{bgesConstantes.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-creacion"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="2"/>
+                            </p:commandButton>
+                                <p:commandButton value="Actualizar" action="#{bgesConstantes.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-actualizar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="3"/>
+                            </p:commandButton>
+                                <p:commandButton value="Eliminar" action="#{bgesConstantes.actionOpcion}"
+                                             immediate="true" update="@form" icon="ui-button-eliminar"
+                                             rendered="#{bgesMenu.opcionRoles.opcTipoTrab.equals('T')}">
+                                <f:param name="opcion" value="4"/>
+                            </p:commandButton>
+                        </b></center>
+                    </fieldset>
+                    <br/>
+                    <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color};overflow: auto">
+                        <h:panelGrid columns="3">
+                            <p:selectCheckboxMenu style="height: 28px" label="Columnas" value="#{bgesConstantes.columnas}"
+                                              rendered="#{not bgesConstantes.opcion.equals('2')}">
+                                <f:selectItem itemLabel="Codigo" itemValue="1"/>
+                                <f:selectItem itemLabel="Descripción" itemValue="4"/>
+                                <f:selectItem itemLabel="Valor Numerico" itemValue="2"/>
+                                <f:selectItem itemLabel="Valor Alfanumerico" itemValue="3"/>
+                                <f:ajax render="@form"/>
+                            </p:selectCheckboxMenu>
+                            <p:commandButton value="Ver" onclick="emprDialog.show()" rendered="#{bgesConstantes.opcion.equals('1') or bgesConstantes.opcion.equals('4')}"/>
+                            <p:commandButton value="Actualizar" onclick="emprUpDialog.show()" rendered="#{bgesConstantes.opcion.equals('3')}"/>
+                            <!--h:graphicImage url="#{bgesMenu.link.linkImg}" height="120" width="120"/-->
+                        </h:panelGrid>
+                        <br/>
+                        <p:dataTable id="tabla" style="width: 600px; table-layout: fixed;" value="#{bgesConstantes.constantes}" var="cons"
+                                     scrollable="true" rowKey="#{cons.consCodPk}" scrollHeight="190"
+                                     emptyMessage="#{cabecera.rol_tabla_vacia}"
+                                     scrollWidth="600" selection="#{bgesConstantes.constante}" selectionMode="single"
+                                 rendered="#{not bgesConstantes.opcion.equals('2')}">
+                            <p:ajax event="rowSelect" oncomplete="" update="@form"/>
+                            <p:column headerText="Codigo" filterBy="#{cons.consCodPk}" filterMatchMode="contains"
+                                      rendered="#{bgesConstantes.columnas.contains('1')}"
+				      width="60" filterStyle="min-width: 50px; max-width: 50px">
+                                <font size="1">
+                                    <h:outputText value="#{cons.consCodPk}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Descripción" filterBy="#{cons.consDescripcion}" filterMatchMode="contains"
+                                      rendered="#{bgesConstantes.columnas.contains('4')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{cons.consDescripcion}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Valor Numerico" filterBy="#{cons.consValorNum}" filterMatchMode="contains"
+                                      rendered="#{bgesConstantes.columnas.contains('2')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{cons.consValorNum}"/>
+                                </font>
+                            </p:column>
+                            <p:column headerText="Valor Alfanumerico" filterBy="#{cons.consValorAlf}" filterMatchMode="contains"
+                                      rendered="#{bgesConstantes.columnas.contains('3')}"
+				      width="120" filterStyle="min-width: 110px; max-width: 110px">
+                                <font size="1">
+                                    <h:outputText value="#{cons.consValorAlf}"/>
+                                </font>
+                            </p:column>
+                            
+                            
+                            
+                        </p:dataTable>
+                        <h:panelGrid columns="2" cellspacing="10" rendered="#{bgesConstantes.opcion.equals('2')}">
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                    color="#{cabecera.login_color_label}">
+                                <b>Codigo</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="cod" value="#{bgesConstantes.CConstante.consCodPk}" required="true"
+                                             requiredMessage="#{bgenErrores.obtenerError(15)}"
+                                             converterMessage="#{bgenErrores.obtenerError(16)}"
+                                             validatorMessage="#{bgenErrores.obtenerError(17)}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateLongRange minimum="0" maximum="99999"/>
+                                </h:inputText>
+                                <h:message id="msg_cod" for="cod" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="cod"> 
+                                     #{bgenAyudas.obtenerAyuda(73)} 
+                                </p:tooltip>
+                            <p:tooltip for="msg_cod" value="#{bgenMessages.message('cons:cod')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Descripción</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="des" value="#{bgesConstantes.CConstante.consDescripcion}" required="true"
+                                             requiredMessage="#{cabecera.rol_req_descripcion}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_des" for="des" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="des"> 
+                                    #{bgenAyudas.obtenerAyuda(148)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_des" value="#{bgenMessages.message('cons:des')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Valor Numerico</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="idt" value="#{bgesConstantes.CConstante.consValorNum}"
+                                             converterMessage="#{bgenErrores.obtenerError(16)}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:convertNumber/>
+                                    <f:validateDoubleRange minimum="0" maximum="9999999999.999999"/>
+                                </h:inputText>
+                                <h:message id="msg_idt" for="idt" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="idt" > 
+                                    #{bgenAyudas.obtenerAyuda(74)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_idt" value="#{bgenMessages.message('cons:idt')}"/>
+                            </h:panelGrid>
+                            
+                            <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                  color="#{cabecera.login_color_label}">
+                                <b>Valor Alfanumérico</b>
+                            </font>
+                            <h:panelGrid columns="2">
+                                <h:inputText id="val" value="#{bgesConstantes.CConstante.consValorAlf}"
+                                             validatorMessage="#{cabecera.rol_val_descripcion}"
+                                        style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                    <f:validateLength maximum="50"/>
+                                </h:inputText>
+                                <h:message id="msg_val" for="val" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                <p:tooltip for="val"> 
+                                    #{bgenAyudas.obtenerAyuda(75)} 
+                                </p:tooltip>
+                                <p:tooltip for="msg_val" value="#{bgenMessages.message('cons:val')}"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </fieldset>
+                    <br/>
+                    <div align="center">
+                        <p:commandButton value="Registrar" update="@form" action="#{bgesConstantes.crear}" rendered="#{bgesConstantes.opcion.equals('2')}"/>
+                        <p:commandButton value="Eliminar" rendered="#{bgesConstantes.opcion.equals('4')}"
+                                             onclick="del.show()"/>
+                    </div>
+                    
+                    <p:confirmDialog message="Esta seguro de eliminar #{bgesConstantes.constante.consCodPk}?" widgetVar="del"> 
+                        <p:commandButton value="Si" update="@form" oncomplete="del.hide()" actionListener="#{bgesConstantes.eliminar}" />  
+                        <p:commandButton value="No" onclick="del.hide()"/>       
+                    </p:confirmDialog>
+                    <p:dialog widgetVar="emprDialog">
+                        <h:panelGrid id="display" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                            <h:outputText value="#{bgesConstantes.constante.consCodPk}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Descripción</b>
+                                </font>
+                            <h:outputText value="#{bgesConstantes.constante.consDescripcion}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Valor Numerico</b>
+                                </font>
+                            <h:outputText value="#{bgesConstantes.constante.consValorNum}"/>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Valor Alfanumerico</b>
+                                </font>
+                            <h:outputText value="#{bgesConstantes.constante.consValorAlf}"/>
+                                
+                                
+                                
+                            </h:panelGrid>
+                    </p:dialog>
+                    <p:dialog widgetVar="emprUpDialog" visible="#{not empty facesContext.maximumSeverity}"
+                              rendered="#{bgesConstantes.opcion.equals('3')}">
+                        <fieldset style="height: 310px; background-color: #{cabecera.form_inter_border_color}; overflow: auto">
+                            <br/>
+                            <h:panelGrid id="tf" columns="2" cellspacing="10">
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Codigo</b>
+                                </font>
+                                <h:outputText value="#{bgesConstantes.constante.consCodPk}"/>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Descripción</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="des_1" value="#{bgesConstantes.constante.consDescripcion}" required="true"
+                                                 requiredMessage="#{cabecera.rol_req_id}"
+                                                 validatorMessage="#{cabecera.rol_val_id}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                            <f:validateLength maximum="50"/>
+                                    </h:inputText>
+                                    <h:message id="msg_des_1" for="des_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="des_1" > 
+                                        #{bgenAyudas.obtenerAyuda(148)} 
+                                    </p:tooltip>
+                                    <p:tooltip for="msg_des_1" value="#{bgenMessages.message('cons:des_1')}"/>
+                                </h:panelGrid>
+                                
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Valor Numerico</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="idt_1" value="#{bgesConstantes.constante.consValorNum}"
+                                                 converterMessage="#{bgenErrores.obtenerError(16)}"
+                                                 validatorMessage="#{cabecera.rol_val_id}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                            <f:convertNumber/>
+                                            <f:validateDoubleRange minimum="0" maximum="9999999999.999999"/>
+                                    </h:inputText>
+                                    <h:message id="msg_idt_1" for="idt_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="idt_1" >  
+                                        #{bgenAyudas.obtenerAyuda(74)} 
+                                </p:tooltip>
+                                    <p:tooltip for="msg_idt_1" value="#{bgenMessages.message('cons:idt_1')}"/>
+                                </h:panelGrid>
+                                <font face="#{cabecera.login_tipo_letra_label}" size="#{cabecera.login_tamaño_letra_label}"
+                                        color="#{cabecera.login_color_label}">
+                                    <b>Valor Alfanumerico</b>
+                                </font>
+                                <h:panelGrid columns="2">
+                                    <h:inputText id="val_1" value="#{bgesConstantes.constante.consValorAlf}"
+                                                 validatorMessage="#{cabecera.rol_val_id}"
+                                            style="color:#{cabecera.login_camposinput};background-color:#{cabecera.login_fondo_camposinput};">
+                                            <f:validateLength maximum="50"/>
+                                    </h:inputText>
+                                    <h:message id="msg_val_1" for="val_1" styleClass="error_campo" showDetail="false" showSummary="false"/>
+                                    <p:tooltip for="val_1" > 
+                                        #{bgenAyudas.obtenerAyuda(75)} 
+                                    </p:tooltip>
+                                    <p:tooltip for="msg_val_1" value="#{bgenMessages.message('cons:val_1')}"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </fieldset>
+                        <br/>
+                        <div align="center">
+                            <p:commandButton value="Actualizar" action="#{bgesConstantes.actualizar}" update="@form"/>
+                        </div>
+                    </p:dialog>
+                    <p:growl globalOnly="true"/>
+                </h:form>
+            </fieldset>
+            <br/><br/>
+        </div>
+    </h:body>
+</html>
+
